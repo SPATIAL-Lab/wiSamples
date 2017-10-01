@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1611" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1611" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="s7y-zd-CfY">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Project Table View Controller-->
+        <!--Your Projects-->
         <scene sceneID="YGQ-gr-NxP">
             <objects>
                 <tableViewController id="7wG-CS-xa6" customClass="ProjectTableViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
@@ -23,7 +23,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="75"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XwP-eD-dKu" id="BEv-jd-wNf">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="74"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="75"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZZR-zq-yIz">
@@ -45,15 +45,22 @@
                             <outlet property="delegate" destination="7wG-CS-xa6" id="5Of-gd-SIi"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Your Projects" id="OKg-kc-0BO">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="yRh-eJ-cDB">
+                            <connections>
+                                <segue destination="flO-B4-xHI" kind="modal" identifier="AddNewProject" id="3Wv-qY-Wjq"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Pr-xC-5Oc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-969" y="9"/>
+            <point key="canvasLocation" x="300" y="107.49625187406298"/>
         </scene>
-        <!--View Controller-->
+        <!--New Project-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ProjectViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -63,7 +70,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="222-fL-s59">
-                                <rect key="frame" x="16" y="40" width="343" height="272"/>
+                                <rect key="frame" x="16" y="84" width="343" height="272"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Project Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yyx-K5-ACP">
                                         <rect key="frame" x="0.0" y="0.0" width="103.5" height="20.5"/>
@@ -129,15 +136,66 @@
                             <constraint firstItem="222-fL-s59" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="z7h-Bu-r6b"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="New Project" id="gtm-Pa-oL7">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="zIE-Vm-mJx">
+                            <connections>
+                                <action selector="cancelNewProject:" destination="BYZ-38-t0r" id="GGo-R6-DUP"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="qcp-Z3-lor">
+                            <connections>
+                                <segue destination="EzW-1e-XTZ" kind="unwind" unwindAction="unwindToProjectListWithSender:" id="2Fg-fW-PQH"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="contactEmailTextField" destination="bLY-VG-cMB" id="XtT-ed-Pbb"/>
                         <outlet property="contactNameTextField" destination="vu0-pw-jGW" id="XcP-lK-62Z"/>
                         <outlet property="projectIDLabel" destination="KGL-Hy-fnh" id="FVu-8b-oVz"/>
                         <outlet property="projectNameTextField" destination="Qlq-hb-PNt" id="YAK-3z-Efq"/>
+                        <outlet property="saveButton" destination="qcp-Z3-lor" id="nfq-vI-dX7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <exit id="EzW-1e-XTZ" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
+            <point key="canvasLocation" x="1873" y="107"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="UEz-7I-WZ0">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="s7y-zd-CfY" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="dxz-tj-9eS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="7wG-CS-xa6" kind="relationship" relationship="rootViewController" id="X10-LA-QYB"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ttl-lH-5FY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-489" y="343"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Ypg-fP-jUN">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="flO-B4-xHI" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="jkB-bb-BT7">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="9Cy-p9-VDK"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4dv-AE-jra" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1087" y="333"/>
         </scene>
     </scenes>
 </document>

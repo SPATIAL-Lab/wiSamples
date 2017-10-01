@@ -95,6 +95,18 @@ class ProjectTableViewController: UITableViewController {
     }
     */
 
+    //MARK: Actions
+
+    @IBAction func unwindToProjectList(sender: UIStoryboardSegue) {
+        if let projectViewController = sender.source as? ProjectViewController, let project = projectViewController.project {
+            // Add a new project
+            let newIndexPath = IndexPath(row: projects.count, section: 0)
+            
+            projects.append(project)
+            tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
+        }
+    }
+    
     //MARK: Private Methods
     
     private func loadSampleProjects() {
