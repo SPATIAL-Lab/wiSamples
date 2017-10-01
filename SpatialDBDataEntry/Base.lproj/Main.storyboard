@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1611" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ffO-tK-5ac">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1611" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="s7y-zd-CfY">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -37,6 +37,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="projectNameLabel" destination="ZZR-zq-yIz" id="Mt6-vw-yLz"/>
+                                    <segue destination="DgL-fJ-2Mc" kind="show" identifier="ShowSites" id="psP-Es-Ixm"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -48,7 +49,7 @@
                     <navigationItem key="navigationItem" title="Your Projects" id="OKg-kc-0BO">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="yRh-eJ-cDB">
                             <connections>
-                                <segue destination="flO-B4-xHI" kind="modal" identifier="AddNewProject" id="3Wv-qY-Wjq"/>
+                                <segue destination="flO-B4-xHI" kind="presentation" identifier="AddNewProject" id="3Wv-qY-Wjq"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -235,7 +236,7 @@
                     <navigationItem key="navigationItem" id="SUH-c8-Hs6">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Z6e-rm-qFV">
                             <connections>
-                                <segue destination="E3t-Zh-IbQ" kind="presentation" id="lcn-OZ-CQU"/>
+                                <segue destination="E3t-Zh-IbQ" kind="presentation" identifier="AddNewSite" id="lcn-OZ-CQU"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -311,7 +312,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="New Site" id="Oo2-mz-zqR">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="7t3-8F-cpc"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="7t3-8F-cpc">
+                            <connections>
+                                <action selector="cancelNewSite:" destination="g6Y-3g-RBj" id="e9w-Ty-FBd"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="Z3h-io-dba">
                             <connections>
                                 <segue destination="f6a-Gx-Skz" kind="unwind" unwindAction="unwindToSiteListWithSender:" id="63g-eX-DOH"/>
@@ -328,24 +333,6 @@
                 <exit id="f6a-Gx-Skz" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3529" y="81"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="gei-6m-Hdm">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ffO-tK-5ac" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="1iv-5U-OjJ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="DgL-fJ-2Mc" kind="relationship" relationship="rootViewController" id="Ns7-LM-4g3"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="8a6-5L-Ik8" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="769" y="572"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="4bf-S1-t0K">

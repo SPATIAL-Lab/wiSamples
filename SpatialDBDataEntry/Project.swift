@@ -16,10 +16,11 @@ class Project {
     var name: String
     var contactName: String
     var contactEmail: String
+    var sites: [Site]
     
     //MARK: Initialization
     
-    init?(id: String, name: String, contactName: String, contactEmail: String) {
+    init?(id: String, name: String, contactName: String, contactEmail: String, sites: [Site]?) {
         guard !id.isEmpty else {
             return nil
         }
@@ -32,5 +33,6 @@ class Project {
         self.name = name
         self.contactName = contactName
         self.contactEmail = contactEmail
+        self.sites = sites ?? []
     }
 }

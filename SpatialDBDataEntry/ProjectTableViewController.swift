@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import os.log
 
 class ProjectTableViewController: UITableViewController {
     
@@ -85,15 +86,36 @@ class ProjectTableViewController: UITableViewController {
     }
     */
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        super.prepare(for: segue, sender: sender)
+        
+        switch segue.identifier ?? "" {
+        case "AddNewProject":
+            os_log("Adding a new project.", log: OSLog.default, type: OSLogType.debug)
+            
+        case "ShowSites":
+            guard let siteTableViewController = segue.destination as? SiteTableViewController else {
+                fatalError("The top view controller was not a SiteTableViewController!")
+            }
+            
+            guard let selectedProjectCell = sender as? ProjectTableViewCell else {
+                fatalError("Unexpected sender \(sender)")
+            }
+            
+            guard let indexPath = tableView.indexPath(for: selectedProjectCell) else {
+                fatalError("The selected cell is not being displayed by the table!")
+            }
+            
+            let selectedProject = projects[indexPath.row]
+            siteTableViewController.sites = selectedProject.sites;
+            
+        default:
+            fatalError("Unexpected Segue Identifier: \(segue.identifier)")
+        }
     }
-    */
 
     //MARK: Actions
 
@@ -109,19 +131,31 @@ class ProjectTableViewController: UITableViewController {
     //MARK: Private Methods
     
     private func loadSampleProjects() {
-        guard let project1 = Project(id: "001", name: "TestProject_01", contactName: "John Doe", contactEmail: "") else {
+        guard let project1 = Project(id: "001", name: "TestProject_01", contactName: "John Doe", contactEmail: "", sites: loadSampleSites()) else {
             fatalError("Unable to instantiate project1")
         }
         
-        guard let project2 = Project(id: "002", name: "TestProject_02", contactName: "Jane Doe", contactEmail: "") else {
+        guard let project2 = Project(id: "002", name: "TestProject_02", contactName: "Jane Doe", contactEmail: "", sites: loadSampleSites()) else {
             fatalError("Unable to instantiate project2")
         }
         
-        guard let project3 = Project(id: "003", name: "TestProject_03", contactName: "Gabe Bowen", contactEmail: "") else {
+        guard let project3 = Project(id: "003", name: "TestProject_03", contactName: "Gabe Bowen", contactEmail: "", sites: loadSampleSites()) else {
             fatalError("Unable to instantiate project3")
         }
         
         projects += [project1, project2, project3]
+    }
+    
+    private func loadSampleSites() -> [Site] {
+        guard let site1 = Site(id: "s_01", name: "Site_01") else {
+            fatalError("Unable to instantiate site1")
+        }
+        
+        guard let site2 = Site(id: "s_02", name: "Site_02") else {
+            fatalError("Unable to instantiate site2")
+        }
+        
+        return [site1, site2]
     }
     
 }

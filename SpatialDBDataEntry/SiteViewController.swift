@@ -80,5 +80,8 @@ class SiteViewController: UIViewController, UITextFieldDelegate {
         saveButton.isEnabled = true
     }
     
+    @IBAction func cancelNewSite(_ sender: UIBarButtonItem) {
+        dismiss(animated: true, completion: nil)
+    }
     
 }
