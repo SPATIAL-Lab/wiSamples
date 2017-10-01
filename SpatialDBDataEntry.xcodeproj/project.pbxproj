@@ -7,10 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9E17B9BA1F81A12600C99F12 /* SiteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E17B9B91F81A12600C99F12 /* SiteTableViewController.swift */; };
+		9E17B9BC1F81A6F500C99F12 /* SiteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E17B9BB1F81A6F500C99F12 /* SiteViewController.swift */; };
 		9E3B19811F7F3B930094D925 /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3B19801F7F3B930094D925 /* Site.swift */; };
 		9E3B19831F7F3BA20094D925 /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3B19821F7F3BA20094D925 /* Project.swift */; };
 		9E3B19851F7F3E4C0094D925 /* ProjectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3B19841F7F3E4C0094D925 /* ProjectTableViewCell.swift */; };
 		9E3B19871F7F401D0094D925 /* ProjectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3B19861F7F401D0094D925 /* ProjectTableViewController.swift */; };
+		9E3F560C1F819E1A004BEBEB /* SiteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3F560B1F819E1A004BEBEB /* SiteTableViewCell.swift */; };
 		9E647DBB1F73593000F2BC61 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E647DBA1F73593000F2BC61 /* AppDelegate.swift */; };
 		9E647DBD1F73593000F2BC61 /* ProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E647DBC1F73593000F2BC61 /* ProjectViewController.swift */; };
 		9E647DC01F73593000F2BC61 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E647DBE1F73593000F2BC61 /* Main.storyboard */; };
@@ -30,10 +33,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9E17B9B91F81A12600C99F12 /* SiteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteTableViewController.swift; sourceTree = "<group>"; };
+		9E17B9BB1F81A6F500C99F12 /* SiteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteViewController.swift; sourceTree = "<group>"; };
 		9E3B19801F7F3B930094D925 /* Site.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Site.swift; sourceTree = "<group>"; };
 		9E3B19821F7F3BA20094D925 /* Project.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
 		9E3B19841F7F3E4C0094D925 /* ProjectTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectTableViewCell.swift; sourceTree = "<group>"; };
 		9E3B19861F7F401D0094D925 /* ProjectTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectTableViewController.swift; sourceTree = "<group>"; };
+		9E3F560B1F819E1A004BEBEB /* SiteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteTableViewCell.swift; sourceTree = "<group>"; };
 		9E647DB71F73593000F2BC61 /* SpatialDBDataEntry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpatialDBDataEntry.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E647DBA1F73593000F2BC61 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9E647DBC1F73593000F2BC61 /* ProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectViewController.swift; sourceTree = "<group>"; };
@@ -88,6 +94,9 @@
 				9E647DBC1F73593000F2BC61 /* ProjectViewController.swift */,
 				9E3B19841F7F3E4C0094D925 /* ProjectTableViewCell.swift */,
 				9E3B19861F7F401D0094D925 /* ProjectTableViewController.swift */,
+				9E3F560B1F819E1A004BEBEB /* SiteTableViewCell.swift */,
+				9E17B9B91F81A12600C99F12 /* SiteTableViewController.swift */,
+				9E17B9BB1F81A6F500C99F12 /* SiteViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -237,8 +246,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E3B19871F7F401D0094D925 /* ProjectTableViewController.swift in Sources */,
+				9E3F560C1F819E1A004BEBEB /* SiteTableViewCell.swift in Sources */,
 				9E3B19851F7F3E4C0094D925 /* ProjectTableViewCell.swift in Sources */,
 				9E647DBD1F73593000F2BC61 /* ProjectViewController.swift in Sources */,
+				9E17B9BA1F81A12600C99F12 /* SiteTableViewController.swift in Sources */,
+				9E17B9BC1F81A6F500C99F12 /* SiteViewController.swift in Sources */,
 				9E3B19811F7F3B930094D925 /* Site.swift in Sources */,
 				9E647DBB1F73593000F2BC61 /* AppDelegate.swift in Sources */,
 				9E3B19831F7F3BA20094D925 /* Project.swift in Sources */,

@@ -1,23 +1,27 @@
 //
-//  ProjectTableViewController.swift
+//  SiteTableViewController.swift
 //  SpatialDBDataEntry
 //
-//  Created by Karan Sequeira on 9/29/17.
+//  Created by Karan Sequeira on 10/1/17.
 //  Copyright © 2017 University of Utah. All rights reserved.
 //
 
 import UIKit
 
-class ProjectTableViewController: UITableViewController {
-    
+class SiteTableViewController: UITableViewController {
+
     //MARK: Properties
     
-    var projects = [Project]()
-
+    var sites = [Site]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        loadSampleProjects()
+        // Uncomment the following line to preserve selection between presentations
+        // self.clearsSelectionOnViewWillAppear = false
+
+        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
     override func didReceiveMemoryWarning() {
@@ -32,20 +36,19 @@ class ProjectTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return projects.count
+        return sites.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Table view cells are reused and should be dequeued using a cell identifier.
-        let cellIdentifier = "ProjectTableViewCell"
+        let cellIdentifier = "SiteTableViewCell"
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? ProjectTableViewCell else {
-            fatalError("The dequeued cell is not an instance of ProjectTableViewCell!")
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? SiteTableViewCell else {
+            fatalError("The dequequed cell is not an instance of SiteTableViewCell!")
         }
 
-        let project = projects[indexPath.row]
+        let site = sites[indexPath.row]
         
-        cell.projectNameLabel.text = project.name
+        cell.siteIDLabel.text = site.id
         
         return cell
     }
@@ -96,32 +99,14 @@ class ProjectTableViewController: UITableViewController {
     */
 
     //MARK: Actions
-
-    @IBAction func unwindToProjectList(sender: UIStoryboardSegue) {
-        if let projectViewController = sender.source as? ProjectViewController, let project = projectViewController.project {
-            // Add a new project
-            let newIndexPath = IndexPath(row: projects.count, section: 0)
-            projects.append(project)
+    
+    @IBAction func unwindToSiteList(sender: UIStoryboardSegue) {
+        if let siteViewController = sender.source as? SiteViewController, let site = siteViewController.site {
+            // Add a new site
+            let newIndexPath = IndexPath(row: sites.count, section: 0)
+            sites.append(site)
             tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
         }
-    }
-    
-    //MARK: Private Methods
-    
-    private func loadSampleProjects() {
-        guard let project1 = Project(id: "001", name: "TestProject_01", contactName: "John Doe", contactEmail: "") else {
-            fatalError("Unable to instantiate project1")
-        }
-        
-        guard let project2 = Project(id: "002", name: "TestProject_02", contactName: "Jane Doe", contactEmail: "") else {
-            fatalError("Unable to instantiate project2")
-        }
-        
-        guard let project3 = Project(id: "003", name: "TestProject_03", contactName: "Gabe Bowen", contactEmail: "") else {
-            fatalError("Unable to instantiate project3")
-        }
-        
-        projects += [project1, project2, project3]
     }
     
 }
