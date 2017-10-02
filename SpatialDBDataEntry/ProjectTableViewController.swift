@@ -111,7 +111,6 @@ class ProjectTableViewController: UITableViewController {
             
             let selectedProject = projects[indexPath.row]
             siteTableViewController.project = selectedProject
-            siteTableViewController.sites = selectedProject.sites
             
         default:
             fatalError("Unexpected Segue Identifier: \(segue.identifier)")
