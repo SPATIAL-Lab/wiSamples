@@ -12,7 +12,8 @@ class SiteTableViewController: UITableViewController {
 
     //MARK: Properties
     
-    var sites = [Site]()
+    var project: Project!
+    var sites: [Site]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +23,8 @@ class SiteTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
+        navigationItem.title = project.name + " Sites"
     }
 
     override func didReceiveMemoryWarning() {
@@ -102,9 +105,14 @@ class SiteTableViewController: UITableViewController {
     
     @IBAction func unwindToSiteList(sender: UIStoryboardSegue) {
         if let siteViewController = sender.source as? SiteViewController, let site = siteViewController.site {
-            // Add a new site
+            // Get an index for the new cell
             let newIndexPath = IndexPath(row: sites.count, section: 0)
+            
+            // Add a new site to the project
             sites.append(site)
+            project.sites.append(site)
+            
+            // Add a new site to the table
             tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
         }
     }
