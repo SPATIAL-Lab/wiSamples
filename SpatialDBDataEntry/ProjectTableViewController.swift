@@ -18,7 +18,12 @@ class ProjectTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        loadSampleProjects()
+        if let savedProjects = Project.loadProjects() {
+            projects = savedProjects
+        }
+        else {
+            loadSampleProjects()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -65,9 +70,14 @@ class ProjectTableViewController: UITableViewController {
         if editingStyle == .delete {
             // Delete the project
             projects.remove(at: indexPath.row)
+            
+            // Save projects
+            Project.saveProjects(projects: projects)
+            
             // Delete the row from the data source
             tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
+        }
+        else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
@@ -126,6 +136,9 @@ class ProjectTableViewController: UITableViewController {
             let newIndexPath = IndexPath(row: projects.count, section: 0)
             projects.append(project)
             tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
+            
+            // Save projects
+            Project.saveProjects(projects: projects)
         }
     }
     

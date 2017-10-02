@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import os.log
 
-class Project {
+class Project: NSObject, NSCoding {
     
     //MARK: Properties
     
@@ -17,6 +18,22 @@ class Project {
     var contactName: String
     var contactEmail: String
     var sites: [Site]
+    
+    //MARK: Archiving paths
+    
+    static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
+    static let ArchiveURL = DocumentsDirectory.appendingPathComponent("projects")
+    
+    //MARK: Types
+    
+    struct PropertyKeys {
+        // Project data
+        static let projectID = "projectID"
+        static let projectName = "projectName"
+        static let contactName = "contactName"
+        static let contactEmail = "contactEmail"
+        static let sites = "sites"
+    }
     
     //MARK: Initialization
     
@@ -34,5 +51,48 @@ class Project {
         self.contactName = contactName
         self.contactEmail = contactEmail
         self.sites = sites ?? []
+    }
+    
+    //MARK: NSCoding
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(id, forKey: PropertyKeys.projectID)
+        aCoder.encode(name, forKey: PropertyKeys.projectName)
+        aCoder.encode(contactName, forKey: PropertyKeys.contactName)
+        aCoder.encode(contactEmail, forKey: PropertyKeys.contactEmail)
+        aCoder.encode(sites, forKey: PropertyKeys.sites)
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        guard let id = aDecoder.decodeObject(forKey: PropertyKeys.projectID) as? String else {
+            os_log("Unable to decode the id for a Project object!", log: OSLog.default, type: OSLogType.debug)
+            return nil
+        }
+        
+        let name = aDecoder.decodeObject(forKey: PropertyKeys.projectName) as? String
+        let contactName = aDecoder.decodeObject(forKey: PropertyKeys.contactName) as? String
+        let contactEmail = aDecoder.decodeObject(forKey: PropertyKeys.contactEmail) as? String
+        let sites = aDecoder.decodeObject(forKey: PropertyKeys.sites) as? [Site]
+        
+        self.init(id: id, name: name!, contactName: contactName!, contactEmail: contactEmail!, sites: sites!)
+    }
+    
+    static func saveProjects(projects: [Project]?) {
+        if projects == nil {
+            os_log("Invalid projects passed to save!", log: .default, type: .debug)
+        }
+        
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(projects!, toFile: Project.ArchiveURL.path)
+        
+        if isSuccessfulSave {
+            os_log("Projects saved.", log: .default, type: .debug)
+        }
+        else {
+            os_log("Projects failed to save!", log: .default, type: .debug)
+        }
+    }
+    
+    static func loadProjects() -> [Project]? {
+        return NSKeyedUnarchiver.unarchiveObject(withFile: Project.ArchiveURL.path) as? [Project]
     }
 }
