@@ -198,7 +198,7 @@
             </objects>
             <point key="canvasLocation" x="770" y="-620"/>
         </scene>
-        <!--Site Table View Controller-->
+        <!--Sites-->
         <scene sceneID="BTz-ry-3cD">
             <objects>
                 <tableViewController id="DgL-fJ-2Mc" customClass="SiteTableViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
@@ -233,7 +233,7 @@
                             <outlet property="delegate" destination="DgL-fJ-2Mc" id="0jG-R4-iar"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="SUH-c8-Hs6">
+                    <navigationItem key="navigationItem" title="Sites" id="SUH-c8-Hs6">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Z6e-rm-qFV">
                             <connections>
                                 <segue destination="E3t-Zh-IbQ" kind="presentation" identifier="AddNewSite" id="lcn-OZ-CQU"/>
