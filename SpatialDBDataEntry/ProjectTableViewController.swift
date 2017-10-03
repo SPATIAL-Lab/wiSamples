@@ -18,10 +18,12 @@ class ProjectTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let savedProjects = Project.loadProjects() {
-            projects = savedProjects
+        let result = Project.loadProjects()
+        if result == ProjectEditResult.loadProjectsSuccess {
+            projects = Project.getProjects()
         }
         else {
+            os_log("Add new project failed: %@. Loading sample projects.", log: .default, type: .debug, result.description)
             loadSampleProjects()
         }
     }
@@ -68,14 +70,17 @@ class ProjectTableViewController: UITableViewController {
     // Support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the project
-            projects.remove(at: indexPath.row)
-            
-            // Save projects
-            Project.saveProjects(projects: projects)
-            
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            // Delete the project from the master list
+            let result = Project.removeExisting(project: projects[indexPath.row])
+            if result == ProjectEditResult.removeProjectSuccess {
+                // Delete the project from out list
+                projects.remove(at: indexPath.row)
+                // Delete the row from the data source
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+            else {
+                os_log("Add new project failed: %@", log: .default, type: .debug, result.description)
+            }
         }
         else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -132,13 +137,19 @@ class ProjectTableViewController: UITableViewController {
 
     @IBAction func unwindToProjectList(sender: UIStoryboardSegue) {
         if let projectViewController = sender.source as? ProjectViewController, let project = projectViewController.project {
-            // Add a new project
-            let newIndexPath = IndexPath(row: projects.count, section: 0)
-            projects.append(project)
-            tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
-            
-            // Save projects
-            Project.saveProjects(projects: projects)
+            // Add a new project to the master list
+            let result = Project.addNew(project: project)
+            if result == ProjectEditResult.addProjectSuccess {
+                // Get an index for the new cell
+                let newIndexPath = IndexPath(row: projects.count, section: 0)
+                // Add the project to our list
+                projects.append(project)
+                // Add the new project to the table
+                tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
+            }
+            else {
+                os_log("Add new project failed: %@", log: .default, type: .debug, result.description)
+            }
         }
     }
     
