@@ -11,6 +11,10 @@ import os.log
 
 class Project: NSObject, NSCoding {
     
+    //MARK: Globals
+    
+    static var projects: [Project] = [Project]()
+    
     //MARK: Properties
     
     var id: String
@@ -53,6 +57,12 @@ class Project: NSObject, NSCoding {
         self.sites = sites ?? []
     }
     
+    //MARK: Global Data Helpers
+    
+    static func isValid(projectIndex: Int) -> Bool {
+        return projectIndex >= 0 && projectIndex < projects.count
+    }
+    
     //MARK: NSCoding
     
     func encode(with aCoder: NSCoder) {
@@ -77,22 +87,24 @@ class Project: NSObject, NSCoding {
         self.init(id: id, name: name!, contactName: contactName!, contactEmail: contactEmail!, sites: sites!)
     }
     
-    static func saveProjects(projects: [Project]?) {
-        if projects == nil {
-            os_log("Invalid projects passed to save!", log: .default, type: .debug)
-        }
-        
-        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(projects!, toFile: Project.ArchiveURL.path)
+    static func saveProjects() {
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(projects, toFile: Project.ArchiveURL.path)
         
         if isSuccessfulSave {
-            os_log("Projects saved.", log: .default, type: .debug)
+            os_log("Projects saved successfully.", log: .default, type: .debug)
         }
         else {
             os_log("Projects failed to save!", log: .default, type: .debug)
         }
     }
     
-    static func loadProjects() -> [Project]? {
-        return NSKeyedUnarchiver.unarchiveObject(withFile: Project.ArchiveURL.path) as? [Project]
+    static func loadProjects() {
+        if let savedProjects = NSKeyedUnarchiver.unarchiveObject(withFile: Project.ArchiveURL.path) as? [Project] {
+            projects = savedProjects
+            os_log("Projects loaded successfully.", log: .default, type: .debug)
+        }
+        else {
+            os_log("Projects failed to load!", log: .default, type: .debug)
+        }
     }
 }

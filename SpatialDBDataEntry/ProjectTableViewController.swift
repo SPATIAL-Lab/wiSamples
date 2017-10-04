@@ -12,18 +12,9 @@ import os.log
 class ProjectTableViewController: UITableViewController {
     
     //MARK: Properties
-    
-    var projects = [Project]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if let savedProjects = Project.loadProjects() {
-            projects = savedProjects
-        }
-        else {
-            loadSampleProjects()
-        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -38,7 +29,7 @@ class ProjectTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return projects.count
+        return Project.projects.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -49,7 +40,7 @@ class ProjectTableViewController: UITableViewController {
             fatalError("The dequeued cell is not an instance of ProjectTableViewCell!")
         }
 
-        let project = projects[indexPath.row]
+        let project = Project.projects[indexPath.row]
         
         cell.projectNameLabel.text = project.name
         
@@ -69,13 +60,13 @@ class ProjectTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the project
-            projects.remove(at: indexPath.row)
-            
-            // Save projects
-            Project.saveProjects(projects: projects)
+            Project.projects.remove(at: indexPath.row)
             
             // Delete the row from the data source
             tableView.deleteRows(at: [indexPath], with: .fade)
+            
+            // Save data
+            Project.saveProjects()
         }
         else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -120,8 +111,7 @@ class ProjectTableViewController: UITableViewController {
                 fatalError("The selected cell is not being displayed by the table!")
             }
             
-            let selectedProject = projects[indexPath.row]
-            siteTableViewController.project = selectedProject
+            siteTableViewController.projectIndex = indexPath.row
             
         default:
             fatalError("Unexpected Segue Identifier: \(segue.identifier)")
@@ -132,44 +122,20 @@ class ProjectTableViewController: UITableViewController {
 
     @IBAction func unwindToProjectList(sender: UIStoryboardSegue) {
         if let projectViewController = sender.source as? ProjectViewController, let project = projectViewController.project {
-            // Add a new project
-            let newIndexPath = IndexPath(row: projects.count, section: 0)
-            projects.append(project)
+            // Get an index for the new cell
+            let newIndexPath = IndexPath(row: Project.projects.count, section: 0)
+            
+            // Add the new project
+            Project.projects.append(project)
+            
+            // Add the new project to the table
             tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
             
-            // Save projects
-            Project.saveProjects(projects: projects)
+            // Save data
+            Project.saveProjects()
         }
     }
     
     //MARK: Private Methods
-    
-    private func loadSampleProjects() {
-        guard let project1 = Project(id: "001", name: "TestProject_01", contactName: "John Doe", contactEmail: "", sites: loadSampleSites()) else {
-            fatalError("Unable to instantiate project1")
-        }
-        
-        guard let project2 = Project(id: "002", name: "TestProject_02", contactName: "Jane Doe", contactEmail: "", sites: loadSampleSites()) else {
-            fatalError("Unable to instantiate project2")
-        }
-        
-        guard let project3 = Project(id: "003", name: "TestProject_03", contactName: "Gabe Bowen", contactEmail: "", sites: loadSampleSites()) else {
-            fatalError("Unable to instantiate project3")
-        }
-        
-        projects += [project1, project2, project3]
-    }
-    
-    private func loadSampleSites() -> [Site] {
-        guard let site1 = Site(id: "s_01", name: "Site_01") else {
-            fatalError("Unable to instantiate site1")
-        }
-        
-        guard let site2 = Site(id: "s_02", name: "Site_02") else {
-            fatalError("Unable to instantiate site2")
-        }
-        
-        return [site1, site2]
-    }
     
 }
