@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import os.log
 
 class SiteTableViewController: UITableViewController {
 
@@ -74,18 +73,11 @@ class SiteTableViewController: UITableViewController {
     // Support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let result = Project.removeExisting(site: project!.sites[indexPath.row], fromProject: project!)
-            // Remove the site from the master list
-            if result == ProjectEditResult.removeSiteSuccess {
-                // Remove the site from our list
-                project!.sites.remove(at: indexPath.row)
-                sites.remove(at: indexPath.row)
-                // Delete the row from the data source
-                tableView.deleteRows(at: [indexPath], with: .fade)
-            }
-            else {
-                os_log("Failed to delete site:%@", log: .default, type: .debug, result.description)
-            }
+            // Delete the site
+            project!.sites.remove(at: indexPath.row)
+            sites.remove(at: indexPath.row)
+            // Delete the row from the data source
+            tableView.deleteRows(at: [indexPath], with: .fade)
         }
         else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -125,17 +117,15 @@ class SiteTableViewController: UITableViewController {
                 fatalError("Project was nil!")
             }
             
-            // Add a new site to the master list
-            let result = Project.addNew(site: site, toProject: project!)
-            if result == ProjectEditResult.addSiteSuccess {
-                // Get an index for the new cell
-                let newIndexPath = IndexPath(row: sites.count, section: 0)
-                // Add a new site to the project
-                project!.sites.append(site)
-                sites.append(site)
-                // Add a new site to the table
-                tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
-            }
+            // Get an index for the new cell
+            let newIndexPath = IndexPath(row: sites.count, section: 0)
+            
+            // Add a new site to the project
+            project!.sites.append(site)
+            sites.append(site)
+            
+            // Add a new site to the table
+            tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
         }
     }
     

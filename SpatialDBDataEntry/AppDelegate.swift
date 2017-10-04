@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import os.log
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,15 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
-        let result = Project.loadProjects()
-        if result == ProjectEditResult.loadProjectsSuccess {
-            os_log("Loaded projects...", log: .default, type: .debug)
-        }
-        else {
-            os_log("Load projects failed:%@", log: .default, type: .debug, result.description)
-        }
-        
         return true
     }
 
