@@ -18,7 +18,7 @@ class SiteViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
     /* This value is either passed by `SiteTableViewController` via `prepare(for:sender)`
-     or construct as part of adding a new site.
+     or constructed as part of adding a new site.
      */
     var site: Site?
     

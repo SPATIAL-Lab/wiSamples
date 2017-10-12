@@ -14,12 +14,16 @@
 		9E3B19851F7F3E4C0094D925 /* ProjectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3B19841F7F3E4C0094D925 /* ProjectTableViewCell.swift */; };
 		9E3B19871F7F401D0094D925 /* ProjectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3B19861F7F401D0094D925 /* ProjectTableViewController.swift */; };
 		9E3F560C1F819E1A004BEBEB /* SiteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3F560B1F819E1A004BEBEB /* SiteTableViewCell.swift */; };
+		9E63B86E1F8EE6B000F16D02 /* Sample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63B86D1F8EE6B000F16D02 /* Sample.swift */; };
 		9E647DBB1F73593000F2BC61 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E647DBA1F73593000F2BC61 /* AppDelegate.swift */; };
 		9E647DBD1F73593000F2BC61 /* ProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E647DBC1F73593000F2BC61 /* ProjectViewController.swift */; };
 		9E647DC01F73593000F2BC61 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E647DBE1F73593000F2BC61 /* Main.storyboard */; };
 		9E647DC21F73593000F2BC61 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E647DC11F73593000F2BC61 /* Assets.xcassets */; };
 		9E647DC51F73593000F2BC61 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E647DC31F73593000F2BC61 /* LaunchScreen.storyboard */; };
 		9E647DD01F73593000F2BC61 /* SpatialDBDataEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E647DCF1F73593000F2BC61 /* SpatialDBDataEntryTests.swift */; };
+		9EF583B41F8C5C8E00079487 /* SampleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF583B31F8C5C8E00079487 /* SampleTableViewController.swift */; };
+		9EF583B61F8C5CA100079487 /* SampleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF583B51F8C5CA100079487 /* SampleTableViewCell.swift */; };
+		9EF583B81F8C5F6100079487 /* SampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF583B71F8C5F6100079487 /* SampleViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +44,7 @@
 		9E3B19841F7F3E4C0094D925 /* ProjectTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectTableViewCell.swift; sourceTree = "<group>"; };
 		9E3B19861F7F401D0094D925 /* ProjectTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectTableViewController.swift; sourceTree = "<group>"; };
 		9E3F560B1F819E1A004BEBEB /* SiteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteTableViewCell.swift; sourceTree = "<group>"; };
+		9E63B86D1F8EE6B000F16D02 /* Sample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sample.swift; sourceTree = "<group>"; };
 		9E647DB71F73593000F2BC61 /* SpatialDBDataEntry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpatialDBDataEntry.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E647DBA1F73593000F2BC61 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9E647DBC1F73593000F2BC61 /* ProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectViewController.swift; sourceTree = "<group>"; };
@@ -50,6 +55,9 @@
 		9E647DCB1F73593000F2BC61 /* SpatialDBDataEntryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpatialDBDataEntryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E647DCF1F73593000F2BC61 /* SpatialDBDataEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpatialDBDataEntryTests.swift; sourceTree = "<group>"; };
 		9E647DD11F73593000F2BC61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9EF583B31F8C5C8E00079487 /* SampleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleTableViewController.swift; sourceTree = "<group>"; };
+		9EF583B51F8C5CA100079487 /* SampleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleTableViewCell.swift; sourceTree = "<group>"; };
+		9EF583B71F8C5F6100079487 /* SampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +83,7 @@
 			children = (
 				9E3B19801F7F3B930094D925 /* Site.swift */,
 				9E3B19821F7F3BA20094D925 /* Project.swift */,
+				9E63B86D1F8EE6B000F16D02 /* Sample.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -97,6 +106,9 @@
 				9E3F560B1F819E1A004BEBEB /* SiteTableViewCell.swift */,
 				9E17B9B91F81A12600C99F12 /* SiteTableViewController.swift */,
 				9E17B9BB1F81A6F500C99F12 /* SiteViewController.swift */,
+				9EF583B31F8C5C8E00079487 /* SampleTableViewController.swift */,
+				9EF583B51F8C5CA100079487 /* SampleTableViewCell.swift */,
+				9EF583B71F8C5F6100079487 /* SampleViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -245,14 +257,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9EF583B61F8C5CA100079487 /* SampleTableViewCell.swift in Sources */,
 				9E3B19871F7F401D0094D925 /* ProjectTableViewController.swift in Sources */,
+				9EF583B81F8C5F6100079487 /* SampleViewController.swift in Sources */,
 				9E3F560C1F819E1A004BEBEB /* SiteTableViewCell.swift in Sources */,
 				9E3B19851F7F3E4C0094D925 /* ProjectTableViewCell.swift in Sources */,
 				9E647DBD1F73593000F2BC61 /* ProjectViewController.swift in Sources */,
 				9E17B9BA1F81A12600C99F12 /* SiteTableViewController.swift in Sources */,
+				9EF583B41F8C5C8E00079487 /* SampleTableViewController.swift in Sources */,
 				9E17B9BC1F81A6F500C99F12 /* SiteViewController.swift in Sources */,
 				9E3B19811F7F3B930094D925 /* Site.swift in Sources */,
 				9E647DBB1F73593000F2BC61 /* AppDelegate.swift in Sources */,
+				9E63B86E1F8EE6B000F16D02 /* Sample.swift in Sources */,
 				9E3B19831F7F3BA20094D925 /* Project.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

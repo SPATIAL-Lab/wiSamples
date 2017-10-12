@@ -10,10 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Your Projects-->
+        <!--Projects-->
         <scene sceneID="YGQ-gr-NxP">
             <objects>
-                <tableViewController id="7wG-CS-xa6" customClass="ProjectTableViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="7wG-CS-xa6" userLabel="Projects" customClass="ProjectTableViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="75" sectionHeaderHeight="28" sectionFooterHeight="28" id="xPw-ga-ie0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -37,7 +37,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="projectNameLabel" destination="ZZR-zq-yIz" id="Mt6-vw-yLz"/>
-                                    <segue destination="DgL-fJ-2Mc" kind="show" identifier="ShowSites" id="psP-Es-Ixm"/>
+                                    <segue destination="MUt-B7-mr6" kind="show" identifier="ShowSamples" id="MH6-DP-Fni"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -46,7 +46,7 @@
                             <outlet property="delegate" destination="7wG-CS-xa6" id="5Of-gd-SIi"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Your Projects" id="OKg-kc-0BO">
+                    <navigationItem key="navigationItem" title="Projects" id="OKg-kc-0BO">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="yRh-eJ-cDB">
                             <connections>
                                 <segue destination="flO-B4-xHI" kind="presentation" identifier="AddNewProject" id="3Wv-qY-Wjq"/>
@@ -198,6 +198,125 @@
             </objects>
             <point key="canvasLocation" x="770" y="-620"/>
         </scene>
+        <!--Samples-->
+        <scene sceneID="y7E-aF-LEg">
+            <objects>
+                <tableViewController id="MUt-B7-mr6" userLabel="Samples" customClass="SampleTableViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="75" sectionHeaderHeight="28" sectionFooterHeight="28" id="iuc-Qi-qbL">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SampleTableViewCell" rowHeight="75" id="uWq-mG-12s" customClass="SampleTableViewCell" customModule="SpatialDBDataEntry" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="375" height="75"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uWq-mG-12s" id="edw-YJ-zRZ">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="75"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Sample ID Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VSU-2G-lJx">
+                                            <rect key="frame" x="8" y="17" width="360" height="40"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="sampleIDLabel" destination="VSU-2G-lJx" id="PnW-fH-0Mk"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="MUt-B7-mr6" id="Oex-px-KJH"/>
+                            <outlet property="delegate" destination="MUt-B7-mr6" id="Tlr-6J-4WC"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LHm-Ju-Bnh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="768.79999999999995" y="402.54872563718146"/>
+        </scene>
+        <!--New Sample-->
+        <scene sceneID="bYQ-GH-8cH">
+            <objects>
+                <viewController id="zAh-PE-PMc" userLabel="New Sample" customClass="SampleViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="FGb-NZ-Vae"/>
+                        <viewControllerLayoutGuide type="bottom" id="mHy-in-yiT"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ghd-GS-cbZ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="oev-4I-kT3">
+                                <rect key="frame" x="16" y="40" width="343" height="418"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sample ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ICK-Nz-ySh">
+                                        <rect key="frame" x="0.0" y="0.0" width="78" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0yk-SJ-cyQ">
+                                        <rect key="frame" x="0.0" y="20.5" width="343" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dhf-ax-WWR">
+                                        <rect key="frame" x="0.0" y="50.5" width="137" height="30"/>
+                                        <state key="normal" title="Generate Sample ID"/>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JcH-4d-1jV">
+                                        <rect key="frame" x="0.0" y="80.5" width="65.5" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zdn-wD-r6d">
+                                        <rect key="frame" x="0.0" y="101" width="102" height="30"/>
+                                        <state key="normal" title="Fetch Location"/>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sample Type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b4d-Ay-xqK">
+                                        <rect key="frame" x="0.0" y="131" width="99" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7iC-P2-5XN">
+                                        <rect key="frame" x="0.0" y="151.5" width="343" height="216"/>
+                                    </pickerView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date &amp; Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6a8-Ew-5re">
+                                        <rect key="frame" x="0.0" y="367.5" width="94.5" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="79g-0p-sRm">
+                                        <rect key="frame" x="0.0" y="388" width="98" height="30"/>
+                                        <state key="normal" title="Miscellaneous"/>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="7iC-P2-5XN" secondAttribute="trailing" id="CEh-1I-L3Y"/>
+                                    <constraint firstAttribute="trailing" secondItem="0yk-SJ-cyQ" secondAttribute="trailing" id="yOp-iX-e2w"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="oev-4I-kT3" firstAttribute="top" secondItem="FGb-NZ-Vae" secondAttribute="bottom" constant="20" id="9qw-Dd-TPJ"/>
+                            <constraint firstItem="oev-4I-kT3" firstAttribute="leading" secondItem="ghd-GS-cbZ" secondAttribute="leadingMargin" id="Xht-rU-aZR"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="oev-4I-kT3" secondAttribute="trailing" id="tSL-aX-RL7"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="f8p-Ih-nxX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2360.8000000000002" y="412.44377811094455"/>
+        </scene>
         <!--Sites-->
         <scene sceneID="BTz-ry-3cD">
             <objects>
@@ -243,7 +362,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J4G-5Q-WU7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1638" y="572"/>
+            <point key="canvasLocation" x="1878" y="1325"/>
         </scene>
         <!--New Site-->
         <scene sceneID="ApQ-PG-EHR">
@@ -332,7 +451,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q7e-VL-KYH" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="f6a-Gx-Skz" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3529" y="81"/>
+            <point key="canvasLocation" x="3542" y="1325"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="4bf-S1-t0K">
@@ -350,7 +469,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WCQ-UC-re7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2679" y="81"/>
+            <point key="canvasLocation" x="2703" y="1325"/>
         </scene>
     </scenes>
 </document>

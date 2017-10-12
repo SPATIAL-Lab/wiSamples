@@ -77,7 +77,7 @@ class ProjectViewController: UIViewController, UITextFieldDelegate {
         let projectID = projectIDLabel.text ?? ""
         
         // Create a new project
-        project = Project(id: projectID, name: projectName, contactName: contactName, contactEmail: contactEmail, sites: nil)
+        project = Project(id: projectID, name: projectName, contactName: contactName, contactEmail: contactEmail, sites: nil, samples: nil)
     }
     
     //MARK: Actions

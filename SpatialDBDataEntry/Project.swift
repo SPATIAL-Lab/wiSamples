@@ -8,11 +8,13 @@
 
 import Foundation
 import os.log
+import CoreLocation
 
 class Project: NSObject, NSCoding {
     
     //MARK: Globals
     
+    static var enableSampleProjects: Bool = true
     static var projects: [Project] = [Project]()
     
     //MARK: Properties
@@ -22,6 +24,7 @@ class Project: NSObject, NSCoding {
     var contactName: String
     var contactEmail: String
     var sites: [Site]
+    var samples: [Sample]
     
     //MARK: Archiving paths
     
@@ -37,11 +40,12 @@ class Project: NSObject, NSCoding {
         static let contactName = "contactName"
         static let contactEmail = "contactEmail"
         static let sites = "sites"
+        static let samples = "samples"
     }
     
     //MARK: Initialization
     
-    init?(id: String, name: String, contactName: String, contactEmail: String, sites: [Site]?) {
+    init?(id: String, name: String, contactName: String, contactEmail: String, sites: [Site]?, samples: [Sample]?) {
         guard !id.isEmpty else {
             return nil
         }
@@ -55,6 +59,7 @@ class Project: NSObject, NSCoding {
         self.contactName = contactName
         self.contactEmail = contactEmail
         self.sites = sites ?? []
+        self.samples = samples ?? []
     }
     
     //MARK: Global Data Helpers
@@ -71,6 +76,7 @@ class Project: NSObject, NSCoding {
         aCoder.encode(contactName, forKey: PropertyKeys.contactName)
         aCoder.encode(contactEmail, forKey: PropertyKeys.contactEmail)
         aCoder.encode(sites, forKey: PropertyKeys.sites)
+        aCoder.encode(samples, forKey: PropertyKeys.samples)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -83,8 +89,9 @@ class Project: NSObject, NSCoding {
         let contactName = aDecoder.decodeObject(forKey: PropertyKeys.contactName) as? String
         let contactEmail = aDecoder.decodeObject(forKey: PropertyKeys.contactEmail) as? String
         let sites = aDecoder.decodeObject(forKey: PropertyKeys.sites) as? [Site]
+        let samples = aDecoder.decodeObject(forKey: PropertyKeys.samples) as? [Sample]
         
-        self.init(id: id, name: name!, contactName: contactName!, contactEmail: contactEmail!, sites: sites!)
+        self.init(id: id, name: name!, contactName: contactName!, contactEmail: contactEmail!, sites: sites!, samples: samples!)
     }
     
     static func saveProjects() {
@@ -99,6 +106,11 @@ class Project: NSObject, NSCoding {
     }
     
     static func loadProjects() {
+        if enableSampleProjects {
+            loadSampleProjects()
+            return
+        }
+        
         if let savedProjects = NSKeyedUnarchiver.unarchiveObject(withFile: Project.ArchiveURL.path) as? [Project] {
             projects = savedProjects
             os_log("Projects loaded successfully.", log: .default, type: .debug)
@@ -106,5 +118,25 @@ class Project: NSObject, NSCoding {
         else {
             os_log("Projects failed to load!", log: .default, type: .debug)
         }
+    }
+    
+    //MARK: Private Methods
+    
+    private static func loadSampleProjects() {
+        guard let site1 = Site(id: "site_01", name: "Site_01") else {
+            fatalError("Unable to instantiate site1")
+        }
+        
+        let location = CLLocationCoordinate2DMake(CLLocationDegrees(0), CLLocationDegrees(0))
+        let date = Date()
+        guard let sample1 = Sample(id: "sample_01", location: location, type: SampleType.lake, dateTime: date, startDateTime: date) else {
+            fatalError("Unable to instantiate sample1")
+        }
+        
+        guard let project1 = Project(id: "project_01", name: "TestProject_01", contactName: "John Doe", contactEmail: "", sites: [site1], samples: [sample1]) else {
+            fatalError("Unable to instantiate project1")
+        }
+        
+        projects += [project1]
     }
 }

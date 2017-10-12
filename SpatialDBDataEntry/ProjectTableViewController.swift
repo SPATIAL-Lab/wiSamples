@@ -113,6 +113,21 @@ class ProjectTableViewController: UITableViewController {
             
             siteTableViewController.projectIndex = indexPath.row
             
+        case "ShowSamples":
+            guard let sampleTableViewController = segue.destination as? SampleTableViewController else {
+                fatalError("The top view controller was not a SampleTableViewController")
+            }
+            
+            guard let selectedProjectCell = sender as? ProjectTableViewCell else {
+                fatalError("Unexpected sender \(sender)")
+            }
+            
+            guard let indexPath = tableView.indexPath(for: selectedProjectCell) else {
+                fatalError("The selected cell is not being displayed by the table!")
+            }
+            
+            sampleTableViewController.projectIndex = indexPath.row
+            
         default:
             fatalError("Unexpected Segue Identifier: \(segue.identifier)")
         }
