@@ -110,7 +110,7 @@ class SampleTableViewController: UITableViewController {
     
     //MARK: Actions
     
-    @IBAction func unwindToSiteList(sender: UIStoryboardSegue) {
+    @IBAction func unwindToSampleList(sender: UIStoryboardSegue) {
         if let sampleViewController = sender.source as? SampleViewController, let sample = sampleViewController.sample {
             if !Project.isValid(projectIndex: projectIndex) {
                 fatalError("Project was nil!")
@@ -126,7 +126,7 @@ class SampleTableViewController: UITableViewController {
             tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
             
             // Save data
-            Project.saveProjects()
+            //Project.saveProjects()
         }
     }
 

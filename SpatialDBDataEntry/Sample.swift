@@ -11,7 +11,6 @@ import os.log
 import CoreLocation
 
 enum SampleType: Int {
-    case invalid
     case ground
     case lake
     case riverOrStream
@@ -32,7 +31,6 @@ enum SampleType: Int {
     
     var description: String {
         switch self {
-        case .invalid:              return "Invalid"
         case .ground:               return "Ground"
         case .lake:                 return "Lake"
         case .riverOrStream:        return "River or Stream"
@@ -51,6 +49,10 @@ enum SampleType: Int {
         case .mine:                 return "Mine"
         case .cloudWater:           return "Cloud Water"
         }
+    }
+    
+    static var count: Int {
+        return 17
     }
 }
 
