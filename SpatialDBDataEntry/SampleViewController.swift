@@ -26,7 +26,7 @@ UIPickerViewDataSource {
      or constructed as part of adding a new sample.
      */
     var sample: Sample?
-    var selectedType: SampleType?
+    var selectedType: SampleType? = SampleType.ground
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -70,7 +70,8 @@ class Sample: NSObject, NSCoding {
     
     struct PropertyKeys {
         static let sampleID = "sampleID"
-        static let location = "location"
+        static let latitude = "latitude"
+        static let longitude = "longitude"
         static let type = "sampleType"
         static let dateTime = "dateTime"
         static let startDateTime = "startDateTime"
@@ -94,8 +95,9 @@ class Sample: NSObject, NSCoding {
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(id, forKey: PropertyKeys.sampleID)
-        aCoder.encode(location, forKey: PropertyKeys.location)
-        aCoder.encode(type, forKey: PropertyKeys.type)
+        aCoder.encode(Double(location.latitude), forKey: PropertyKeys.latitude)
+        aCoder.encode(Double(location.longitude), forKey: PropertyKeys.longitude)
+        aCoder.encode(type.rawValue, forKey: PropertyKeys.type)
         aCoder.encode(dateTime, forKey: PropertyKeys.dateTime)
         aCoder.encode(startDateTime, forKey: PropertyKeys.startDateTime)
     }
@@ -106,12 +108,14 @@ class Sample: NSObject, NSCoding {
             return nil
         }
         
-        let location = aDecoder.decodeObject(forKey: PropertyKeys.location) as? CLLocationCoordinate2D
-        let type = aDecoder.decodeObject(forKey: PropertyKeys.type) as? SampleType
+        let latitude = aDecoder.decodeDouble(forKey: PropertyKeys.latitude)
+        let longitude = aDecoder.decodeDouble(forKey: PropertyKeys.longitude)
+        let location = CLLocationCoordinate2DMake(CLLocationDegrees(latitude), CLLocationDegrees(longitude))
+        let type = SampleType(rawValue: aDecoder.decodeInteger(forKey: PropertyKeys.type))!
         let dateTime = aDecoder.decodeObject(forKey: PropertyKeys.dateTime) as? Date
         let startDateTime = aDecoder.decodeObject(forKey: PropertyKeys.startDateTime) as? Date
         
-        self.init(id: id, location: location!, type: type!, dateTime: dateTime!, startDateTime: startDateTime!)
+        self.init(id: id, location: location, type: type, dateTime: dateTime!, startDateTime: startDateTime!)
     }
     
 }

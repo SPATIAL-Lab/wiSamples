@@ -126,7 +126,7 @@ class SampleTableViewController: UITableViewController {
             tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
             
             // Save data
-            //Project.saveProjects()
+            Project.saveProjects()
         }
     }
 

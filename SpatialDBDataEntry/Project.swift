@@ -14,7 +14,7 @@ class Project: NSObject, NSCoding {
     
     //MARK: Globals
     
-    static var enableSampleProjects: Bool = true
+    static var enableSampleProjects: Bool = false
     static var projects: [Project] = [Project]()
     
     //MARK: Properties
