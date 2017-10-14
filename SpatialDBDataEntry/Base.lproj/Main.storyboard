@@ -258,7 +258,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="oev-4I-kT3">
-                                <rect key="frame" x="16" y="84" width="343" height="342"/>
+                                <rect key="frame" x="16" y="84" width="343" height="452"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sample ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ICK-Nz-ySh">
                                         <rect key="frame" x="0.0" y="0.0" width="78" height="20.5"/>
@@ -270,7 +270,7 @@
                                         <rect key="frame" x="0.0" y="30.5" width="343" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dhf-ax-WWR">
                                         <rect key="frame" x="0.0" y="70.5" width="137" height="30"/>
@@ -297,19 +297,32 @@
                                             <constraint firstAttribute="height" constant="100" id="bqg-Mj-csQ"/>
                                         </constraints>
                                     </pickerView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date &amp; Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6a8-Ew-5re">
-                                        <rect key="frame" x="0.0" y="281.5" width="94.5" height="20.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Collection Date &amp; Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6a8-Ew-5re">
+                                        <rect key="frame" x="0.0" y="281.5" width="175.5" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="10" translatesAutoresizingMaskIntoConstraints="NO" id="6Le-5J-reb">
+                                        <rect key="frame" x="0.0" y="312" width="343" height="100"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="100" id="qd4-Qf-sLl"/>
+                                        </constraints>
+                                        <date key="date" timeIntervalSinceReferenceDate="529634141.47707403">
+                                            <!--2017-10-14 00:35:41 +0000-->
+                                        </date>
+                                        <connections>
+                                            <action selector="collectionDateSelected:" destination="zAh-PE-PMc" eventType="valueChanged" id="DXQ-Dq-B99"/>
+                                        </connections>
+                                    </datePicker>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="79g-0p-sRm">
-                                        <rect key="frame" x="0.0" y="312" width="98" height="30"/>
+                                        <rect key="frame" x="0.0" y="422" width="98" height="30"/>
                                         <state key="normal" title="Miscellaneous"/>
                                     </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="7iC-P2-5XN" secondAttribute="trailing" id="CEh-1I-L3Y"/>
+                                    <constraint firstAttribute="trailing" secondItem="6Le-5J-reb" secondAttribute="trailing" id="sz5-Z4-xv6"/>
                                     <constraint firstAttribute="trailing" secondItem="0yk-SJ-cyQ" secondAttribute="trailing" id="yOp-iX-e2w"/>
                                 </constraints>
                             </stackView>

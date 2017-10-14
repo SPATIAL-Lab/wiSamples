@@ -29,8 +29,9 @@ CLLocationManagerDelegate {
      or constructed as part of adding a new sample.
      */
     var sample: Sample?
-    var selectedType: SampleType? = SampleType.ground
+    var selectedType: SampleType = SampleType.ground
     var lastUpdatedLocation: CLLocationCoordinate2D = CLLocationCoordinate2D()
+    var selectedDate: Date = Date()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -118,10 +119,9 @@ CLLocationManagerDelegate {
         // Extract properties for a new sample.
         let sampleID = sampleIDTextField.text ?? ""
         let location = CLLocationCoordinate2DMake(CLLocationDegrees(0), CLLocationDegrees(0))
-        let date = Date()
         
         // Create a new sample
-        sample = Sample(id: sampleID, location: location, type: selectedType!, dateTime: date, startDateTime: date)
+        sample = Sample(id: sampleID, location: location, type: selectedType, dateTime: selectedDate, startDateTime: selectedDate)
     }
 
     //MARK: Actions
@@ -130,6 +130,10 @@ CLLocationManagerDelegate {
     }
     
     @IBAction func generateSampleID(_ sender: UIButton) {
+    }
+    
+    @IBAction func collectionDateSelected(_ sender: UIDatePicker) {
+        selectedDate = sender.date
     }
     
 }
