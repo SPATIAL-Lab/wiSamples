@@ -23,7 +23,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="75"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XwP-eD-dKu" id="BEv-jd-wNf">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="74"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="75"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZZR-zq-yIz">
@@ -211,7 +211,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="75"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uWq-mG-12s" id="edw-YJ-zRZ">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="74"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="75"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Sample ID Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VSU-2G-lJx">
@@ -258,7 +258,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="oev-4I-kT3">
-                                <rect key="frame" x="16" y="84" width="343" height="382"/>
+                                <rect key="frame" x="16" y="84" width="343" height="342"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sample ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ICK-Nz-ySh">
                                         <rect key="frame" x="0.0" y="0.0" width="78" height="20.5"/>
@@ -285,33 +285,26 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zdn-wD-r6d">
-                                        <rect key="frame" x="0.0" y="141" width="102" height="30"/>
-                                        <state key="normal" title="Fetch Location"/>
-                                        <connections>
-                                            <action selector="fetchLocation:" destination="zAh-PE-PMc" eventType="touchUpInside" id="ezC-04-n2P"/>
-                                        </connections>
-                                    </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sample Type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b4d-Ay-xqK">
-                                        <rect key="frame" x="0.0" y="181" width="99" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="141" width="99" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7iC-P2-5XN">
-                                        <rect key="frame" x="0.0" y="211.5" width="343" height="100"/>
+                                        <rect key="frame" x="0.0" y="171.5" width="343" height="100"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="bqg-Mj-csQ"/>
                                         </constraints>
                                     </pickerView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date &amp; Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6a8-Ew-5re">
-                                        <rect key="frame" x="0.0" y="321.5" width="94.5" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="281.5" width="94.5" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="79g-0p-sRm">
-                                        <rect key="frame" x="0.0" y="352" width="98" height="30"/>
+                                        <rect key="frame" x="0.0" y="312" width="98" height="30"/>
                                         <state key="normal" title="Miscellaneous"/>
                                     </button>
                                 </subviews>
@@ -365,7 +358,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="75"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="C6z-bq-WVE" id="ZLt-jO-Yze">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="74"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="75"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Site ID Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wu2-pY-h5e">

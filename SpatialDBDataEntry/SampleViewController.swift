@@ -13,9 +13,12 @@ import CoreLocation
 class SampleViewController: UIViewController,
 UITextFieldDelegate,
 UIPickerViewDelegate,
-UIPickerViewDataSource {
+UIPickerViewDataSource,
+CLLocationManagerDelegate {
 
     //MARK: Properties
+    
+    let locationManager = CLLocationManager()
     
     @IBOutlet weak var sampleIDTextField: UITextField!
     @IBOutlet weak var locationLabel: UILabel!
@@ -27,6 +30,7 @@ UIPickerViewDataSource {
      */
     var sample: Sample?
     var selectedType: SampleType? = SampleType.ground
+    var lastUpdatedLocation: CLLocationCoordinate2D = CLLocationCoordinate2D()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +42,18 @@ UIPickerViewDataSource {
         typePicker.delegate = self
         typePicker.dataSource = self
 
-        // Do any additional setup after loading the view.
+        // Initialize location
+        // Request location usage
+        locationManager.requestWhenInUseAuthorization()
+        
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.startUpdatingLocation()
+        }
+        else {
+            locationLabel.text = "Location: Permission denied!"
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -83,6 +98,13 @@ UIPickerViewDataSource {
         return SampleType(rawValue: row)?.description
     }
 
+    //MARK: CLLocationManagerDelegate
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        lastUpdatedLocation = (manager.location?.coordinate)!
+        locationLabel.text = "Location: \(lastUpdatedLocation.latitude), \(lastUpdatedLocation.longitude)"
+    }
+    
     // MARK: Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -108,9 +130,6 @@ UIPickerViewDataSource {
     }
     
     @IBAction func generateSampleID(_ sender: UIButton) {
-    }
-    
-    @IBAction func fetchLocation(_ sender: UIButton) {
     }
     
 }
