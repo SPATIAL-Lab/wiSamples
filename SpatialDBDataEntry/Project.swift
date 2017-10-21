@@ -14,15 +14,15 @@ class Project: NSObject, NSCoding {
     
     //MARK: Globals
     
-    static var enableSampleProjects: Bool = false
+    static var enableSampleProjects: Bool = true
     static var projects: [Project] = [Project]()
     
     //MARK: Properties
     
-    var id: String
     var name: String
     var contactName: String
     var contactEmail: String
+    var sampleIDPrefix: String
     var sites: [Site]
     var samples: [Sample]
     
@@ -35,29 +35,25 @@ class Project: NSObject, NSCoding {
     
     struct PropertyKeys {
         // Project data
-        static let projectID = "projectID"
         static let projectName = "projectName"
         static let contactName = "contactName"
         static let contactEmail = "contactEmail"
+        static let sampleIDPrefix = "sampleIDPrefix"
         static let sites = "sites"
         static let samples = "samples"
     }
     
     //MARK: Initialization
     
-    init?(id: String, name: String, contactName: String, contactEmail: String, sites: [Site]?, samples: [Sample]?) {
-        guard !id.isEmpty else {
-            return nil
-        }
-        
+    init?(name: String, contactName: String, contactEmail: String, sampleIDPrefix: String, sites: [Site]?, samples: [Sample]?) {
         guard !name.isEmpty else {
             return nil
         }
         
-        self.id = id
         self.name = name
         self.contactName = contactName
         self.contactEmail = contactEmail
+        self.sampleIDPrefix = sampleIDPrefix
         self.sites = sites ?? []
         self.samples = samples ?? []
     }
@@ -71,27 +67,27 @@ class Project: NSObject, NSCoding {
     //MARK: NSCoding
     
     func encode(with aCoder: NSCoder) {
-        aCoder.encode(id, forKey: PropertyKeys.projectID)
         aCoder.encode(name, forKey: PropertyKeys.projectName)
         aCoder.encode(contactName, forKey: PropertyKeys.contactName)
         aCoder.encode(contactEmail, forKey: PropertyKeys.contactEmail)
+        aCoder.encode(sampleIDPrefix, forKey: PropertyKeys.sampleIDPrefix)
         aCoder.encode(sites, forKey: PropertyKeys.sites)
         aCoder.encode(samples, forKey: PropertyKeys.samples)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
-        guard let id = aDecoder.decodeObject(forKey: PropertyKeys.projectID) as? String else {
-            os_log("Unable to decode the id for a Project object!", log: OSLog.default, type: OSLogType.debug)
+        guard let name = aDecoder.decodeObject(forKey: PropertyKeys.projectName) as? String else {
+            os_log("Unable to decode the name for a Project object!", log: OSLog.default, type: OSLogType.debug)
             return nil
         }
         
-        let name = aDecoder.decodeObject(forKey: PropertyKeys.projectName) as? String
         let contactName = aDecoder.decodeObject(forKey: PropertyKeys.contactName) as? String
         let contactEmail = aDecoder.decodeObject(forKey: PropertyKeys.contactEmail) as? String
+        let sampleIDPrefix = aDecoder.decodeObject(forKey: PropertyKeys.sampleIDPrefix) as? String
         let sites = aDecoder.decodeObject(forKey: PropertyKeys.sites) as? [Site]
         let samples = aDecoder.decodeObject(forKey: PropertyKeys.samples) as? [Sample]
         
-        self.init(id: id, name: name!, contactName: contactName!, contactEmail: contactEmail!, sites: sites!, samples: samples!)
+        self.init(name: name, contactName: contactName!, contactEmail: contactEmail!, sampleIDPrefix: sampleIDPrefix!, sites: sites!, samples: samples!)
     }
     
     static func saveProjects() {
@@ -133,10 +129,21 @@ class Project: NSObject, NSCoding {
             fatalError("Unable to instantiate sample1")
         }
         
-        guard let project1 = Project(id: "project_01", name: "TestProject_01", contactName: "John Doe", contactEmail: "", sites: [site1], samples: [sample1]) else {
+        guard let project1 = Project(name: "TestProject_01", contactName: "John Doe", contactEmail: "", sampleIDPrefix: "TP1-JD-", sites: [site1], samples: [sample1]) else {
             fatalError("Unable to instantiate project1")
         }
         
         projects += [project1]
+    }
+    
+    private static func deleteSavedProjects() {
+        let fileManager = FileManager.default
+        
+        do {
+            try fileManager.removeItem(atPath: Project.ArchiveURL.path)
+        }
+        catch {
+            os_log("Failed to delete failed projects!", log: .default, type: .debug)
+        }
     }
 }

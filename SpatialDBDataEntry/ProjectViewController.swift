@@ -16,10 +16,8 @@ class ProjectViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var projectNameTextField: UITextField!
     @IBOutlet weak var contactNameTextField: UITextField!
     @IBOutlet weak var contactEmailTextField: UITextField!
-    @IBOutlet weak var projectIDLabel: UILabel!
+    @IBOutlet weak var sampleIDPrefixTextField: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
-    
-    let projectIDLabelSuffix: String = "Project ID: "
 
     /* This value is either passed by `ProjectTableViewController` via `prepare(for:sender)`
         or construct as part of adding a new project.
@@ -33,6 +31,7 @@ class ProjectViewController: UIViewController, UITextFieldDelegate {
         projectNameTextField.delegate = self
         contactNameTextField.delegate = self
         contactEmailTextField.delegate = self
+        sampleIDPrefixTextField.delegate = self
         
         // Disable save button
         saveButton.isEnabled = false
@@ -57,6 +56,9 @@ class ProjectViewController: UIViewController, UITextFieldDelegate {
         
         // Hide the keyboard.
         textField.resignFirstResponder()
+        
+        checkAndEnableSaveButton()
+        
         return true
     }
 
@@ -74,10 +76,10 @@ class ProjectViewController: UIViewController, UITextFieldDelegate {
         let projectName = projectNameTextField.text ?? ""
         let contactName = contactNameTextField.text ?? ""
         let contactEmail = contactEmailTextField.text ?? ""
-        let projectID = projectIDLabel.text ?? ""
+        let sampleIDPrefix = sampleIDPrefixTextField.text ?? ""
         
         // Create a new project
-        project = Project(id: projectID, name: projectName, contactName: contactName, contactEmail: contactEmail, sites: nil, samples: nil)
+        project = Project(name: projectName, contactName: contactName, contactEmail: contactEmail, sampleIDPrefix: sampleIDPrefix, sites: nil, samples: nil)
     }
     
     //MARK: Actions
@@ -86,19 +88,15 @@ class ProjectViewController: UIViewController, UITextFieldDelegate {
         dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func generateProjectID(_ sender: UIButton) {
-        let projectName = projectNameTextField.text ?? ""
-        
-        if projectName.isEmpty {
-            os_log("Project name was empty. Cannot generate project ID!", log: OSLog.default, type: OSLogType.debug)
-            return
+    //MARK: Private Methods
+    
+    func checkAndEnableSaveButton() {
+        if projectNameTextField.text!.isEmpty == false && sampleIDPrefixTextField.text!.isEmpty == false {
+            saveButton.isEnabled = true;
         }
-        
-        // Generate a project ID based on the name.
-        projectIDLabel.text = projectIDLabelSuffix + projectName + "_01"
-        
-        // Enable the save button
-        saveButton.isEnabled = true
+        else {
+            saveButton.isEnabled = false;
+        }
     }
 }
 
