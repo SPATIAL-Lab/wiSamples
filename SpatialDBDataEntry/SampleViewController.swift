@@ -21,7 +21,6 @@ CLLocationManagerDelegate {
     let locationManager = CLLocationManager()
     
     @IBOutlet weak var sampleIDTextField: UITextField!
-    @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var typePicker: UIPickerView!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
@@ -29,6 +28,7 @@ CLLocationManagerDelegate {
      or constructed as part of adding a new sample.
      */
     var sample: Sample?
+    var generatedSampleID: String = ""
     var selectedType: SampleType = SampleType.ground
     var lastUpdatedLocation: CLLocationCoordinate2D = CLLocationCoordinate2D()
     var selectedDate: Date = Date()
@@ -42,6 +42,9 @@ CLLocationManagerDelegate {
         // Set picker view delegates
         typePicker.delegate = self
         typePicker.dataSource = self
+        
+        // Initialize sample ID
+        sampleIDTextField.text = generatedSampleID
 
         // Initialize location
         // Request location usage
@@ -53,7 +56,7 @@ CLLocationManagerDelegate {
             locationManager.startUpdatingLocation()
         }
         else {
-            locationLabel.text = "Location: Permission denied!"
+            os_log("Location services are disabled!", log: .default, type: .debug)
         }
     }
 
@@ -103,7 +106,6 @@ CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         lastUpdatedLocation = (manager.location?.coordinate)!
-        locationLabel.text = "Location: \(lastUpdatedLocation.latitude), \(lastUpdatedLocation.longitude)"
     }
     
     // MARK: Navigation
@@ -118,18 +120,14 @@ CLLocationManagerDelegate {
         
         // Extract properties for a new sample.
         let sampleID = sampleIDTextField.text ?? ""
-        let location = CLLocationCoordinate2DMake(CLLocationDegrees(0), CLLocationDegrees(0))
         
         // Create a new sample
-        sample = Sample(id: sampleID, location: location, type: selectedType, dateTime: selectedDate, startDateTime: selectedDate)
+        sample = Sample(id: sampleID, location: lastUpdatedLocation, type: selectedType, dateTime: selectedDate, startDateTime: selectedDate)
     }
 
     //MARK: Actions
     @IBAction func cancelNewSample(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
-    }
-    
-    @IBAction func generateSampleID(_ sender: UIButton) {
     }
     
     @IBAction func collectionDateSelected(_ sender: UIDatePicker) {

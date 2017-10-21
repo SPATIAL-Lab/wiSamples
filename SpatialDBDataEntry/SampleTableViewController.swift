@@ -98,15 +98,27 @@ class SampleTableViewController: UITableViewController {
     }
     */
 
-    /*
-    // MARK: - Navigation
+    // MARK: Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        super.prepare(for: segue, sender: sender)
+        
+        switch segue.identifier ?? "" {
+        case "AddNewSample":
+            guard let navigationController = segue.destination as? UINavigationController else {
+                fatalError("Unexpected destination \(segue.destination)")
+            }
+            
+            guard let sampleViewController = navigationController.viewControllers[0] as? SampleViewController else {
+                fatalError("Unexpected presented view controller \(navigationController.presentedViewController)")
+            }
+            
+            sampleViewController.generatedSampleID = Project.projects[projectIndex].getIDForNewSample()
+            
+        default:
+            fatalError("Unexpected Segue Identifier: \(segue.identifier)")
+        }
     }
-    */
     
     //MARK: Actions
     

@@ -58,6 +58,12 @@ class Project: NSObject, NSCoding {
         self.samples = samples ?? []
     }
     
+    //MARK: Behavior
+    
+    func getIDForNewSample() -> String {
+        return sampleIDPrefix + String(format: "%02d", samples.count + 1)
+    }
+    
     //MARK: Global Data Helpers
     
     static func isValid(projectIndex: Int) -> Bool {
@@ -125,7 +131,7 @@ class Project: NSObject, NSCoding {
         
         let location = CLLocationCoordinate2DMake(CLLocationDegrees(0), CLLocationDegrees(0))
         let date = Date()
-        guard let sample1 = Sample(id: "sample_01", location: location, type: SampleType.lake, dateTime: date, startDateTime: date) else {
+        guard let sample1 = Sample(id: "TP1-JD-01", location: location, type: SampleType.lake, dateTime: date, startDateTime: date) else {
             fatalError("Unable to instantiate sample1")
         }
         
@@ -134,6 +140,8 @@ class Project: NSObject, NSCoding {
         }
         
         projects += [project1]
+        
+        os_log("Sample projects loaded successfully.", log: .default, type: .debug)
     }
     
     private static func deleteSavedProjects() {
