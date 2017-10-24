@@ -32,6 +32,10 @@ CLLocationManagerDelegate {
     var selectedType: SampleType = SampleType.ground
     var lastUpdatedLocation: CLLocationCoordinate2D = CLLocationCoordinate2D()
     var selectedDate: Date = Date()
+    var depth: Int = 0
+    var volume: Int = 0
+    var phase: PhaseType = PhaseType.liquid
+    var comments: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -123,9 +127,24 @@ CLLocationManagerDelegate {
         
         // Create a new sample
         sample = Sample(id: sampleID, location: lastUpdatedLocation, type: selectedType, dateTime: selectedDate, startDateTime: selectedDate)
+        
+        sample!.depth = depth
+        sample!.volume = volume
+        sample!.phase = phase
+        sample!.comments = comments
     }
 
     //MARK: Actions
+    
+    @IBAction func unwindToSampleView(sender: UIStoryboardSegue) {
+        if let sampleMiscDataViewController = sender.source as? SampleMiscDataViewController {
+            depth = sampleMiscDataViewController.depth
+            volume = sampleMiscDataViewController.volume
+            phase = sampleMiscDataViewController.selectedPhase
+            comments = sampleMiscDataViewController.comments
+        }
+    }
+    
     @IBAction func cancelNewSample(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
     }

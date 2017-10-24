@@ -33,7 +33,7 @@ class ProjectViewController: UIViewController, UITextFieldDelegate {
         contactEmailTextField.delegate = self
         sampleIDPrefixTextField.delegate = self
         
-        // Disable save button
+        // Disable the save button
         saveButton.isEnabled = false
     }
 
@@ -58,7 +58,6 @@ class ProjectViewController: UIViewController, UITextFieldDelegate {
         textField.resignFirstResponder()
         
         checkAndEnableSaveButton()
-        
         return true
     }
 

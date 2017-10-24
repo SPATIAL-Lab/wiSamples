@@ -21,6 +21,7 @@
 		9E647DC21F73593000F2BC61 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E647DC11F73593000F2BC61 /* Assets.xcassets */; };
 		9E647DC51F73593000F2BC61 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E647DC31F73593000F2BC61 /* LaunchScreen.storyboard */; };
 		9E647DD01F73593000F2BC61 /* SpatialDBDataEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E647DCF1F73593000F2BC61 /* SpatialDBDataEntryTests.swift */; };
+		9ECB43D21F9ECC230012B456 /* SampleMiscDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB43D11F9ECC230012B456 /* SampleMiscDataViewController.swift */; };
 		9EF583B41F8C5C8E00079487 /* SampleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF583B31F8C5C8E00079487 /* SampleTableViewController.swift */; };
 		9EF583B61F8C5CA100079487 /* SampleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF583B51F8C5CA100079487 /* SampleTableViewCell.swift */; };
 		9EF583B81F8C5F6100079487 /* SampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF583B71F8C5F6100079487 /* SampleViewController.swift */; };
@@ -55,6 +56,7 @@
 		9E647DCB1F73593000F2BC61 /* SpatialDBDataEntryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpatialDBDataEntryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E647DCF1F73593000F2BC61 /* SpatialDBDataEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpatialDBDataEntryTests.swift; sourceTree = "<group>"; };
 		9E647DD11F73593000F2BC61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9ECB43D11F9ECC230012B456 /* SampleMiscDataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleMiscDataViewController.swift; sourceTree = "<group>"; };
 		9EF583B31F8C5C8E00079487 /* SampleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleTableViewController.swift; sourceTree = "<group>"; };
 		9EF583B51F8C5CA100079487 /* SampleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleTableViewCell.swift; sourceTree = "<group>"; };
 		9EF583B71F8C5F6100079487 /* SampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleViewController.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				9EF583B31F8C5C8E00079487 /* SampleTableViewController.swift */,
 				9EF583B51F8C5CA100079487 /* SampleTableViewCell.swift */,
 				9EF583B71F8C5F6100079487 /* SampleViewController.swift */,
+				9ECB43D11F9ECC230012B456 /* SampleMiscDataViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -261,6 +264,7 @@
 				9E3B19871F7F401D0094D925 /* ProjectTableViewController.swift in Sources */,
 				9EF583B81F8C5F6100079487 /* SampleViewController.swift in Sources */,
 				9E3F560C1F819E1A004BEBEB /* SiteTableViewCell.swift in Sources */,
+				9ECB43D21F9ECC230012B456 /* SampleMiscDataViewController.swift in Sources */,
 				9E3B19851F7F3E4C0094D925 /* ProjectTableViewCell.swift in Sources */,
 				9E647DBD1F73593000F2BC61 /* ProjectViewController.swift in Sources */,
 				9E17B9BA1F81A12600C99F12 /* SiteTableViewController.swift in Sources */,
