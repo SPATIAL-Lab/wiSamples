@@ -56,6 +56,24 @@ enum SampleType: Int {
     }
 }
 
+enum PhaseType: Int {
+    case liquid
+    case solid
+    case mixed
+    
+    var description: String {
+        switch self {
+        case .liquid:               return "Liquid"
+        case .solid:                return "Solid"
+        case .mixed:                return "Mixed"
+        }
+    }
+    
+    static var count: Int {
+        return 3
+    }
+}
+
 class Sample: NSObject, NSCoding {
     
     //MARK: Properties
@@ -65,6 +83,10 @@ class Sample: NSObject, NSCoding {
     var type: SampleType
     var dateTime: Date
     var startDateTime: Date
+    var depth: Int = 0
+    var volume: Int = 0
+    var phase: PhaseType = PhaseType.liquid
+    var comments: String = ""
     
     //MARK: Types
     
@@ -75,6 +97,10 @@ class Sample: NSObject, NSCoding {
         static let type = "sampleType"
         static let dateTime = "dateTime"
         static let startDateTime = "startDateTime"
+        static let depth = "depth"
+        static let volume = "volume"
+        static let phase = "phase"
+        static let comments = "comments"
     }
     
     //MARK: Initialization
@@ -100,6 +126,10 @@ class Sample: NSObject, NSCoding {
         aCoder.encode(type.rawValue, forKey: PropertyKeys.type)
         aCoder.encode(dateTime, forKey: PropertyKeys.dateTime)
         aCoder.encode(startDateTime, forKey: PropertyKeys.startDateTime)
+        aCoder.encode(depth, forKey: PropertyKeys.depth)
+        aCoder.encode(volume, forKey: PropertyKeys.volume)
+        aCoder.encode(phase.rawValue, forKey: PropertyKeys.phase)
+        aCoder.encode(comments, forKey: PropertyKeys.comments)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -114,8 +144,17 @@ class Sample: NSObject, NSCoding {
         let type = SampleType(rawValue: aDecoder.decodeInteger(forKey: PropertyKeys.type))!
         let dateTime = aDecoder.decodeObject(forKey: PropertyKeys.dateTime) as? Date
         let startDateTime = aDecoder.decodeObject(forKey: PropertyKeys.startDateTime) as? Date
+        let depth = aDecoder.decodeInteger(forKey: PropertyKeys.depth)
+        let volume = aDecoder.decodeInteger(forKey: PropertyKeys.volume)
+        let phase = PhaseType(rawValue: aDecoder.decodeInteger(forKey: PropertyKeys.phase))!
+        let comments = aDecoder.decodeObject(forKey: PropertyKeys.comments) as? String
         
         self.init(id: id, location: location, type: type, dateTime: dateTime!, startDateTime: startDateTime!)
+        
+        self.depth = depth
+        self.volume = volume
+        self.phase = phase
+        self.comments = comments ?? ""
     }
     
 }
