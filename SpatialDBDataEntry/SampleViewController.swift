@@ -147,6 +147,9 @@ CLLocationManagerDelegate {
             startCollectionDate = sampleMiscDataViewController.startCollectionDate
             comments = sampleMiscDataViewController.comments
         }
+        else if let mapViewController = sender.source as? MapViewController {
+            
+        }
     }
     
     @IBAction func cancelNewSample(_ sender: UIBarButtonItem) {

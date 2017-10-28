@@ -14,6 +14,7 @@
 		9E3B19851F7F3E4C0094D925 /* ProjectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3B19841F7F3E4C0094D925 /* ProjectTableViewCell.swift */; };
 		9E3B19871F7F401D0094D925 /* ProjectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3B19861F7F401D0094D925 /* ProjectTableViewController.swift */; };
 		9E3F560C1F819E1A004BEBEB /* SiteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3F560B1F819E1A004BEBEB /* SiteTableViewCell.swift */; };
+		9E4A97301FA41CDB009EB5FD /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4A972F1FA41CDB009EB5FD /* MapViewController.swift */; };
 		9E63B86E1F8EE6B000F16D02 /* Sample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63B86D1F8EE6B000F16D02 /* Sample.swift */; };
 		9E647DBB1F73593000F2BC61 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E647DBA1F73593000F2BC61 /* AppDelegate.swift */; };
 		9E647DBD1F73593000F2BC61 /* ProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E647DBC1F73593000F2BC61 /* ProjectViewController.swift */; };
@@ -45,6 +46,7 @@
 		9E3B19841F7F3E4C0094D925 /* ProjectTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectTableViewCell.swift; sourceTree = "<group>"; };
 		9E3B19861F7F401D0094D925 /* ProjectTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectTableViewController.swift; sourceTree = "<group>"; };
 		9E3F560B1F819E1A004BEBEB /* SiteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteTableViewCell.swift; sourceTree = "<group>"; };
+		9E4A972F1FA41CDB009EB5FD /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		9E63B86D1F8EE6B000F16D02 /* Sample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sample.swift; sourceTree = "<group>"; };
 		9E647DB71F73593000F2BC61 /* SpatialDBDataEntry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpatialDBDataEntry.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E647DBA1F73593000F2BC61 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 				9EF583B51F8C5CA100079487 /* SampleTableViewCell.swift */,
 				9EF583B71F8C5F6100079487 /* SampleViewController.swift */,
 				9ECB43D11F9ECC230012B456 /* SampleMiscDataViewController.swift */,
+				9E4A972F1FA41CDB009EB5FD /* MapViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -273,6 +276,7 @@
 				9E3B19811F7F3B930094D925 /* Site.swift in Sources */,
 				9E647DBB1F73593000F2BC61 /* AppDelegate.swift in Sources */,
 				9E63B86E1F8EE6B000F16D02 /* Sample.swift in Sources */,
+				9E4A97301FA41CDB009EB5FD /* MapViewController.swift in Sources */,
 				9E3B19831F7F3BA20094D925 /* Project.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
