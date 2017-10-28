@@ -29,12 +29,14 @@ CLLocationManagerDelegate {
      */
     var sample: Sample?
     var generatedSampleID: String = ""
-    var selectedType: SampleType = SampleType.ground
+    var type: SampleType = SampleType.ground
     var lastUpdatedLocation: CLLocationCoordinate2D = CLLocationCoordinate2D()
-    var selectedDate: Date = Date()
-    var depth: Int = 0
-    var volume: Int = 0
-    var phase: PhaseType = PhaseType.liquid
+    var collectionDate: Date = Date()
+    
+    var depth: Int = -1
+    var volume: Int = -1
+    var phase: PhaseType = PhaseType.none
+    var startCollectionDate: Date = Date.distantFuture
     var comments: String = ""
     
     override func viewDidLoad() {
@@ -49,6 +51,7 @@ CLLocationManagerDelegate {
         
         // Initialize sample ID
         sampleIDTextField.text = generatedSampleID
+        navigationItem.title = generatedSampleID
 
         // Initialize location
         // Request location usage
@@ -97,7 +100,7 @@ CLLocationManagerDelegate {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectedType = SampleType(rawValue: row)!
+        type = SampleType(rawValue: row)!
     }
     
     //MARK: UIPickerViewDataSource
@@ -126,7 +129,7 @@ CLLocationManagerDelegate {
         let sampleID = sampleIDTextField.text ?? ""
         
         // Create a new sample
-        sample = Sample(id: sampleID, location: lastUpdatedLocation, type: selectedType, dateTime: selectedDate, startDateTime: selectedDate)
+        sample = Sample(id: sampleID, location: lastUpdatedLocation, type: type, dateTime: collectionDate, startDateTime: startCollectionDate)
         
         sample!.depth = depth
         sample!.volume = volume
@@ -140,7 +143,8 @@ CLLocationManagerDelegate {
         if let sampleMiscDataViewController = sender.source as? SampleMiscDataViewController {
             depth = sampleMiscDataViewController.depth
             volume = sampleMiscDataViewController.volume
-            phase = sampleMiscDataViewController.selectedPhase
+            phase = sampleMiscDataViewController.phase
+            startCollectionDate = sampleMiscDataViewController.startCollectionDate
             comments = sampleMiscDataViewController.comments
         }
     }
@@ -150,7 +154,7 @@ CLLocationManagerDelegate {
     }
     
     @IBAction func collectionDateSelected(_ sender: UIDatePicker) {
-        selectedDate = sender.date
+        collectionDate = sender.date
     }
     
 }

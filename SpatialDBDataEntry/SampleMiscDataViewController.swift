@@ -23,9 +23,10 @@ UIPickerViewDataSource
     @IBOutlet weak var commentsTextField: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
 
-    var depth: Int = 0
-    var volume: Int = 0
-    var selectedPhase: PhaseType = PhaseType.liquid
+    var depth: Int = -1
+    var volume: Int = -1
+    var phase: PhaseType = PhaseType.none
+    var startCollectionDate: Date = Date.distantFuture
     var comments: String = ""
     
     override func viewDidLoad() {
@@ -39,9 +40,6 @@ UIPickerViewDataSource
         // Set picker view delegates
         phasePicker.delegate = self
         phasePicker.dataSource = self
-        
-        // Disable save button
-        saveButton.isEnabled = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -55,11 +53,9 @@ UIPickerViewDataSource
         
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {        
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // Hide the keyboard.
         textField.resignFirstResponder()
-        
-        checkAndEnableSaveButton()
         return true
     }
     
@@ -74,7 +70,7 @@ UIPickerViewDataSource
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectedPhase = PhaseType(rawValue: row)!
+        phase = PhaseType(rawValue: row)!
     }
     
     //MARK: UIPickerViewDataSource
@@ -93,8 +89,14 @@ UIPickerViewDataSource
             return
         }
         
-        depth = Int(depthTextField.text!)!
-        volume = Int(volumeTextField.text!)!
+        if depthTextField.text!.isEmpty == false {
+            depth = Int(depthTextField.text!)!
+        }
+        
+        if volumeTextField.text!.isEmpty == false {
+            volume = Int(volumeTextField.text!)!
+        }
+        
         comments = commentsTextField.text!
     }
     
@@ -106,13 +108,8 @@ UIPickerViewDataSource
     
     //MARK: Private Methods
     
-    func checkAndEnableSaveButton() {
-        if depthTextField.text!.isEmpty == false && volumeTextField.text!.isEmpty == false {
-            saveButton.isEnabled = true;
-        }
-        else {
-            saveButton.isEnabled = false;
-        }
+    @IBAction func startCollectionDateSelected(_ sender: UIDatePicker) {
+        startCollectionDate = sender.date
     }
     
 }

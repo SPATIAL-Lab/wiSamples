@@ -57,12 +57,14 @@ enum SampleType: Int {
 }
 
 enum PhaseType: Int {
+    case none
     case liquid
     case solid
     case mixed
     
     var description: String {
         switch self {
+        case .none:                 return ""
         case .liquid:               return "Liquid"
         case .solid:                return "Solid"
         case .mixed:                return "Mixed"
@@ -70,7 +72,7 @@ enum PhaseType: Int {
     }
     
     static var count: Int {
-        return 3
+        return 4
     }
 }
 
@@ -83,9 +85,9 @@ class Sample: NSObject, NSCoding {
     var type: SampleType
     var dateTime: Date
     var startDateTime: Date
-    var depth: Int = 0
-    var volume: Int = 0
-    var phase: PhaseType = PhaseType.liquid
+    var depth: Int = -1
+    var volume: Int = -1
+    var phase: PhaseType = PhaseType.none
     var comments: String = ""
     
     //MARK: Types
