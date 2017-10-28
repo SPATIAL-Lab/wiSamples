@@ -22,15 +22,17 @@ CLLocationManagerDelegate {
     
     @IBOutlet weak var sampleIDTextField: UITextField!
     @IBOutlet weak var typePicker: UIPickerView!
+    @IBOutlet weak var collectionDatePicker: UIDatePicker!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
     /* This value is either passed by `SampleTableViewController` via `prepare(for:sender)`
      or constructed as part of adding a new sample.
      */
     var sample: Sample?
+    
     var generatedSampleID: String = ""
     var type: SampleType = SampleType.ground
-    var lastUpdatedLocation: CLLocationCoordinate2D = CLLocationCoordinate2D()
+    var location: CLLocationCoordinate2D = CLLocationCoordinate2D()
     var collectionDate: Date = Date()
     
     var depth: Int = -1
@@ -48,23 +50,45 @@ CLLocationManagerDelegate {
         // Set picker view delegates
         typePicker.delegate = self
         typePicker.dataSource = self
-        
-        // Initialize sample ID
-        sampleIDTextField.text = generatedSampleID
-        navigationItem.title = generatedSampleID
 
-        // Initialize location
-        // Request location usage
-        locationManager.requestWhenInUseAuthorization()
-        
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            locationManager.startUpdatingLocation()
+        // Setup views if editing an existing sample
+        if let existingSample = sample {
+            
+            // Update data variables
+            generatedSampleID = existingSample.id
+            type = existingSample.type
+            location = existingSample.location
+            collectionDate = existingSample.dateTime
+            depth = existingSample.depth
+            volume = existingSample.volume
+            phase = existingSample.phase
+            startCollectionDate = existingSample.startDateTime
+            comments = existingSample.comments
+            
+            // Update view
+            sampleIDTextField.text = existingSample.id
+            navigationItem.title = existingSample.id
+            typePicker.selectRow(existingSample.type.rawValue, inComponent: 0, animated: false)
+            collectionDatePicker.setDate(existingSample.dateTime, animated: false)
         }
         else {
-            os_log("Location services are disabled!", log: .default, type: .debug)
+            // Initialize sample ID
+            sampleIDTextField.text = generatedSampleID
+            navigationItem.title = generatedSampleID
         }
+
+//        // Initialize location
+//        // Request location usage
+//        locationManager.requestWhenInUseAuthorization()
+//        
+//        if CLLocationManager.locationServicesEnabled() {
+//            locationManager.delegate = self
+//            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+//            locationManager.startUpdatingLocation()
+//        }
+//        else {
+//            os_log("Location services are disabled!", log: .default, type: .debug)
+//        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -112,7 +136,7 @@ CLLocationManagerDelegate {
     //MARK: CLLocationManagerDelegate
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        lastUpdatedLocation = (manager.location?.coordinate)!
+        location = (manager.location?.coordinate)!
     }
     
     // MARK: Navigation
@@ -120,21 +144,50 @@ CLLocationManagerDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         
-        guard let button = sender as? UIBarButtonItem, button === saveButton else {
-            os_log("The save button was not pressed...cancelling.", log: OSLog.default, type: OSLogType.debug)
-            return
+        switch segue.identifier ?? "" {
+        case "ShowMapView":
+            guard let navigationController = segue.destination as? UINavigationController else {
+                fatalError("Unexpected destination \(segue.destination)")
+            }
+            
+            guard let mapViewController = navigationController.viewControllers[0] as? MapViewController else {
+                fatalError("Unexpected presented view controller \(navigationController.presentedViewController)")
+            }
+            
+            mapViewController.locationSelected = location
+            
+        case "ShowSampleMiscData":
+            guard let navigationController = segue.destination as? UINavigationController else {
+                fatalError("Unexpected destination \(segue.destination)")
+            }
+            
+            guard let sampleMiscDataViewController = navigationController.viewControllers[0] as? SampleMiscDataViewController else {
+                fatalError("Unexpected presented view controller \(navigationController.presentedViewController)")
+            }
+            
+            sampleMiscDataViewController.depth = depth
+            sampleMiscDataViewController.volume = volume
+            sampleMiscDataViewController.phase = phase
+            sampleMiscDataViewController.startCollectionDate = startCollectionDate
+            sampleMiscDataViewController.comments = comments
+            
+        default:
+            guard let button = sender as? UIBarButtonItem, button === saveButton else {
+                os_log("The save button was not pressed...cancelling.", log: OSLog.default, type: OSLogType.debug)
+                return
+            }
+            
+            // Extract properties for a new sample.
+            let sampleID = sampleIDTextField.text ?? ""
+            
+            // Create a new sample
+            sample = Sample(id: sampleID, location: location, type: type, dateTime: collectionDate, startDateTime: startCollectionDate)
+            
+            sample!.depth = depth
+            sample!.volume = volume
+            sample!.phase = phase
+            sample!.comments = comments
         }
-        
-        // Extract properties for a new sample.
-        let sampleID = sampleIDTextField.text ?? ""
-        
-        // Create a new sample
-        sample = Sample(id: sampleID, location: lastUpdatedLocation, type: type, dateTime: collectionDate, startDateTime: startCollectionDate)
-        
-        sample!.depth = depth
-        sample!.volume = volume
-        sample!.phase = phase
-        sample!.comments = comments
     }
 
     //MARK: Actions

@@ -225,6 +225,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="sampleIDLabel" destination="VSU-2G-lJx" id="PnW-fH-0Mk"/>
+                                    <segue destination="jE5-L8-yXB" kind="show" identifier="ShowSample" id="d7Z-wb-NOd"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -344,6 +345,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="collectionDatePicker" destination="6Le-5J-reb" id="IOY-jX-yAa"/>
                         <outlet property="sampleIDTextField" destination="0yk-SJ-cyQ" id="Wbg-LY-f7B"/>
                         <outlet property="saveButton" destination="ISb-iT-9Z0" id="66x-7F-ETX"/>
                         <outlet property="typePicker" destination="7iC-P2-5XN" id="Yxh-gp-Fkt"/>
@@ -514,6 +516,7 @@
                         <outlet property="depthTextField" destination="h3B-zX-dtE" id="5bz-gK-1kC"/>
                         <outlet property="phasePicker" destination="nCp-Gs-7az" id="4hq-Ya-HOe"/>
                         <outlet property="saveButton" destination="tbi-6G-5Ls" id="iM5-dR-OQd"/>
+                        <outlet property="startCollectionDatePicker" destination="wmu-fo-Ylg" id="GdJ-12-mIN"/>
                         <outlet property="volumeTextField" destination="38B-S4-hXx" id="tEx-Em-NqO"/>
                     </connections>
                 </viewController>
@@ -731,4 +734,7 @@
             <point key="canvasLocation" x="3437.5999999999999" y="402.54872563718146"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="d7Z-wb-NOd"/>
+    </inferredMetricsTieBreakers>
 </document>

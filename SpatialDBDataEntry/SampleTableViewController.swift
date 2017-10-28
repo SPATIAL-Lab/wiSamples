@@ -115,6 +115,30 @@ class SampleTableViewController: UITableViewController {
             
             sampleViewController.generatedSampleID = Project.projects[projectIndex].getIDForNewSample()
             
+        case "ShowSample":
+//            guard let sampleViewController = segue.destination as? SampleViewController else {
+//                fatalError("Unexpected destination \(segue.destination)")
+//            }
+            
+            guard let navigationController = segue.destination as? UINavigationController else {
+                fatalError("Unexpected destination \(segue.destination)")
+            }
+            
+            guard let sampleViewController = navigationController.viewControllers[0] as? SampleViewController else {
+                fatalError("Unexpected presented view controller \(navigationController.presentedViewController)")
+            }
+            
+            guard let selectedSampleCell = sender as? SampleTableViewCell else {
+                fatalError("Unexpected sender: \(sender)")
+            }
+            
+            guard let indexPath = tableView.indexPath(for: selectedSampleCell) else {
+                fatalError("The selected cell is not being displayed by the table")
+            }
+            
+            let selectedSample = Project.projects[projectIndex].samples[indexPath.row]
+            sampleViewController.sample = selectedSample
+            
         default:
             fatalError("Unexpected Segue Identifier: \(segue.identifier)")
         }
@@ -128,14 +152,21 @@ class SampleTableViewController: UITableViewController {
                 fatalError("Project was nil!")
             }
             
-            // Get an index for the new cell
-            let newIndexPath = IndexPath(row: Project.projects[projectIndex].samples.count, section: 0)
-            
-            // Add the new site
-            Project.projects[projectIndex].samples.append(sample)
-            
-            // Add the new site to the table
-            tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
+            if let selectedIndexPath = tableView.indexPathForSelectedRow {
+                // Update an existing sample
+                Project.projects[projectIndex].samples[selectedIndexPath.row] = sample
+                tableView.reloadRows(at: [selectedIndexPath], with: .none)
+            }
+            else {
+                // Get an index for the new cell
+                let newIndexPath = IndexPath(row: Project.projects[projectIndex].samples.count, section: 0)
+                
+                // Add the new site
+                Project.projects[projectIndex].samples.append(sample)
+                
+                // Add the new site to the table
+                tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
+            }
             
             // Save data
             Project.saveProjects()

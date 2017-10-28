@@ -9,12 +9,15 @@
 import UIKit
 import MapKit
 import os.log
+import CoreLocation
 
 class MapViewController: UIViewController {
     
     //MARK: Properties
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
+    
+    var locationSelected: CLLocationCoordinate2D = CLLocationCoordinate2D()
 
     override func viewDidLoad() {
         super.viewDidLoad()

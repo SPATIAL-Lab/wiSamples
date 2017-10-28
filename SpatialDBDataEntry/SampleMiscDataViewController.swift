@@ -20,6 +20,7 @@ UIPickerViewDataSource
     @IBOutlet weak var depthTextField: UITextField!
     @IBOutlet weak var volumeTextField: UITextField!
     @IBOutlet weak var phasePicker: UIPickerView!
+    @IBOutlet weak var startCollectionDatePicker: UIDatePicker!
     @IBOutlet weak var commentsTextField: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
 
@@ -40,6 +41,23 @@ UIPickerViewDataSource
         // Set picker view delegates
         phasePicker.delegate = self
         phasePicker.dataSource = self
+        
+        // Check if editing an existing sample
+        if depth != -1 {
+            depthTextField.text = String(depth)
+        }
+        
+        if volume != -1 {
+            volumeTextField.text = String(volume)
+        }
+        
+        phasePicker.selectRow(phase.rawValue, inComponent: 0, animated: false)
+        
+        if startCollectionDate.compare(Date.distantFuture) == ComparisonResult.orderedAscending {
+            startCollectionDatePicker.setDate(startCollectionDate, animated: false)
+        }
+        
+        commentsTextField.text = comments
     }
 
     override func didReceiveMemoryWarning() {
