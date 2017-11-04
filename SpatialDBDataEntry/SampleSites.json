@@ -1,0 +1,128 @@
+{
+    "status": {
+        "Code": 200,
+        "Message": ""
+    },
+    "sites": [
+        {
+            "Site_ID": "SSC-14-3-13",
+            "Site_Name": "Jordan 7",
+            "Latitude": 40.76295,
+            "Longitude": -111.92621,
+            "Elevation_mabsl": 1671,
+            "Address": null,
+            "City": null,
+            "State_or_Province": "UT",
+            "Country": "US",
+            "Site_Comments": null
+        },
+        {
+            "Site_ID": "SSC-16-2-11",
+            "Site_Name": "Sunnyside Park Downstream",
+            "Latitude": 40.7511,
+            "Longitude": -111.8399,
+            "Elevation_mabsl": 1711,
+            "Address": null,
+            "City": null,
+            "State_or_Province": "UT",
+            "Country": "US",
+            "Site_Comments": null
+        },
+        {
+            "Site_ID": "SSC-16-2-12",
+            "Site_Name": "Sunnyside Park Upstream",
+            "Latitude": 40.753022,
+            "Longitude": -111.838531,
+            "Elevation_mabsl": 1714,
+            "Address": null,
+            "City": null,
+            "State_or_Province": "UT",
+            "Country": "US",
+            "Site_Comments": null
+        },
+        {
+            "Site_ID": "SSC-16-2-13",
+            "Site_Name": "Foothill Drive Aquatic",
+            "Latitude": 40.75725,
+            "Longitude": -111.833733,
+            "Elevation_mabsl": 1714,
+            "Address": null,
+            "City": null,
+            "State_or_Province": "UT",
+            "Country": "US",
+            "Site_Comments": null
+        },
+        {
+            "Site_ID": "SSC-16-2-14",
+            "Site_Name": "Dentistry",
+            "Latitude": 40.75761,
+            "Longitude": -111.832783,
+            "Elevation_mabsl": 1707,
+            "Address": null,
+            "City": null,
+            "State_or_Province": "UT",
+            "Country": "US",
+            "Site_Comments": null
+        },
+        {
+            "Site_ID": "isomap_1399",
+            "Site_Name": "Midway farm location 2",
+            "Latitude": 40.51552,
+            "Longitude": -111.47656,
+            "Elevation_mabsl": 1697,
+            "Address": null,
+            "City": null,
+            "State_or_Province": "UT",
+            "Country": "US",
+            "Site_Comments": null
+        },
+        {
+            "Site_ID": "SSC-16-2-15",
+            "Site_Name": "Fort Douglas",
+            "Latitude": 40.758617,
+            "Longitude": -111.831733,
+            "Elevation_mabsl": 1735,
+            "Address": null,
+            "City": null,
+            "State_or_Province": "UT",
+            "Country": "US",
+            "Site_Comments": null
+        },
+        {
+            "Site_ID": "SLV-WS-061",
+            "Site_Name": "Shell",
+            "Latitude": 40.76524,
+            "Longitude": -111.85461,
+            "Elevation_mabsl": 1736,
+            "Address": null,
+            "City": null,
+            "State_or_Province": "UT",
+            "Country": "US",
+            "Site_Comments": null
+        },
+        {
+            "Site_ID": "SLV-WS-027",
+            "Site_Name": "SPATIAL Lab",
+            "Latitude": 40.766641,
+            "Longitude": -111.848071,
+            "Elevation_mabsl": 1740,
+            "Address": null,
+            "City": null,
+            "State_or_Province": "UT",
+            "Country": "US",
+            "Site_Comments": null
+        },
+        {
+            "Site_ID": "SSC-16-2-16",
+            "Site_Name": "Connor Road",
+            "Latitude": 40.762018,
+            "Longitude": -111.828573,
+            "Elevation_mabsl": 1733,
+            "Address": null,
+            "City": null,
+            "State_or_Province": "UT",
+            "Country": "US",
+            "Site_Comments": null
+        }
+    ]
+}

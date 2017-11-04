@@ -12,7 +12,8 @@ import os.log
 import CoreLocation
 
 class MapViewController: UIViewController,
-CLLocationManagerDelegate {
+CLLocationManagerDelegate,
+MKMapViewDelegate {
     
     //MARK: Properties
     
@@ -21,17 +22,19 @@ CLLocationManagerDelegate {
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var mapView: MKMapView!
     
-    var initialLocation: CLLocationCoordinate2D = CLLocationCoordinate2D()
     var locationSelected: CLLocationCoordinate2D = CLLocationCoordinate2D()
-    let regionRadius: CLLocationDistance = 1000
+    let regionRadius: CLLocationDistance = 5000
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        mapView.delegate = self
+        
         // Initialize location
         // Request location usage
         locationManager.requestWhenInUseAuthorization()
         
+        // Setup location services
         if CLLocationManager.locationServicesEnabled() {
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -40,6 +43,18 @@ CLLocationManagerDelegate {
         else {
             os_log("Location services are disabled!", log: .default, type: .debug)
         }
+        
+        // Center map on selected location if valid else ask location manager
+        if locationSelected.latitude == 0 && locationSelected.longitude == 0 {
+            centerMapOnLocation(location: locationManager.location!.coordinate)
+        }
+        else {
+            centerMapOnLocation(location: locationSelected)
+        }
+        
+        // Plot sample sites
+        let siteAnnotationList = SiteAnnotation.loadSitesFromFile(withName: "SampleSites")
+        mapView.addAnnotations(siteAnnotationList)
     }
 
     override func didReceiveMemoryWarning() {
@@ -50,8 +65,29 @@ CLLocationManagerDelegate {
     //MARK: CLLocationManagerDelegate
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        initialLocation = (manager.location?.coordinate)!
-        centerMapOnLocation()
+        locationSelected = (manager.location?.coordinate)!
+    }
+    
+    //MARK: MKMapViewDelegate
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard let annotation = annotation as? SiteAnnotation else {
+            return nil
+        }
+        
+        let identifier = "SiteAnnotation"
+        var view: MKPinAnnotationView
+        
+        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKPinAnnotationView {
+            dequeuedView.annotation = annotation
+            view = dequeuedView
+        }
+        else {
+            view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            view.canShowCallout = true
+        }
+        
+        return view
     }
 
     // MARK: Navigation
@@ -73,8 +109,8 @@ CLLocationManagerDelegate {
     
     //MARK: Private Methods
     
-    private func centerMapOnLocation() {
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(initialLocation, regionRadius, regionRadius)
+    private func centerMapOnLocation(location: CLLocationCoordinate2D) {
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, regionRadius, regionRadius)
         mapView.setRegion(coordinateRegion, animated: true)
     }
 

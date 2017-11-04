@@ -188,7 +188,7 @@ CLLocationManagerDelegate {
             comments = sampleMiscDataViewController.comments
         }
         else if let mapViewController = sender.source as? MapViewController {
-            
+            location = mapViewController.locationSelected
         }
     }
     
