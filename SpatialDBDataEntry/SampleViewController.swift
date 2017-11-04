@@ -76,19 +76,6 @@ CLLocationManagerDelegate {
             sampleIDTextField.text = generatedSampleID
             navigationItem.title = generatedSampleID
         }
-
-//        // Initialize location
-//        // Request location usage
-//        locationManager.requestWhenInUseAuthorization()
-//        
-//        if CLLocationManager.locationServicesEnabled() {
-//            locationManager.delegate = self
-//            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-//            locationManager.startUpdatingLocation()
-//        }
-//        else {
-//            os_log("Location services are disabled!", log: .default, type: .debug)
-//        }
     }
 
     override func didReceiveMemoryWarning() {

@@ -11,18 +11,35 @@ import MapKit
 import os.log
 import CoreLocation
 
-class MapViewController: UIViewController {
+class MapViewController: UIViewController,
+CLLocationManagerDelegate {
     
     //MARK: Properties
     
-    @IBOutlet weak var saveButton: UIBarButtonItem!
+    let locationManager = CLLocationManager()
     
+    @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var mapView: MKMapView!
+    
+    var initialLocation: CLLocationCoordinate2D = CLLocationCoordinate2D()
     var locationSelected: CLLocationCoordinate2D = CLLocationCoordinate2D()
+    let regionRadius: CLLocationDistance = 1000
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        // Initialize location
+        // Request location usage
+        locationManager.requestWhenInUseAuthorization()
+        
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.startUpdatingLocation()
+        }
+        else {
+            os_log("Location services are disabled!", log: .default, type: .debug)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -30,6 +47,12 @@ class MapViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    //MARK: CLLocationManagerDelegate
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        initialLocation = (manager.location?.coordinate)!
+        centerMapOnLocation()
+    }
 
     // MARK: Navigation
 
@@ -46,6 +69,13 @@ class MapViewController: UIViewController {
     
     @IBAction func cancelSetLocation(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    //MARK: Private Methods
+    
+    private func centerMapOnLocation() {
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(initialLocation, regionRadius, regionRadius)
+        mapView.setRegion(coordinateRegion, animated: true)
     }
 
 }
