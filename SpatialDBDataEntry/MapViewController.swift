@@ -23,7 +23,8 @@ MKMapViewDelegate {
     @IBOutlet weak var mapView: MKMapView!
     
     var locationSelected: CLLocationCoordinate2D = CLLocationCoordinate2D()
-    let regionRadius: CLLocationDistance = 5000
+    var lastUpdatedLocation: CLLocationCoordinate2D = CLLocationCoordinate2D()
+    let regionRadius: CLLocationDistance = 2000
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,17 +45,25 @@ MKMapViewDelegate {
             os_log("Location services are disabled!", log: .default, type: .debug)
         }
         
+        // Plot sample sites
+        let siteAnnotationList = SiteAnnotation.loadSitesFromFile(withName: "SampleSites")
+        mapView.addAnnotations(siteAnnotationList)
+        
         // Center map on selected location if valid else ask location manager
         if locationSelected.latitude == 0 && locationSelected.longitude == 0 {
             centerMapOnLocation(location: locationManager.location!.coordinate)
         }
         else {
             centerMapOnLocation(location: locationSelected)
+            
+            // Select the annotation that matches the selected location
+            for siteAnnotation in siteAnnotationList {
+                if siteAnnotation.coordinate.latitude == locationSelected.latitude && siteAnnotation.coordinate.longitude == locationSelected.longitude {
+                    mapView.selectAnnotation(siteAnnotation, animated: true)
+                    break
+                }
+            }
         }
-        
-        // Plot sample sites
-        let siteAnnotationList = SiteAnnotation.loadSitesFromFile(withName: "SampleSites")
-        mapView.addAnnotations(siteAnnotationList)
     }
 
     override func didReceiveMemoryWarning() {
@@ -65,7 +74,7 @@ MKMapViewDelegate {
     //MARK: CLLocationManagerDelegate
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        locationSelected = (manager.location?.coordinate)!
+        lastUpdatedLocation = (manager.location?.coordinate)!
     }
     
     //MARK: MKMapViewDelegate
@@ -78,6 +87,7 @@ MKMapViewDelegate {
         let identifier = "SiteAnnotation"
         var view: MKPinAnnotationView
         
+        // Reuse a dequeued view else create one
         if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKPinAnnotationView {
             dequeuedView.annotation = annotation
             view = dequeuedView
@@ -87,7 +97,31 @@ MKMapViewDelegate {
             view.canShowCallout = true
         }
         
+        // Check if the site annotation matches with the selected location
+        let annotationCoordinate = (view.annotation?.coordinate)!
+        if annotationCoordinate.latitude == locationSelected.latitude && annotationCoordinate.longitude == locationSelected.longitude {
+            view.pinTintColor = UIColor.yellow
+        }
+        else {
+            view.pinTintColor = UIColor.orange
+        }
+        
         return view
+    }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        if let pinAnnotation = view as? MKPinAnnotationView {
+            pinAnnotation.pinTintColor = UIColor.yellow
+        }
+        
+        locationSelected = (view.annotation?.coordinate)!
+        centerMapOnLocation(location: locationSelected)
+    }
+    
+    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+        if let pinAnnotation = view as? MKPinAnnotationView {
+            pinAnnotation.pinTintColor = UIColor.orange
+        }
     }
 
     // MARK: Navigation
@@ -98,6 +132,12 @@ MKMapViewDelegate {
         guard let button = sender as? UIBarButtonItem, button === saveButton else {
             os_log("The save button was not pressed...cancelling.", log: OSLog.default, type: OSLogType.debug)
             return
+        }
+        
+        // Check if location was selected
+        if locationSelected.latitude == 0 && locationSelected.longitude == 0 {
+            // Use last updated location as selected location
+            locationSelected = lastUpdatedLocation
         }
     }
     
