@@ -61,7 +61,25 @@ class Project: NSObject, NSCoding {
     //MARK: Behavior
     
     func getIDForNewSample() -> String {
-        return sampleIDPrefix + String(format: "%02d", samples.count + 1)
+        if samples.count > 0 {
+            let lastSample = samples[samples.count - 1]
+            let splitSampleID = lastSample.id.components(separatedBy: sampleIDPrefix + String("SAMPLE-"))
+            let newSampleID = Int(splitSampleID[1])! + 1
+            return sampleIDPrefix + String(format: "SAMPLE-%02d", newSampleID)
+        }
+        
+        return sampleIDPrefix + String(format: "SAMPLE-%02d", samples.count + 1)
+    }
+    
+    func getIDForNewSite() -> String {
+        if sites.count > 0 {
+            let lastSite = sites[sites.count - 1]
+            let splitSiteID = lastSite.id.components(separatedBy: sampleIDPrefix + String("SITE-"))
+            let newSiteID = Int(splitSiteID[1])! + 1
+            return sampleIDPrefix + String(format: "SITE-%02d", newSiteID)
+        }
+        
+        return sampleIDPrefix + String(format: "SITE-%02d", sites.count + 1)
     }
     
     //MARK: Global Data Helpers
@@ -128,12 +146,12 @@ class Project: NSObject, NSCoding {
     private static func loadSampleProjects() {
         let location = CLLocationCoordinate2DMake(CLLocationDegrees(0), CLLocationDegrees(0))
         
-        guard let site1 = Site(id: "site_01", name: "Site_01", location: location) else {
+        guard let site1 = Site(id: "TP1-JD-SITE-01", name: "Site_01", location: location) else {
             fatalError("Unable to instantiate site1")
         }
         
         let date = Date()
-        guard let sample1 = Sample(id: "TP1-JD-01", location: location, type: SampleType.lake, dateTime: date, startDateTime: date) else {
+        guard let sample1 = Sample(id: "TP1-JD-SAMPLE-01", location: location, type: SampleType.lake, dateTime: date, startDateTime: date) else {
             fatalError("Unable to instantiate sample1")
         }
         

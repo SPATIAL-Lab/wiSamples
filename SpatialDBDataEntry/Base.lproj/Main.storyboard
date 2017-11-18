@@ -109,8 +109,8 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                     </textField>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sample ID Prefix" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KGL-Hy-fnh">
-                                        <rect key="frame" x="0.0" y="211.5" width="126" height="20.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sample &amp; Site ID Prefix" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KGL-Hy-fnh">
+                                        <rect key="frame" x="0.0" y="211.5" width="175.5" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -562,11 +562,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Sites" id="SUH-c8-Hs6">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Z6e-rm-qFV">
-                            <connections>
-                                <segue destination="E3t-Zh-IbQ" kind="presentation" identifier="AddNewSite" id="lcn-OZ-CQU"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Z6e-rm-qFV"/>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J4G-5Q-WU7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -586,7 +582,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="c1G-NW-D0C">
-                                <rect key="frame" x="16" y="84" width="343" height="201.5"/>
+                                <rect key="frame" x="16" y="84" width="343" height="131"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Site ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m2K-ot-MUG">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="20.5"/>
@@ -612,19 +608,6 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                     </textField>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oEg-0P-G2A">
-                                        <rect key="frame" x="0.0" y="141" width="65.5" height="20.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v7s-AN-wG9">
-                                        <rect key="frame" x="0.0" y="171.5" width="88" height="30"/>
-                                        <state key="normal" title="Get Location"/>
-                                        <connections>
-                                            <action selector="GetSiteLocation:" destination="g6Y-3g-RBj" eventType="touchUpInside" id="8LC-pp-YJA"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="eOP-Cp-eCZ" secondAttribute="trailing" id="bfJ-kz-oTM"/>
@@ -660,7 +643,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q7e-VL-KYH" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="f6a-Gx-Skz" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2534" y="-1740"/>
+            <point key="canvasLocation" x="6183" y="403"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="4bf-S1-t0K">
@@ -678,7 +661,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WCQ-UC-re7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1638" y="-1740"/>
+            <point key="canvasLocation" x="5287" y="403"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="fmI-JW-emi">

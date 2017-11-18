@@ -22,10 +22,13 @@ MKMapViewDelegate {
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var mapView: MKMapView!
     
+    var selectedExistingSite: Bool = false
     var locationSelected: CLLocationCoordinate2D = CLLocationCoordinate2D()
     var lastUpdatedLocation: CLLocationCoordinate2D = CLLocationCoordinate2D()
     let regionRadius: CLLocationDistance = 2000
 
+    var siteAnnotationList: [SiteAnnotation] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -45,8 +48,9 @@ MKMapViewDelegate {
             os_log("Location services are disabled!", log: .default, type: .debug)
         }
         
+        // TODO: This must also include sites saved by the user.
         // Plot sample sites
-        let siteAnnotationList = SiteAnnotation.loadSitesFromFile(withName: "SampleSites")
+        siteAnnotationList = SiteAnnotation.loadSitesFromFile(withName: "SampleSites")
         mapView.addAnnotations(siteAnnotationList)
         
         // Center map on selected location if valid else ask location manager
@@ -134,8 +138,18 @@ MKMapViewDelegate {
             return
         }
         
-        // Check if location was selected
-        if locationSelected.latitude == 0 && locationSelected.longitude == 0 {
+        // Check if an existing location was selected
+        if locationSelected.latitude != 0 || locationSelected.longitude != 0 {
+            for siteAnnotation in siteAnnotationList {
+                if siteAnnotation.coordinate.latitude == locationSelected.latitude && siteAnnotation.coordinate.longitude == locationSelected.longitude {
+                    selectedExistingSite = true
+                    break
+                }
+            }
+        }
+        // This means no location was selected
+        else {
+            selectedExistingSite = false
             // Use last updated location as selected location
             locationSelected = lastUpdatedLocation
         }

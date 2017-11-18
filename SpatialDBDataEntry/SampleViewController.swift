@@ -13,12 +13,9 @@ import CoreLocation
 class SampleViewController: UIViewController,
 UITextFieldDelegate,
 UIPickerViewDelegate,
-UIPickerViewDataSource,
-CLLocationManagerDelegate {
+UIPickerViewDataSource {
 
     //MARK: Properties
-    
-    let locationManager = CLLocationManager()
     
     @IBOutlet weak var sampleIDTextField: UITextField!
     @IBOutlet weak var typePicker: UIPickerView!
@@ -118,12 +115,6 @@ CLLocationManagerDelegate {
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return SampleType(rawValue: row)?.description
-    }
-
-    //MARK: CLLocationManagerDelegate
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        location = (manager.location?.coordinate)!
     }
     
     // MARK: Navigation
