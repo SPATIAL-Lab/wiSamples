@@ -8,6 +8,7 @@
 
 import UIKit
 import os.log
+import CoreLocation
 
 class SiteViewController: UIViewController, UITextFieldDelegate {
     
@@ -17,10 +18,11 @@ class SiteViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var siteNameTextField: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
-    /* This value is either passed by `SiteTableViewController` via `prepare(for:sender)`
+    /* This value is either passed by `SampleViewController`
      or constructed as part of adding a new site.
      */
     var site: Site?
+    var location: CLLocationCoordinate2D = CLLocationCoordinate2D()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,9 +30,6 @@ class SiteViewController: UIViewController, UITextFieldDelegate {
         // Set text field delegates
         siteIDTextField.delegate = self
         siteNameTextField.delegate = self
-        
-        // Disable the save button
-        saveButton.isEnabled = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -71,14 +70,10 @@ class SiteViewController: UIViewController, UITextFieldDelegate {
         let siteName = siteNameTextField.text ?? ""
         
         // Create a new site
-        site = Site(id: siteID, name: siteName)
+        site = Site(id: siteID, name: siteName, location: location)
     }
 
     //MARK: Actions
-    
-    @IBAction func GetSiteLocation(_ sender: UIButton) {
-        saveButton.isEnabled = true
-    }
     
     @IBAction func cancelNewSite(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)

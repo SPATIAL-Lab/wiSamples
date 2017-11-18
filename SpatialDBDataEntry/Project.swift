@@ -14,7 +14,7 @@ class Project: NSObject, NSCoding {
     
     //MARK: Globals
     
-    static var enableSampleProjects: Bool = false
+    static var enableSampleProjects: Bool = true
     static var projects: [Project] = [Project]()
     
     //MARK: Properties
@@ -109,6 +109,7 @@ class Project: NSObject, NSCoding {
     
     static func loadProjects() {
         if enableSampleProjects {
+            deleteSavedProjects()
             loadSampleProjects()
             return
         }
@@ -125,11 +126,12 @@ class Project: NSObject, NSCoding {
     //MARK: Private Methods
     
     private static func loadSampleProjects() {
-        guard let site1 = Site(id: "site_01", name: "Site_01") else {
+        let location = CLLocationCoordinate2DMake(CLLocationDegrees(0), CLLocationDegrees(0))
+        
+        guard let site1 = Site(id: "site_01", name: "Site_01", location: location) else {
             fatalError("Unable to instantiate site1")
         }
         
-        let location = CLLocationCoordinate2DMake(CLLocationDegrees(0), CLLocationDegrees(0))
         let date = Date()
         guard let sample1 = Sample(id: "TP1-JD-01", location: location, type: SampleType.lake, dateTime: date, startDateTime: date) else {
             fatalError("Unable to instantiate sample1")
@@ -149,6 +151,7 @@ class Project: NSObject, NSCoding {
         
         do {
             try fileManager.removeItem(atPath: Project.ArchiveURL.path)
+            os_log("Saved projects deleted successfully.", log: .default, type: .debug)
         }
         catch {
             os_log("Failed to delete failed projects!", log: .default, type: .debug)

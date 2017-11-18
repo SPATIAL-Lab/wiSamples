@@ -102,7 +102,7 @@ class Sample: NSObject, NSCoding {
         static let depth = "depth"
         static let volume = "volume"
         static let phase = "phase"
-        static let comments = "comments"
+        static let comments = "sampleComments"
     }
     
     //MARK: Initialization
