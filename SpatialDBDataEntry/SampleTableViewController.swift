@@ -20,12 +20,6 @@ class SampleTableViewController: UITableViewController {
         if !Project.isValid(projectIndex: projectIndex) {
             fatalError("Project was nil!")
         }
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         navigationItem.title = "Samples"
     }
@@ -115,11 +109,7 @@ class SampleTableViewController: UITableViewController {
             
             sampleViewController.generatedSampleID = Project.projects[projectIndex].getIDForNewSample()
             
-        case "ShowSample":
-//            guard let sampleViewController = segue.destination as? SampleViewController else {
-//                fatalError("Unexpected destination \(segue.destination)")
-//            }
-            
+        case "ShowSample":            
             guard let navigationController = segue.destination as? UINavigationController else {
                 fatalError("Unexpected destination \(segue.destination)")
             }

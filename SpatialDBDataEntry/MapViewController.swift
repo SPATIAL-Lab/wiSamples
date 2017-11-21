@@ -22,11 +22,14 @@ MKMapViewDelegate {
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var mapView: MKMapView!
     
-    var selectedExistingSite: Bool = false
-    var locationSelected: CLLocationCoordinate2D = CLLocationCoordinate2D()
+    // MapView properties
     var lastUpdatedLocation: CLLocationCoordinate2D = CLLocationCoordinate2D()
     let regionRadius: CLLocationDistance = 2000
 
+    // Sample properties
+    var selectedExistingSite: Bool = false
+    var existingSiteID: String = ""
+    var locationSelected: CLLocationCoordinate2D = CLLocationCoordinate2D()
     var siteAnnotationList: [SiteAnnotation] = []
     
     override func viewDidLoad() {
@@ -54,20 +57,10 @@ MKMapViewDelegate {
         mapView.addAnnotations(siteAnnotationList)
         
         // Center map on selected location if valid else ask location manager
-        if locationSelected.latitude == 0 && locationSelected.longitude == 0 {
-            centerMapOnLocation(location: locationManager.location!.coordinate)
-        }
-        else {
-            centerMapOnLocation(location: locationSelected)
-            
-            // Select the annotation that matches the selected location
-            for siteAnnotation in siteAnnotationList {
-                if siteAnnotation.coordinate.latitude == locationSelected.latitude && siteAnnotation.coordinate.longitude == locationSelected.longitude {
-                    mapView.selectAnnotation(siteAnnotation, animated: true)
-                    break
-                }
-            }
-        }
+        initSelectedSite()
+        
+        // Disable the save button
+        saveButton.isEnabled = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -118,14 +111,28 @@ MKMapViewDelegate {
             pinAnnotation.pinTintColor = UIColor.yellow
         }
         
+        // Save the selected annotation's location
         locationSelected = (view.annotation?.coordinate)!
         centerMapOnLocation(location: locationSelected)
+        
+        // Update the title
+        if let siteAnnotation = view.annotation as? SiteAnnotation {
+            navigationItem.title = siteAnnotation.id
+        }
+        else {
+            navigationItem.title = "My Location"
+        }
+        
+        saveButton.isEnabled = true
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
         if let pinAnnotation = view as? MKPinAnnotationView {
             pinAnnotation.pinTintColor = UIColor.orange
         }
+        
+        navigationItem.title = ""
+        saveButton.isEnabled = false
     }
 
     // MARK: Navigation
@@ -143,6 +150,7 @@ MKMapViewDelegate {
             for siteAnnotation in siteAnnotationList {
                 if siteAnnotation.coordinate.latitude == locationSelected.latitude && siteAnnotation.coordinate.longitude == locationSelected.longitude {
                     selectedExistingSite = true
+                    existingSiteID = siteAnnotation.id
                     break
                 }
             }
@@ -162,6 +170,24 @@ MKMapViewDelegate {
     }
     
     //MARK: Private Methods
+    
+    private func initSelectedSite() {
+        if locationSelected.latitude == 0 && locationSelected.longitude == 0 {
+            centerMapOnLocation(location: locationManager.location!.coordinate)
+        }
+        else {
+            centerMapOnLocation(location: locationSelected)
+            
+            // Select the annotation that matches the selected location
+            for siteAnnotation in siteAnnotationList {
+                if siteAnnotation.coordinate.latitude == locationSelected.latitude && siteAnnotation.coordinate.longitude == locationSelected.longitude {
+                    mapView.selectAnnotation(siteAnnotation, animated: true)
+                    navigationItem.title = siteAnnotation.id
+                    break
+                }
+            }
+        }
+    }
     
     private func centerMapOnLocation(location: CLLocationCoordinate2D) {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, regionRadius, regionRadius)
