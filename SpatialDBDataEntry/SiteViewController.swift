@@ -16,13 +16,21 @@ class SiteViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var siteIDTextField: UITextField!
     @IBOutlet weak var siteNameTextField: UITextField!
+    @IBOutlet weak var commentsTextField: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
-    /* This value is either passed by `SampleViewController`
-     or constructed as part of adding a new site.
-     */
+    // Project properties
+    var projectIndex: Int = -1
     var site: Site?
+    
+    // Site properties
+    var generatedSiteID: String = ""
     var location: CLLocationCoordinate2D = CLLocationCoordinate2D()
+    var elevation: Double = -1
+    var address: String = ""
+    var city: String = ""
+    var stateOrProvince: String = ""
+    var country: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +38,10 @@ class SiteViewController: UIViewController, UITextFieldDelegate {
         // Set text field delegates
         siteIDTextField.delegate = self
         siteNameTextField.delegate = self
+        
+        // Initialize the site id
+        siteIDTextField.text = generatedSiteID
+        navigationItem.title = generatedSiteID
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,7 +57,7 @@ class SiteViewController: UIViewController, UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // Set the title if editing project name.
-        if textField === siteNameTextField {
+        if textField === siteIDTextField {
             navigationItem.title = textField.text
         }
         
@@ -71,6 +83,17 @@ class SiteViewController: UIViewController, UITextFieldDelegate {
         
         // Create a new site
         site = Site(id: siteID, name: siteName, location: location)
+        
+        // Fill in the remaining information
+        site!.elevation = elevation
+        site!.address = address
+        site!.city = city
+        site!.stateOrProvince = stateOrProvince
+        site!.country = country
+        site!.comments = commentsTextField.text ?? ""
+        
+        // Add the new site to this project
+        Project.projects[projectIndex].sites.append(site!)
     }
 
     //MARK: Actions

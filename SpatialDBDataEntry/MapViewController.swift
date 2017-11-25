@@ -22,11 +22,14 @@ MKMapViewDelegate {
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var mapView: MKMapView!
     
+    // Project properties
+    var projectIndex: Int = -1
+    
     // MapView properties
     var lastUpdatedLocation: CLLocationCoordinate2D = CLLocationCoordinate2D()
     let regionRadius: CLLocationDistance = 2000
 
-    // Sample properties
+    // Site properties
     var selectedExistingSite: Bool = false
     var existingSiteID: String = ""
     var locationSelected: CLLocationCoordinate2D = CLLocationCoordinate2D()
@@ -140,9 +143,17 @@ MKMapViewDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         
-        guard let button = sender as? UIBarButtonItem, button === saveButton else {
-            os_log("The save button was not pressed...cancelling.", log: OSLog.default, type: OSLogType.debug)
-            return
+        if segue.identifier == "ShowSiteView" {
+            guard let navigationController = segue.destination as? UINavigationController else {
+                fatalError("Unexpected destination \(segue.destination)")
+            }
+            
+            guard let siteViewController = navigationController.viewControllers[0] as? SiteViewController else {
+                fatalError("Unexpected presented view controller \(navigationController.presentedViewController)")
+            }
+            
+            siteViewController.generatedSiteID = Project.projects[projectIndex].getIDForNewSite()
+            siteViewController.projectIndex = projectIndex
         }
     }
     

@@ -107,6 +107,7 @@ class SampleTableViewController: UITableViewController {
                 fatalError("Unexpected presented view controller \(navigationController.presentedViewController)")
             }
             
+            sampleViewController.projectIndex = projectIndex
             sampleViewController.generatedSampleID = Project.projects[projectIndex].getIDForNewSample()
             
         case "ShowSample":            
@@ -127,6 +128,7 @@ class SampleTableViewController: UITableViewController {
             }
             
             let selectedSample = Project.projects[projectIndex].samples[indexPath.row]
+            sampleViewController.projectIndex = projectIndex
             sampleViewController.sample = selectedSample
             
         default:
@@ -151,10 +153,10 @@ class SampleTableViewController: UITableViewController {
                 // Get an index for the new cell
                 let newIndexPath = IndexPath(row: Project.projects[projectIndex].samples.count, section: 0)
                 
-                // Add the new site
+                // Add the new sample
                 Project.projects[projectIndex].samples.append(sample)
                 
-                // Add the new site to the table
+                // Add the new sample to the table
                 tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
             }
             

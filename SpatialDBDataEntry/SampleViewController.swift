@@ -27,11 +27,17 @@ UIPickerViewDataSource {
      */
     var sample: Sample?
     
+    // Project properties
+    var projectIndex: Int = -1
+    
+    // Sample properties
     var generatedSampleID: String = ""
     var type: SampleType = SampleType.ground
     var location: CLLocationCoordinate2D = CLLocationCoordinate2D()
+    var siteID: String = ""
     var collectionDate: Date = Date()
     
+    // Sample misc properties
     var depth: Int = -1
     var volume: Int = -1
     var phase: PhaseType = PhaseType.none
@@ -132,6 +138,7 @@ UIPickerViewDataSource {
                 fatalError("Unexpected presented view controller \(navigationController.presentedViewController)")
             }
             
+            mapViewController.projectIndex = projectIndex
             mapViewController.locationSelected = location
             
         case "ShowSampleMiscData":
@@ -180,6 +187,9 @@ UIPickerViewDataSource {
         }
         else if let mapViewController = sender.source as? MapViewController {
             location = mapViewController.locationSelected
+        }
+        else if let siteViewController = sender.source as? SiteViewController {
+            siteID = siteViewController.site!.id
         }
     }
     

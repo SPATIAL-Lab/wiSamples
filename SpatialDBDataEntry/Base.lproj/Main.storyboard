@@ -584,7 +584,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="c1G-NW-D0C">
-                                <rect key="frame" x="16" y="84" width="343" height="131"/>
+                                <rect key="frame" x="16" y="84" width="343" height="201.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Site ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m2K-ot-MUG">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="20.5"/>
@@ -610,10 +610,23 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                     </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Comments" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7a6-qi-7HN">
+                                        <rect key="frame" x="0.0" y="141" width="83.5" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2QI-ve-2oi">
+                                        <rect key="frame" x="0.0" y="171.5" width="343" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="eOP-Cp-eCZ" secondAttribute="trailing" id="bfJ-kz-oTM"/>
                                     <constraint firstAttribute="trailing" secondItem="iSN-xG-OXx" secondAttribute="trailing" id="ka2-EZ-JR8"/>
+                                    <constraint firstAttribute="trailing" secondItem="2QI-ve-2oi" secondAttribute="trailing" id="tzc-VY-f25"/>
                                 </constraints>
                             </stackView>
                         </subviews>
@@ -637,6 +650,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="commentsTextField" destination="2QI-ve-2oi" id="U1t-Mw-135"/>
                         <outlet property="saveButton" destination="Z3h-io-dba" id="866-OP-sqA"/>
                         <outlet property="siteIDTextField" destination="iSN-xG-OXx" id="1AI-Fi-m5S"/>
                         <outlet property="siteNameTextField" destination="eOP-Cp-eCZ" id="pa4-PJ-bWU"/>
