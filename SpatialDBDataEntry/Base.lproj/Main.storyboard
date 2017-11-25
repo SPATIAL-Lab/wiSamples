@@ -13,7 +13,7 @@
         <!--Projects-->
         <scene sceneID="YGQ-gr-NxP">
             <objects>
-                <tableViewController id="7wG-CS-xa6" userLabel="Projects" customClass="ProjectTableViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="ProjectTableViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7wG-CS-xa6" userLabel="Projects" customClass="ProjectTableViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="75" sectionHeaderHeight="28" sectionFooterHeight="28" id="xPw-ga-ie0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -61,7 +61,7 @@
         <!--New Project-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ProjectViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProjectViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="BYZ-38-t0r" customClass="ProjectViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -165,7 +165,7 @@
         <!--Navigation Controller-->
         <scene sceneID="UEz-7I-WZ0">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="s7y-zd-CfY" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ProjectTableNavigationController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="s7y-zd-CfY" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="dxz-tj-9eS">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -183,7 +183,7 @@
         <!--Navigation Controller-->
         <scene sceneID="Ypg-fP-jUN">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="flO-B4-xHI" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ProjectViewNavigationController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="flO-B4-xHI" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="jkB-bb-BT7">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -201,7 +201,7 @@
         <!--Samples-->
         <scene sceneID="y7E-aF-LEg">
             <objects>
-                <tableViewController id="MUt-B7-mr6" userLabel="Samples" customClass="SampleTableViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="SampleTableViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="MUt-B7-mr6" userLabel="Samples" customClass="SampleTableViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="75" sectionHeaderHeight="28" sectionFooterHeight="28" id="iuc-Qi-qbL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -249,7 +249,7 @@
         <!--New Sample-->
         <scene sceneID="bYQ-GH-8cH">
             <objects>
-                <viewController id="zAh-PE-PMc" userLabel="New Sample" customClass="SampleViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SampleViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="zAh-PE-PMc" userLabel="New Sample" customClass="SampleViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="FGb-NZ-Vae"/>
                         <viewControllerLayoutGuide type="bottom" id="mHy-in-yiT"/>
@@ -359,7 +359,7 @@
         <!--Map View Controller-->
         <scene sceneID="4Pe-k7-WVm">
             <objects>
-                <viewController id="xCM-yW-aIQ" customClass="MapViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MapViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="xCM-yW-aIQ" customClass="MapViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="JeI-ES-ZcR"/>
                         <viewControllerLayoutGuide type="bottom" id="bKZ-eA-sSK"/>
@@ -388,13 +388,15 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="Wr6-n2-RhO">
                             <connections>
-                                <segue destination="C6G-yh-9Lq" kind="unwind" unwindAction="unwindToSampleViewWithSender:" id="3rO-dG-cZU"/>
+                                <action selector="saveLocation:" destination="xCM-yW-aIQ" id="w1S-yP-jnC"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="Ip4-Zf-wB0" id="qvi-UX-VfA"/>
                         <outlet property="saveButton" destination="Wr6-n2-RhO" id="TT3-2j-4dW"/>
+                        <segue destination="E3t-Zh-IbQ" kind="presentation" identifier="ShowSiteView" id="YJO-Vo-Hd2"/>
+                        <segue destination="C6G-yh-9Lq" kind="unwind" identifier="UnwindOnSiteSelected" unwindAction="unwindToSampleViewWithSender:" id="tc8-j9-vNC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YBx-fl-DlM" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -405,7 +407,7 @@
         <!--Sample Misc Data View Controller-->
         <scene sceneID="2CK-wx-ppB">
             <objects>
-                <viewController id="PNn-BT-KaH" customClass="SampleMiscDataViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SampleMiscDataViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="PNn-BT-KaH" customClass="SampleMiscDataViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Sph-mL-lkv"/>
                         <viewControllerLayoutGuide type="bottom" id="qm0-tC-5Cu"/>
@@ -524,7 +526,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pcr-tq-tG1" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="vwS-Qg-wvU" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3437.5999999999999" y="1173.4632683658172"/>
+            <point key="canvasLocation" x="4377" y="1173"/>
         </scene>
         <!--Sites-->
         <scene sceneID="BTz-ry-3cD">
@@ -572,7 +574,7 @@
         <!--New Site-->
         <scene sceneID="ApQ-PG-EHR">
             <objects>
-                <viewController id="g6Y-3g-RBj" customClass="SiteViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SiteViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="g6Y-3g-RBj" customClass="SiteViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="gRl-id-Xvk"/>
                         <viewControllerLayoutGuide type="bottom" id="474-sQ-xQn"/>
@@ -630,7 +632,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="Z3h-io-dba">
                             <connections>
-                                <segue destination="f6a-Gx-Skz" kind="unwind" unwindAction="unwindToSiteListWithSender:" id="63g-eX-DOH"/>
+                                <segue destination="f6a-Gx-Skz" kind="unwind" unwindAction="unwindToSampleViewWithSender:" id="sur-Zb-6c1"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -643,12 +645,12 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q7e-VL-KYH" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="f6a-Gx-Skz" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="6183" y="403"/>
+            <point key="canvasLocation" x="6223" y="403"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="4bf-S1-t0K">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="E3t-Zh-IbQ" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="NewSiteNavigationController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="E3t-Zh-IbQ" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="0Jh-9K-ElZ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -661,12 +663,12 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WCQ-UC-re7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5287" y="403"/>
+            <point key="canvasLocation" x="5302" y="403"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="fmI-JW-emi">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="jE5-L8-yXB" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="SampleViewNavigationController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="jE5-L8-yXB" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="rEd-me-R38">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -684,7 +686,7 @@
         <!--Navigation Controller-->
         <scene sceneID="GBI-mj-OOJ">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="AkH-HF-yfd" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="SampleMiscViewNavigationController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="AkH-HF-yfd" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="xXz-9l-fXy">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -697,12 +699,12 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="umJ-oU-QDU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2534" y="1174"/>
+            <point key="canvasLocation" x="3438" y="1173"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Wce-Ej-yZh">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="IEp-1J-acU" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MapViewNavigationController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="IEp-1J-acU" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="4X6-bu-Sq7">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -719,6 +721,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="d7Z-wb-NOd"/>
+        <segue reference="Rie-Zc-7e3"/>
     </inferredMetricsTieBreakers>
 </document>

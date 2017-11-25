@@ -144,7 +144,15 @@ MKMapViewDelegate {
             os_log("The save button was not pressed...cancelling.", log: OSLog.default, type: OSLogType.debug)
             return
         }
-        
+    }
+    
+    //MARK: Actions
+    
+    @IBAction func cancelSetLocation(_ sender: UIBarButtonItem) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func saveLocation(_ sender: UIBarButtonItem) {
         // Check if an existing location was selected
         if locationSelected.latitude != 0 || locationSelected.longitude != 0 {
             for siteAnnotation in siteAnnotationList {
@@ -155,18 +163,20 @@ MKMapViewDelegate {
                 }
             }
         }
-        // This means no location was selected
         else {
+            // This means the user's current location was selected
             selectedExistingSite = false
             // Use last updated location as selected location
             locationSelected = lastUpdatedLocation
         }
-    }
-    
-    //MARK: Actions
-    
-    @IBAction func cancelSetLocation(_ sender: UIBarButtonItem) {
-        dismiss(animated: true, completion: nil)
+        
+        // Check if the user selected an existing site or a new one
+        if selectedExistingSite {
+            performSegue(withIdentifier: "UnwindOnSiteSelected", sender: self)
+            }
+        else {
+            performSegue(withIdentifier: "ShowSiteView", sender: self)
+        }
     }
     
     //MARK: Private Methods
