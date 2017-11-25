@@ -144,14 +144,14 @@ class Project: NSObject, NSCoding {
     //MARK: Private Methods
     
     private static func loadSampleProjects() {
-        let location = CLLocationCoordinate2DMake(CLLocationDegrees(0), CLLocationDegrees(0))
+        let location = CLLocationCoordinate2DMake(CLLocationDegrees(40.764941), CLLocationDegrees(-111.842194))
         
         guard let site1 = Site(id: "TP1-JD-SITE-01", name: "Site_01", location: location) else {
             fatalError("Unable to instantiate site1")
         }
         
         let date = Date()
-        guard let sample1 = Sample(id: "TP1-JD-SAMPLE-01", location: location, type: SampleType.lake, dateTime: date, startDateTime: date) else {
+        guard let sample1 = Sample(id: "TP1-JD-SAMPLE-01", siteID: "TP1-JD-SITE-01", type: SampleType.lake, dateTime: date, startDateTime: date) else {
             fatalError("Unable to instantiate sample1")
         }
         

@@ -81,7 +81,7 @@ class Sample: NSObject, NSCoding {
     //MARK: Properties
     
     var id: String
-    var location: CLLocationCoordinate2D
+    var siteID: String
     var type: SampleType
     var dateTime: Date
     var startDateTime: Date
@@ -94,8 +94,7 @@ class Sample: NSObject, NSCoding {
     
     struct PropertyKeys {
         static let sampleID = "sampleID"
-        static let latitude = "latitude"
-        static let longitude = "longitude"
+        static let siteID = "siteID"
         static let type = "sampleType"
         static let dateTime = "dateTime"
         static let startDateTime = "startDateTime"
@@ -107,13 +106,13 @@ class Sample: NSObject, NSCoding {
     
     //MARK: Initialization
     
-    init?(id: String, location: CLLocationCoordinate2D, type: SampleType, dateTime: Date, startDateTime: Date) {
+    init?(id: String, siteID: String, type: SampleType, dateTime: Date, startDateTime: Date) {
         guard !id.isEmpty else {
             return nil
         }
         
         self.id = id
-        self.location = location
+        self.siteID = siteID
         self.type = type
         self.dateTime = dateTime
         self.startDateTime = startDateTime
@@ -123,8 +122,7 @@ class Sample: NSObject, NSCoding {
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(id, forKey: PropertyKeys.sampleID)
-        aCoder.encode(Double(location.latitude), forKey: PropertyKeys.latitude)
-        aCoder.encode(Double(location.longitude), forKey: PropertyKeys.longitude)
+        aCoder.encode(siteID, forKey: PropertyKeys.siteID)
         aCoder.encode(type.rawValue, forKey: PropertyKeys.type)
         aCoder.encode(dateTime, forKey: PropertyKeys.dateTime)
         aCoder.encode(startDateTime, forKey: PropertyKeys.startDateTime)
@@ -140,9 +138,7 @@ class Sample: NSObject, NSCoding {
             return nil
         }
         
-        let latitude = aDecoder.decodeDouble(forKey: PropertyKeys.latitude)
-        let longitude = aDecoder.decodeDouble(forKey: PropertyKeys.longitude)
-        let location = CLLocationCoordinate2DMake(CLLocationDegrees(latitude), CLLocationDegrees(longitude))
+        let siteID = aDecoder.decodeObject(forKey: PropertyKeys.siteID) as? String
         let type = SampleType(rawValue: aDecoder.decodeInteger(forKey: PropertyKeys.type))!
         let dateTime = aDecoder.decodeObject(forKey: PropertyKeys.dateTime) as? Date
         let startDateTime = aDecoder.decodeObject(forKey: PropertyKeys.startDateTime) as? Date
@@ -151,7 +147,7 @@ class Sample: NSObject, NSCoding {
         let phase = PhaseType(rawValue: aDecoder.decodeInteger(forKey: PropertyKeys.phase))!
         let comments = aDecoder.decodeObject(forKey: PropertyKeys.comments) as? String
         
-        self.init(id: id, location: location, type: type, dateTime: dateTime!, startDateTime: startDateTime!)
+        self.init(id: id, siteID: siteID!, type: type, dateTime: dateTime!, startDateTime: startDateTime!)
         
         self.depth = depth
         self.volume = volume

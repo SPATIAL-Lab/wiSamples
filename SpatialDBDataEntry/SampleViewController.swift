@@ -33,7 +33,6 @@ UIPickerViewDataSource {
     // Sample properties
     var generatedSampleID: String = ""
     var type: SampleType = SampleType.ground
-    var location: CLLocationCoordinate2D = CLLocationCoordinate2D()
     var siteID: String = ""
     var collectionDate: Date = Date()
     
@@ -60,7 +59,7 @@ UIPickerViewDataSource {
             // Update data variables
             generatedSampleID = existingSample.id
             type = existingSample.type
-            location = existingSample.location
+            siteID = existingSample.siteID
             collectionDate = existingSample.dateTime
             depth = existingSample.depth
             volume = existingSample.volume
@@ -139,7 +138,8 @@ UIPickerViewDataSource {
             }
             
             mapViewController.projectIndex = projectIndex
-            mapViewController.locationSelected = location
+            mapViewController.existingSiteID = siteID
+            mapViewController.selectedExistingSite = !siteID.isEmpty
             
         case "ShowSampleMiscData":
             guard let navigationController = segue.destination as? UINavigationController else {
@@ -166,7 +166,7 @@ UIPickerViewDataSource {
             let sampleID = sampleIDTextField.text ?? ""
             
             // Create a new sample
-            sample = Sample(id: sampleID, location: location, type: type, dateTime: collectionDate, startDateTime: startCollectionDate)
+            sample = Sample(id: sampleID, siteID: siteID, type: type, dateTime: collectionDate, startDateTime: startCollectionDate)
             
             sample!.depth = depth
             sample!.volume = volume
@@ -186,7 +186,7 @@ UIPickerViewDataSource {
             comments = sampleMiscDataViewController.comments
         }
         else if let mapViewController = sender.source as? MapViewController {
-            location = mapViewController.locationSelected
+            siteID = mapViewController.existingSiteID
         }
         else if let siteViewController = sender.source as? SiteViewController {
             siteID = siteViewController.site!.id

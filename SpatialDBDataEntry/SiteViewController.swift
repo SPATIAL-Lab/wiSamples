@@ -32,6 +32,9 @@ class SiteViewController: UIViewController, UITextFieldDelegate {
     var stateOrProvince: String = ""
     var country: String = ""
     
+    // Map properties
+    var newLocation: CLLocation = CLLocation()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -42,6 +45,8 @@ class SiteViewController: UIViewController, UITextFieldDelegate {
         // Initialize the site id
         siteIDTextField.text = generatedSiteID
         navigationItem.title = generatedSiteID
+        
+        initSiteProperties()
     }
 
     override func didReceiveMemoryWarning() {
@@ -102,4 +107,25 @@ class SiteViewController: UIViewController, UITextFieldDelegate {
         dismiss(animated: true, completion: nil)
     }
     
+    //MARK: Private Methods
+    
+    private func initSiteProperties() {
+        self.location = newLocation.coordinate
+        self.elevation = newLocation.altitude
+        
+        CLGeocoder().reverseGeocodeLocation(newLocation, completionHandler: {(placemarks, error) -> Void in
+            if error != nil {
+                os_log("Reverse geocode location failed!", log: OSLog.default, type: OSLogType.debug)
+                return
+            }
+            
+            if placemarks!.count > 0 {
+                let placemark = placemarks![0]
+                self.address = placemark.thoroughfare ?? ""
+                self.city = placemark.locality ?? ""
+                self.stateOrProvince = placemark.administrativeArea ?? ""
+                self.country = placemark.isoCountryCode ?? ""
+            }
+        })
+    }
 }

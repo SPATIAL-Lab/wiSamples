@@ -26,14 +26,13 @@ MKMapViewDelegate {
     var projectIndex: Int = -1
     
     // MapView properties
-    var lastUpdatedLocation: CLLocationCoordinate2D = CLLocationCoordinate2D()
+    var lastUpdatedLocation: CLLocation = CLLocation()
     let regionRadius: CLLocationDistance = 2000
+    var siteAnnotationList: [SiteAnnotation] = []
 
     // Site properties
     var selectedExistingSite: Bool = false
     var existingSiteID: String = ""
-    var locationSelected: CLLocationCoordinate2D = CLLocationCoordinate2D()
-    var siteAnnotationList: [SiteAnnotation] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,8 +61,8 @@ MKMapViewDelegate {
         // Center map on selected location if valid else ask location manager
         initSelectedSite()
         
-        // Disable the save button
-        saveButton.isEnabled = false
+        // Enable the save button if viewing an existing site
+        saveButton.isEnabled = selectedExistingSite
     }
 
     override func didReceiveMemoryWarning() {
@@ -74,7 +73,7 @@ MKMapViewDelegate {
     //MARK: CLLocationManagerDelegate
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        lastUpdatedLocation = (manager.location?.coordinate)!
+        lastUpdatedLocation = manager.location!
     }
     
     //MARK: MKMapViewDelegate
@@ -98,8 +97,7 @@ MKMapViewDelegate {
         }
         
         // Check if the site annotation matches with the selected location
-        let annotationCoordinate = (view.annotation?.coordinate)!
-        if annotationCoordinate.latitude == locationSelected.latitude && annotationCoordinate.longitude == locationSelected.longitude {
+        if annotation.id == existingSiteID {
             view.pinTintColor = UIColor.yellow
         }
         else {
@@ -114,15 +112,15 @@ MKMapViewDelegate {
             pinAnnotation.pinTintColor = UIColor.yellow
         }
         
-        // Save the selected annotation's location
-        locationSelected = (view.annotation?.coordinate)!
-        centerMapOnLocation(location: locationSelected)
+        centerMapOnLocation(location: (view.annotation?.coordinate)!)
         
         // Update the title
         if let siteAnnotation = view.annotation as? SiteAnnotation {
+            existingSiteID = siteAnnotation.id
             navigationItem.title = siteAnnotation.id
         }
         else {
+            existingSiteID = ""
             navigationItem.title = "My Location"
         }
         
@@ -134,6 +132,7 @@ MKMapViewDelegate {
             pinAnnotation.pinTintColor = UIColor.orange
         }
         
+        existingSiteID = ""
         navigationItem.title = ""
         saveButton.isEnabled = false
     }
@@ -154,6 +153,7 @@ MKMapViewDelegate {
             
             siteViewController.generatedSiteID = Project.projects[projectIndex].getIDForNewSite()
             siteViewController.projectIndex = projectIndex
+            siteViewController.newLocation = lastUpdatedLocation
         }
     }
     
@@ -164,28 +164,15 @@ MKMapViewDelegate {
     }
     
     @IBAction func saveLocation(_ sender: UIBarButtonItem) {
-        // Check if an existing location was selected
-        if locationSelected.latitude != 0 || locationSelected.longitude != 0 {
-            for siteAnnotation in siteAnnotationList {
-                if siteAnnotation.coordinate.latitude == locationSelected.latitude && siteAnnotation.coordinate.longitude == locationSelected.longitude {
-                    selectedExistingSite = true
-                    existingSiteID = siteAnnotation.id
-                    break
-                }
-            }
-        }
-        else {
-            // This means the user's current location was selected
-            selectedExistingSite = false
-            // Use last updated location as selected location
-            locationSelected = lastUpdatedLocation
-        }
+        // Check if an existing site id exists
+        selectedExistingSite = !existingSiteID.isEmpty
         
-        // Check if the user selected an existing site or a new one
         if selectedExistingSite {
+            // If an existing site was selected, unwind to the sample view
             performSegue(withIdentifier: "UnwindOnSiteSelected", sender: self)
             }
         else {
+            // If a new site was selected, show the site view
             performSegue(withIdentifier: "ShowSiteView", sender: self)
         }
     }
@@ -193,15 +180,14 @@ MKMapViewDelegate {
     //MARK: Private Methods
     
     private func initSelectedSite() {
-        if locationSelected.latitude == 0 && locationSelected.longitude == 0 {
+        if existingSiteID.isEmpty {
             centerMapOnLocation(location: locationManager.location!.coordinate)
         }
         else {
-            centerMapOnLocation(location: locationSelected)
-            
             // Select the annotation that matches the selected location
             for siteAnnotation in siteAnnotationList {
-                if siteAnnotation.coordinate.latitude == locationSelected.latitude && siteAnnotation.coordinate.longitude == locationSelected.longitude {
+                if siteAnnotation.id == existingSiteID {
+                    centerMapOnLocation(location: siteAnnotation.coordinate)
                     mapView.selectAnnotation(siteAnnotation, animated: true)
                     navigationItem.title = siteAnnotation.id
                     break
