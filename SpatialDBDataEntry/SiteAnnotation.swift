@@ -47,6 +47,31 @@ MKAnnotation {
     
     //MARK: Global Data Helpers
     
+    static func loadSitesForProject(withIndex: Int) -> [SiteAnnotation] {
+        if Project.isValid(projectIndex: withIndex) == false {
+            fatalError("Invalid project index passed to loadSitesForProject!")
+        }
+        
+        var siteAnnotationList: [SiteAnnotation] = []
+        
+        let sites = Project.projects[withIndex].sites
+        
+        for site in sites {
+            let siteAnnotation = SiteAnnotation(id: site.id,
+                                                name: site.name,
+                                                coordinate: site.location,
+                                                elevation: site.elevation,
+                                                address: site.address,
+                                                city: site.city,
+                                                stateOrProvince: site.stateOrProvince,
+                                                country: site.country,
+                                                comments: site.comments)
+            siteAnnotationList.append(siteAnnotation)
+        }
+        
+        return siteAnnotationList
+    }
+    
     static func loadSitesFromFile(withName: String) -> [SiteAnnotation] {
         var siteAnnotationList: [SiteAnnotation] = []
         

@@ -53,9 +53,13 @@ MKMapViewDelegate {
             os_log("Location services are disabled!", log: .default, type: .debug)
         }
         
-        // TODO: This must also include sites saved by the user.
         // Plot sample sites
-        siteAnnotationList = SiteAnnotation.loadSitesFromFile(withName: "SampleSites")
+        let sampleSites = SiteAnnotation.loadSitesFromFile(withName: "SampleSites")
+        // Plot saved sites
+        let savedSites = SiteAnnotation.loadSitesForProject(withIndex: projectIndex)
+        
+        siteAnnotationList.append(contentsOf: sampleSites)
+        siteAnnotationList.append(contentsOf: savedSites)
         mapView.addAnnotations(siteAnnotationList)
         
         // Center map on selected location if valid else ask location manager
