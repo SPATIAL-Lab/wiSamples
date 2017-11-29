@@ -64,8 +64,10 @@ class Project: NSObject, NSCoding {
         if samples.count > 0 {
             let lastSample = samples[samples.count - 1]
             let splitSampleID = lastSample.id.components(separatedBy: sampleIDPrefix + String("SAMPLE-"))
-            let newSampleID = Int(splitSampleID[1])! + 1
-            return sampleIDPrefix + String(format: "SAMPLE-%02d", newSampleID)
+            if splitSampleID.count > 1 {
+                let newSampleID = Int(splitSampleID[1])! + 1
+                return sampleIDPrefix + String(format: "SAMPLE-%02d", newSampleID)
+            }
         }
         
         return sampleIDPrefix + String(format: "SAMPLE-%02d", samples.count + 1)
@@ -75,8 +77,10 @@ class Project: NSObject, NSCoding {
         if sites.count > 0 {
             let lastSite = sites[sites.count - 1]
             let splitSiteID = lastSite.id.components(separatedBy: sampleIDPrefix + String("SITE-"))
-            let newSiteID = Int(splitSiteID[1])! + 1
-            return sampleIDPrefix + String(format: "SITE-%02d", newSiteID)
+            if splitSiteID.count > 1 {
+                let newSiteID = Int(splitSiteID[1])! + 1
+                return sampleIDPrefix + String(format: "SITE-%02d", newSiteID)
+            }
         }
         
         return sampleIDPrefix + String(format: "SITE-%02d", sites.count + 1)

@@ -78,6 +78,9 @@ UIPickerViewDataSource {
             sampleIDTextField.text = generatedSampleID
             navigationItem.title = generatedSampleID
         }
+        
+        // Enable save button if site id is valid
+        saveButton.isEnabled = !siteID.isEmpty
     }
 
     override func didReceiveMemoryWarning() {
@@ -191,6 +194,9 @@ UIPickerViewDataSource {
         else if let siteViewController = sender.source as? SiteViewController {
             siteID = siteViewController.site!.id
         }
+        
+        // Enable save button if site id is valid
+        saveButton.isEnabled = !siteID.isEmpty
     }
     
     @IBAction func cancelNewSample(_ sender: UIBarButtonItem) {
