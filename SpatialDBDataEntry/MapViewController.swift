@@ -13,7 +13,8 @@ import CoreLocation
 
 class MapViewController: UIViewController,
 CLLocationManagerDelegate,
-MKMapViewDelegate {
+MKMapViewDelegate,
+DataManagerResponseDelegate {
     
     //MARK: Properties
     
@@ -53,12 +54,10 @@ MKMapViewDelegate {
             os_log("Location services are disabled!", log: .default, type: .debug)
         }
         
-        // Plot sample sites
-        let sampleSites = SiteAnnotation.loadSitesFromFile(withName: "SampleSites")
+        DataManager.shared.fetchSites(delegate: self, location: locationManager.location!, rangeInKM: 5)
+
         // Plot saved sites
-        let savedSites = SiteAnnotation.loadSitesForProject(withIndex: projectIndex)
-        
-        siteAnnotationList.append(contentsOf: sampleSites)
+        let savedSites = SiteAnnotation.loadSiteAnnotations(fromSites: Project.projects[projectIndex].sites)
         siteAnnotationList.append(contentsOf: savedSites)
         mapView.addAnnotations(siteAnnotationList)
         
@@ -159,6 +158,18 @@ MKMapViewDelegate {
             siteViewController.projectIndex = projectIndex
             siteViewController.newLocation = lastUpdatedLocation
         }
+    }
+    
+    //MARK: DataManagerResponseDelegate
+    
+    func receiveSites(errorMessage: String, sites: [Site]) {
+        // Plot saved sites
+        let receivedSites = SiteAnnotation.loadSiteAnnotations(fromSites: sites)
+        siteAnnotationList.append(contentsOf: receivedSites)
+        mapView.addAnnotations(siteAnnotationList)
+        
+        // Center map on selected location if valid else ask location manager
+        initSelectedSite()
     }
     
     //MARK: Actions

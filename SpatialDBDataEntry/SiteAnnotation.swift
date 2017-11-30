@@ -47,16 +47,9 @@ MKAnnotation {
     
     //MARK: Global Data Helpers
     
-    static func loadSitesForProject(withIndex: Int) -> [SiteAnnotation] {
-        if Project.isValid(projectIndex: withIndex) == false {
-            fatalError("Invalid project index passed to loadSitesForProject!")
-        }
-        
+    static func loadSiteAnnotations(fromSites: [Site]) -> [SiteAnnotation] {
         var siteAnnotationList: [SiteAnnotation] = []
-        
-        let sites = Project.projects[withIndex].sites
-        
-        for site in sites {
+        for site in fromSites {
             let siteAnnotation = SiteAnnotation(id: site.id,
                                                 name: site.name,
                                                 coordinate: site.location,
@@ -72,7 +65,7 @@ MKAnnotation {
         return siteAnnotationList
     }
     
-    static func loadSitesFromFile(withName: String) -> [SiteAnnotation] {
+    static func loadSiteAnnotationsFromFile(withName: String) -> [SiteAnnotation] {
         var siteAnnotationList: [SiteAnnotation] = []
         
         guard let fileName = Bundle.main.path(forResource: withName, ofType: "json") else {
