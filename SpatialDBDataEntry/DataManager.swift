@@ -27,14 +27,14 @@ class DataManager: NSObject
         dataTask?.cancel()
         responseDelegate = delegate
 
-        let sitesURL: URL = URL(string: "http://wateriso.utah.edu/api/sites.php")!
+        let sitesURL: URL = URL(string: "http://wateriso.utah.edu/api/sites_for_mobile.php")!
         var sitesRequest: URLRequest = URLRequest(url: sitesURL)
         
         sitesRequest.httpMethod = "POST"
         sitesRequest.addValue("application/json", forHTTPHeaderField: "ContentType")
         
-        let latitude: Double = Double(location.coordinate.latitude)
-        let longitude: Double = Double(location.coordinate.longitude)
+        let latitude: Double = 40.759341//Double(location.coordinate.latitude)
+        let longitude: Double = -111.861879//Double(location.coordinate.longitude)
         
         let radiusEarth: Double = 6378;
         let radiansToDegrees: Double = 180 / Double.pi
@@ -47,15 +47,7 @@ class DataManager: NSObject
         
         let sitesRequestBodyString: String = "{" +
             "\"latitude\": { \"Min\": \(minLatitude), \"Max\": \(maxLatitude) }," +
-            "\"longitude\": { \"Min\": \(minLongitude), \"Max\": \(maxLongitude) }," +
-            "\"elevation\": null," +
-            "\"countries\": null," +
-            "\"states\": null," +
-            "\"collection_date\": null," +
-            "\"types\": null," +
-            "\"h2\": null," +
-            "\"o18\": null," +
-            "\"project_ids\": null" +
+            "\"longitude\": { \"Min\": \(minLongitude), \"Max\": \(maxLongitude) }" +
         "}"
         
         let sitesRequestBodyData: Data = sitesRequestBodyString.data(using: .utf8)!
@@ -105,22 +97,8 @@ class DataManager: NSObject
             let latitude = siteDict["Latitude"] as? Double
             let longitude = siteDict["Longitude"] as? Double
             let coordinate = CLLocationCoordinate2D(latitude: latitude!, longitude: longitude!)
-            let elevation = siteDict["Elevation_mabsl"] as? Double
-            let address = siteDict["Address"] as? String
-            let city = siteDict["City"] as? String
-            let stateOrProvince = siteDict["State_or_Province"] as? String
-            let country = siteDict["Country"] as? String
-            let comments = siteDict["Site_Comments"] as? String
             
-            let site: Site = Site(id: id!, name: name ?? "", location: coordinate)!
-            
-            // Fill in the remaining information
-            site.elevation = elevation ?? 0
-            site.address = address ?? ""
-            site.city = city ?? ""
-            site.stateOrProvince = stateOrProvince ?? ""
-            site.country = country ?? ""
-            site.comments = comments ?? ""
+            let site: Site = Site(id: id ?? "nil", name: name ?? "", location: coordinate)!
             
             sites.append(site)
         }
