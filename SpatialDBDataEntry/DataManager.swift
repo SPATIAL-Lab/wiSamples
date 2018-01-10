@@ -23,7 +23,7 @@ class DataManager: NSObject
     var responseDelegate: DataManagerResponseDelegate?
     var errorMessage: String = ""
     
-    func fetchSites(delegate: DataManagerResponseDelegate, location: CLLocation, rangeInKM: Double) {
+    func fetchSites(delegate: DataManagerResponseDelegate, minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {
         dataTask?.cancel()
         responseDelegate = delegate
 
@@ -33,21 +33,9 @@ class DataManager: NSObject
         sitesRequest.httpMethod = "POST"
         sitesRequest.addValue("application/json", forHTTPHeaderField: "ContentType")
         
-        let latitude: Double = 40.759341//Double(location.coordinate.latitude)
-        let longitude: Double = -111.861879//Double(location.coordinate.longitude)
-        
-        let radiusEarth: Double = 6378;
-        let radiansToDegrees: Double = 180 / Double.pi
-        let degreesToRadians: Double = Double.pi / 180
-        
-        let minLatitude = latitude - (rangeInKM / radiusEarth) * radiansToDegrees
-        let maxLatitude = latitude + (rangeInKM / radiusEarth) * radiansToDegrees
-        let minLongitude = longitude - (rangeInKM / radiusEarth) * radiansToDegrees / cos(latitude * degreesToRadians)
-        let maxLongitude = longitude + (rangeInKM / radiusEarth) * radiansToDegrees / cos(latitude * degreesToRadians)
-        
         let sitesRequestBodyString: String = "{" +
-            "\"latitude\": { \"Min\": \(minLatitude), \"Max\": \(maxLatitude) }," +
-            "\"longitude\": { \"Min\": \(minLongitude), \"Max\": \(maxLongitude) }" +
+            "\"latitude\": { \"Min\": \(minLatLong.latitude), \"Max\": \(maxLatLong.latitude) }," +
+            "\"longitude\": { \"Min\": \(minLatLong.longitude), \"Max\": \(maxLatLong.longitude) }" +
         "}"
         
         let sitesRequestBodyData: Data = sitesRequestBodyString.data(using: .utf8)!

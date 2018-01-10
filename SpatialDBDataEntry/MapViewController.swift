@@ -28,8 +28,11 @@ DataManagerResponseDelegate {
     
     // MapView properties
     var lastUpdatedLocation: CLLocation = CLLocation()
-    let regionRadius: CLLocationDistance = 2000
+    let regionRadius: CLLocationDistance = 1000
     var siteAnnotationList: [SiteAnnotation] = []
+    var lastRegionCenter: CLLocationCoordinate2D = CLLocationCoordinate2D()
+    var lastMinLatLong: CLLocationCoordinate2D = CLLocationCoordinate2D()
+    var lastMaxLatLong: CLLocationCoordinate2D = CLLocationCoordinate2D()
 
     // Site properties
     var selectedExistingSite: Bool = false
@@ -54,7 +57,11 @@ DataManagerResponseDelegate {
             os_log("Location services are disabled!", log: .default, type: .debug)
         }
         
-        DataManager.shared.fetchSites(delegate: self, location: locationManager.location!, rangeInKM: 5)
+        // Get a range of latitude and longitude around the user's current location
+        (lastMinLatLong, lastMaxLatLong) = getMinMaxLatLong(location: locationManager.location!, rangeInKM: 10)
+        
+        // Request for sites in the range of latitude and longitude
+        DataManager.shared.fetchSites(delegate: self, minLatLong: lastMinLatLong, maxLatLong: lastMaxLatLong)
 
         // Plot saved sites
         let savedSites = SiteAnnotation.loadSiteAnnotations(fromSites: Project.projects[projectIndex].sites)
@@ -139,6 +146,14 @@ DataManagerResponseDelegate {
         navigationItem.title = ""
         saveButton.isEnabled = false
     }
+    
+    func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+        print("regionWillChange \(mapView.region.center)")
+    }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        print("regionDidChange \(mapView.region.center)")
+    }
 
     // MARK: Navigation
 
@@ -214,6 +229,22 @@ DataManagerResponseDelegate {
     private func centerMapOnLocation(location: CLLocationCoordinate2D) {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, regionRadius, regionRadius)
         mapView.setRegion(coordinateRegion, animated: true)
+    }
+    
+    private func getMinMaxLatLong(location: CLLocation, rangeInKM: Double) -> (min: CLLocationCoordinate2D, max: CLLocationCoordinate2D) {
+        let latitude: Double = 40.759341//Double(location.coordinate.latitude)
+        let longitude: Double = -111.861879//Double(location.coordinate.longitude)
+        
+        let radiusEarth: Double = 6378;
+        let radiansToDegrees: Double = 180 / Double.pi
+        let degreesToRadians: Double = Double.pi / 180
+        
+        let minLatitude = latitude - (rangeInKM / radiusEarth) * radiansToDegrees
+        let maxLatitude = latitude + (rangeInKM / radiusEarth) * radiansToDegrees
+        let minLongitude = longitude - (rangeInKM / radiusEarth) * radiansToDegrees / cos(latitude * degreesToRadians)
+        let maxLongitude = longitude + (rangeInKM / radiusEarth) * radiansToDegrees / cos(latitude * degreesToRadians)
+        
+        return (CLLocationCoordinate2D(latitude: minLatitude, longitude: minLongitude), CLLocationCoordinate2D(latitude: maxLatitude, longitude: maxLongitude))
     }
 
 }
