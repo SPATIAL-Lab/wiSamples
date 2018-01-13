@@ -28,7 +28,8 @@ DataManagerResponseDelegate {
     
     // MapView properties
     var lastUpdatedLocation: CLLocation = CLLocation()
-    let regionRadius: CLLocationDistance = 5000
+    let regionRadius: CLLocationDistance = 2000
+    let maxLatitudeDelta: Double = 0.05
     var siteAnnotationList: [SiteAnnotation] = []
     var lastRegionCenter: CLLocationCoordinate2D = CLLocationCoordinate2D()
     var lastMinLatLong: CLLocationCoordinate2D = CLLocationCoordinate2D()
@@ -158,7 +159,11 @@ DataManagerResponseDelegate {
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-//        print("regionDidChange \(mapView.region.center)")
+//        print("regionDidChange C:\(mapView.region.center) S:\(mapView.region.span)")
+        if Double(mapView.region.span.latitudeDelta) > maxLatitudeDelta {
+            let correctedRegion = MKCoordinateRegionMake(mapView.region.center, MKCoordinateSpanMake(maxLatitudeDelta, maxLatitudeDelta))
+            mapView.setRegion(correctedRegion, animated: true)
+        }
     }
 
     // MARK: Navigation
