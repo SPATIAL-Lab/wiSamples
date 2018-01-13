@@ -28,11 +28,16 @@ DataManagerResponseDelegate {
     
     // MapView properties
     var lastUpdatedLocation: CLLocation = CLLocation()
-    let regionRadius: CLLocationDistance = 1000
+    let regionRadius: CLLocationDistance = 5000
     var siteAnnotationList: [SiteAnnotation] = []
     var lastRegionCenter: CLLocationCoordinate2D = CLLocationCoordinate2D()
     var lastMinLatLong: CLLocationCoordinate2D = CLLocationCoordinate2D()
     var lastMaxLatLong: CLLocationCoordinate2D = CLLocationCoordinate2D()
+    
+    // Site fetching
+    var hasFetchedInitially: Bool = false
+    let siteFetchWindowSize: Double = 10
+    let minLocationErrorTolerance: Double = 5
 
     // Site properties
     var selectedExistingSite: Bool = false
@@ -56,12 +61,6 @@ DataManagerResponseDelegate {
         else {
             os_log("Location services are disabled!", log: .default, type: .debug)
         }
-        
-        // Get a range of latitude and longitude around the user's current location
-        (lastMinLatLong, lastMaxLatLong) = getMinMaxLatLong(location: locationManager.location!, rangeInKM: 10)
-        
-        // Request for sites in the range of latitude and longitude
-        DataManager.shared.fetchSites(delegate: self, minLatLong: lastMinLatLong, maxLatLong: lastMaxLatLong)
 
         // Plot saved sites
         let savedSites = SiteAnnotation.loadSiteAnnotations(fromSites: Project.projects[projectIndex].sites)
@@ -83,7 +82,14 @@ DataManagerResponseDelegate {
     //MARK: CLLocationManagerDelegate
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        // Save off the difference from the previous update
+        let distanceFromLastUpdatedLocation = manager.location!.distance(from: lastUpdatedLocation)
         lastUpdatedLocation = manager.location!
+        
+        if !hasFetchedInitially && distanceFromLastUpdatedLocation.isLess(than: minLocationErrorTolerance) {
+            hasFetchedInitially = true
+            fetchSites()
+        }
     }
     
     //MARK: MKMapViewDelegate
@@ -148,11 +154,11 @@ DataManagerResponseDelegate {
     }
     
     func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
-        print("regionWillChange \(mapView.region.center)")
+//        print("regionWillChange \(mapView.region.center)")
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        print("regionDidChange \(mapView.region.center)")
+//        print("regionDidChange \(mapView.region.center)")
     }
 
     // MARK: Navigation
@@ -177,8 +183,20 @@ DataManagerResponseDelegate {
     
     //MARK: DataManagerResponseDelegate
     
+    func fetchSites() {
+        // Get a range of latitude and longitude around the user's current location
+        (lastMinLatLong, lastMaxLatLong) = getMinMaxLatLong(location: lastUpdatedLocation, rangeInKM: siteFetchWindowSize)
+        
+        print("Fetching sites in range \(lastMinLatLong), \(lastMaxLatLong)...")
+        
+        // Request for sites in the range of latitude and longitude
+        DataManager.shared.fetchSites(delegate: self, minLatLong: lastMinLatLong, maxLatLong: lastMaxLatLong)
+    }
+    
     func receiveSites(errorMessage: String, sites: [Site]) {
-        // Plot saved sites
+        print("Plotting \(sites.count) received sites...")
+        
+        // Plot received sites
         let receivedSites = SiteAnnotation.loadSiteAnnotations(fromSites: sites)
         siteAnnotationList.append(contentsOf: receivedSites)
         mapView.addAnnotations(siteAnnotationList)
@@ -232,8 +250,8 @@ DataManagerResponseDelegate {
     }
     
     private func getMinMaxLatLong(location: CLLocation, rangeInKM: Double) -> (min: CLLocationCoordinate2D, max: CLLocationCoordinate2D) {
-        let latitude: Double = 40.759341//Double(location.coordinate.latitude)
-        let longitude: Double = -111.861879//Double(location.coordinate.longitude)
+        let latitude: Double = Double(location.coordinate.latitude)//40.759341//Double(location.coordinate.latitude)
+        let longitude: Double = Double(location.coordinate.longitude)//-111.861879//Double(location.coordinate.longitude)
         
         let radiusEarth: Double = 6378;
         let radiansToDegrees: Double = 180 / Double.pi
