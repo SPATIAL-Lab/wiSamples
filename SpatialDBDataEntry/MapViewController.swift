@@ -28,17 +28,16 @@ DataManagerResponseDelegate {
     
     // MapView properties
     var lastUpdatedLocation: CLLocation = CLLocation()
-    let regionRadius: CLLocationDistance = 2000
     let maxLatitudeDelta: Double = 0.05
     var siteAnnotationList: [SiteAnnotation] = []
     var lastRegionCenter: CLLocationCoordinate2D = CLLocationCoordinate2D()
-    var lastMinLatLong: CLLocationCoordinate2D = CLLocationCoordinate2D()
-    var lastMaxLatLong: CLLocationCoordinate2D = CLLocationCoordinate2D()
     
     // Site fetching
     var hasFetchedInitially: Bool = false
     let siteFetchWindowSize: Double = 10
     let minLocationErrorTolerance: Double = 5
+//    var lastMinLatLong: CLLocationCoordinate2D = CLLocationCoordinate2D()
+//    var lastMaxLatLong: CLLocationCoordinate2D = CLLocationCoordinate2D()
 
     // Site properties
     var selectedExistingSite: Bool = false
@@ -159,9 +158,10 @@ DataManagerResponseDelegate {
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-//        print("regionDidChange C:\(mapView.region.center) S:\(mapView.region.span)")
+        // Check if the map has been zoomed out beyond the maximum
         if Double(mapView.region.span.latitudeDelta) > maxLatitudeDelta {
-            let correctedRegion = MKCoordinateRegionMake(mapView.region.center, MKCoordinateSpanMake(maxLatitudeDelta, maxLatitudeDelta))
+            // Zoom back in
+            let correctedRegion = MKCoordinateRegionMake(lastUpdatedLocation.coordinate, MKCoordinateSpanMake(maxLatitudeDelta * 0.5, maxLatitudeDelta * 0.5))
             mapView.setRegion(correctedRegion, animated: true)
         }
     }
@@ -190,12 +190,12 @@ DataManagerResponseDelegate {
     
     func fetchSites() {
         // Get a range of latitude and longitude around the user's current location
-        (lastMinLatLong, lastMaxLatLong) = getMinMaxLatLong(location: lastUpdatedLocation, rangeInKM: siteFetchWindowSize)
+        let (minLatLong, maxLatLong) = getMinMaxLatLong(location: lastUpdatedLocation, rangeInKM: siteFetchWindowSize)
         
-        print("Fetching sites in range \(lastMinLatLong), \(lastMaxLatLong)...")
+        print("Fetching sites in range \(minLatLong), \(maxLatLong)...")
         
         // Request for sites in the range of latitude and longitude
-        DataManager.shared.fetchSites(delegate: self, minLatLong: lastMinLatLong, maxLatLong: lastMaxLatLong)
+        DataManager.shared.fetchSites(delegate: self, minLatLong: minLatLong, maxLatLong: maxLatLong)
     }
     
     func receiveSites(errorMessage: String, sites: [Site]) {
@@ -250,13 +250,13 @@ DataManagerResponseDelegate {
     }
     
     private func centerMapOnLocation(location: CLLocationCoordinate2D) {
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, regionRadius, regionRadius)
+        let coordinateRegion = MKCoordinateRegionMake(location, MKCoordinateSpanMake(maxLatitudeDelta * 0.25, maxLatitudeDelta * 0.25))
         mapView.setRegion(coordinateRegion, animated: true)
     }
     
     private func getMinMaxLatLong(location: CLLocation, rangeInKM: Double) -> (min: CLLocationCoordinate2D, max: CLLocationCoordinate2D) {
-        let latitude: Double = Double(location.coordinate.latitude)//40.759341//Double(location.coordinate.latitude)
-        let longitude: Double = Double(location.coordinate.longitude)//-111.861879//Double(location.coordinate.longitude)
+        let latitude: Double = Double(location.coordinate.latitude)
+        let longitude: Double = Double(location.coordinate.longitude)
         
         let radiusEarth: Double = 6378;
         let radiansToDegrees: Double = 180 / Double.pi
