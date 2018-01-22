@@ -65,11 +65,34 @@ DataManagerResponseDelegate {
     // Site properties
     var selectedExistingSite: Bool = false
     var existingSiteID: String = ""
+    var existingSiteLocation: CLLocationCoordinate2D = CLLocationCoordinate2D()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         mapView.delegate = self
+        
+        // Plot saved sites
+        let savedSites = SiteAnnotation.loadSiteAnnotations(fromSites: Project.projects[projectIndex].sites)
+        siteAnnotationList.append(contentsOf: savedSites)
+        mapView.addAnnotations(siteAnnotationList)
+        
+//        // Check if an existing site has been selected
+//        if !existingSiteID.isEmpty {
+//            hasFetchedInitially = true
+//            
+//            // Get the selected site's location
+//            existingSiteLocation = getExistingSiteLocation()
+//            
+//            // Get a window around the selected site's location
+//            let (minLatLong, maxLatLong) = getMinMaxLatLong(location: existingSiteLocation, rangeInKM: siteFetchWindowSize)
+//            
+//            // Update the window dimensions
+//            updateWindow(mapRegionCenter: existingSiteLocation, minLatLong: minLatLong, maxLatLong: maxLatLong)
+//            
+//            // Fetch sites for the current window
+//            fetchSites(minLatLong: minLatLong, maxLatLong: maxLatLong)
+//        }
         
         // Initialize location
         // Request location usage
@@ -84,11 +107,6 @@ DataManagerResponseDelegate {
         else {
             os_log("Location services are disabled!", log: .default, type: .debug)
         }
-
-        // Plot saved sites
-        let savedSites = SiteAnnotation.loadSiteAnnotations(fromSites: Project.projects[projectIndex].sites)
-        siteAnnotationList.append(contentsOf: savedSites)
-        mapView.addAnnotations(siteAnnotationList)
         
         // Center map on selected location if valid else ask location manager
         initSelectedSite()
@@ -116,7 +134,7 @@ DataManagerResponseDelegate {
             hasFetchedInitially = true
             
             // Get a window around the user's current location
-            let (minLatLong, maxLatLong) = getMinMaxLatLong(location: lastUpdatedLocation, rangeInKM: siteFetchWindowSize)
+            let (minLatLong, maxLatLong) = getMinMaxLatLong(location: lastUpdatedLocation.coordinate, rangeInKM: siteFetchWindowSize)
             
             // Update the window dimensions
             updateWindow(mapRegionCenter: lastUpdatedLocation.coordinate, minLatLong: minLatLong, maxLatLong: maxLatLong)
@@ -170,10 +188,12 @@ DataManagerResponseDelegate {
         // Update the title
         if let siteAnnotation = view.annotation as? SiteAnnotation {
             existingSiteID = siteAnnotation.id
+            existingSiteLocation = siteAnnotation.coordinate
             navigationItem.title = siteAnnotation.id
         }
         else {
             existingSiteID = ""
+            existingSiteLocation = CLLocationCoordinate2D()
             navigationItem.title = "My Location"
         }
         
@@ -186,20 +206,19 @@ DataManagerResponseDelegate {
         }
         
         existingSiteID = ""
+        existingSiteLocation = CLLocationCoordinate2D()
         navigationItem.title = ""
         saveButton.isEnabled = false
-    }
-    
-    func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
-//        print("regionWillChange \(mapView.region.center)")
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         
         // Check if the map has been zoomed out beyond the maximum
         if Double(mapView.region.span.latitudeDelta) > maxLatitudeDelta {
+            let correctedCenter = existingSiteID.isEmpty ? lastUpdatedLocation.coordinate : existingSiteLocation
+            
             // Zoom back in to the user's current location
-            let correctedRegion = MKCoordinateRegionMake(lastUpdatedLocation.coordinate, MKCoordinateSpanMake(maxLatitudeDelta * 0.5, maxLatitudeDelta * 0.5))
+            let correctedRegion = MKCoordinateRegionMake(correctedCenter, MKCoordinateSpanMake(maxLatitudeDelta * 0.5, maxLatitudeDelta * 0.5))
             mapView.setRegion(correctedRegion, animated: true)
             
             return
@@ -208,28 +227,36 @@ DataManagerResponseDelegate {
         // Check if the map has been panned far enough to fetch new sites
         let mapPanFetchResult = mustFetchSites(newMapRegionCenter: mapView.region.center)
         
-        fetchSites(minLatLong: lastMinLatLong, maxLatLong: lastMaxLatLong)
-        
-        print("MapPanFetchResult: \(mapPanFetchResult.description)")
-        
         if mapPanFetchResult != MapPanFetchResultType.withinWindow {
-//            // Update min, max lat-long
-//            switch mapPanFetchResult {
-//            case MapPanFetchResultType.leftOfWindow:
-//                break
-//            case MapPanFetchResultType.rightOfWindow:
-//                break
-//            case MapPanFetchResultType.aboveWindow:
-//                break
-//            case MapPanFetchResultType.belowWindow:
-//                break
-//            default:
-//                return
-//            }
-//            
-//            // Calculate delta in the window
-//            
-//            // Fetch sites for the delta
+            print("MapPanFetchResult: \(mapPanFetchResult.description)")
+            
+            // Calculate delta in the window
+            let (deltaMinLatLong, deltaMaxLatLong) = getDeltaWindow(mapPanFetchResult: mapPanFetchResult)
+
+            // Fetch sites for the delta
+            fetchSites(minLatLong: deltaMinLatLong, maxLatLong: deltaMaxLatLong)
+            
+            // Expand the window by the delta
+            switch mapPanFetchResult {
+            case MapPanFetchResultType.leftOfWindow:
+                lastMinLatLong.longitude = deltaMinLatLong.longitude
+                break
+                
+            case MapPanFetchResultType.rightOfWindow:
+                lastMaxLatLong.longitude = deltaMaxLatLong.longitude
+                break
+                
+            case MapPanFetchResultType.aboveWindow:
+                lastMaxLatLong.latitude = deltaMaxLatLong.latitude
+                break
+                
+            case MapPanFetchResultType.belowWindow:
+                lastMinLatLong.latitude = deltaMinLatLong.latitude
+                break
+                
+            default:
+                break
+            }
         }
     }
 
@@ -256,7 +283,7 @@ DataManagerResponseDelegate {
     //MARK: DataManagerResponseDelegate
     
     func fetchSites(minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {
-        print("Fetching sites in range \(minLatLong), \(maxLatLong)...")
+        print("Fetching sites in range \(minLatLong), \(maxLatLong)")
         
         // Request for sites in the range of latitude and longitude
         DataManager.shared.fetchSites(delegate: self, minLatLong: minLatLong, maxLatLong: maxLatLong)
@@ -265,17 +292,20 @@ DataManagerResponseDelegate {
     func receiveSites(errorMessage: String, sites: [Site]) {
         // Get site annotations for each received site
         let receivedSites = SiteAnnotation.loadSiteAnnotations(fromSites: sites)
-        // Cache the annotations that aren't already cached
+        
+        // Filter out annotations that are already cached
         let newSites = getNewSitesFromReceivedSites(receivedSiteAnnotations: receivedSites)
         
         if !newSites.isEmpty {
-            print("Plotting \(newSites.count) out of \(receivedSites.count) received sites...")
+            print("Plotting \(newSites.count) out of \(receivedSites.count) received sites")
             
             // Save the new sites
             siteAnnotationList.append(contentsOf: newSites)
             
             // Plot the site annotations
             mapView.addAnnotations(newSites)
+            
+            print("SiteAnnotations:\(siteAnnotationList.count) MapAnnotations:\(mapView.annotations.count)")
         }
     }
     
@@ -301,6 +331,8 @@ DataManagerResponseDelegate {
     
     //MARK: Private Methods
     
+    //MARK: Map Methods
+    
     private func initSelectedSite() {
         // If not site was selected, center map on the user's current location
         if existingSiteID.isEmpty {
@@ -319,6 +351,23 @@ DataManagerResponseDelegate {
         }
     }
     
+    private func getExistingSiteLocation() -> CLLocationCoordinate2D {
+        // Select the annotation that matches the selected location's site ID
+        for siteAnnotation in siteAnnotationList {
+            if siteAnnotation.id == existingSiteID {
+                return siteAnnotation.coordinate
+            }
+        }
+        return CLLocationCoordinate2D()
+    }
+    
+    private func centerMapOnLocation(location: CLLocationCoordinate2D) {
+        let coordinateRegion = MKCoordinateRegionMake(location, MKCoordinateSpanMake(maxLatitudeDelta * 0.25, maxLatitudeDelta * 0.25))
+        mapView.setRegion(coordinateRegion, animated: true)
+    }
+    
+    //MARK: Site Fetch Methods
+    
     private func getNewSitesFromReceivedSites(receivedSiteAnnotations: [SiteAnnotation]) -> [SiteAnnotation] {
         // Filter out existing sites
         let newSiteAnnotations = receivedSiteAnnotations.filter {
@@ -334,9 +383,43 @@ DataManagerResponseDelegate {
         lastMaxLatLong = maxLatLong
     }
     
-    private func centerMapOnLocation(location: CLLocationCoordinate2D) {
-        let coordinateRegion = MKCoordinateRegionMake(location, MKCoordinateSpanMake(maxLatitudeDelta * 0.25, maxLatitudeDelta * 0.25))
-        mapView.setRegion(coordinateRegion, animated: true)
+    private func getDeltaWindow(mapPanFetchResult: MapPanFetchResultType) -> (min: CLLocationCoordinate2D, max: CLLocationCoordinate2D) {
+        
+        let latitude = Double(lastUpdatedLocation.coordinate.latitude)
+        let deltaLatLong = getDeltaLatLong(rangeInKM: siteFetchWindowSize)
+        let degreesToRadians: Double = Double.pi / 180
+        
+        var minLatLong = lastMinLatLong
+        var maxLatLong = lastMaxLatLong
+        
+        switch mapPanFetchResult {
+            
+        case MapPanFetchResultType.leftOfWindow:
+            maxLatLong.longitude = minLatLong.longitude
+            minLatLong.longitude -= deltaLatLong
+            break
+            
+        case MapPanFetchResultType.rightOfWindow:
+            minLatLong.longitude = maxLatLong.longitude
+            maxLatLong.longitude += deltaLatLong
+            break
+            
+        case MapPanFetchResultType.aboveWindow:
+            minLatLong.latitude = maxLatLong.latitude
+            maxLatLong.latitude += deltaLatLong / cos(latitude * degreesToRadians)
+            break
+            
+        case MapPanFetchResultType.belowWindow:
+            maxLatLong.latitude = minLatLong.latitude
+            minLatLong.latitude -= deltaLatLong / cos(latitude * degreesToRadians)
+            break
+            
+        default:
+            return (minLatLong, maxLatLong)
+            
+        }
+        
+        return (minLatLong, maxLatLong)
     }
     
     private func mustFetchSites(newMapRegionCenter: CLLocationCoordinate2D) -> MapPanFetchResultType {
@@ -356,20 +439,26 @@ DataManagerResponseDelegate {
         return MapPanFetchResultType.withinWindow
     }
     
-    private func getMinMaxLatLong(location: CLLocation, rangeInKM: Double) -> (min: CLLocationCoordinate2D, max: CLLocationCoordinate2D) {
-        let latitude: Double = Double(location.coordinate.latitude)
-        let longitude: Double = Double(location.coordinate.longitude)
+    private func getMinMaxLatLong(location: CLLocationCoordinate2D, rangeInKM: Double) -> (min: CLLocationCoordinate2D, max: CLLocationCoordinate2D) {
+        let latitude: Double = Double(location.latitude)
+        let longitude: Double = Double(location.longitude)
         
-        let radiusEarth: Double = 6378;
-        let radiansToDegrees: Double = 180 / Double.pi
         let degreesToRadians: Double = Double.pi / 180
+        let deltaLatLong = getDeltaLatLong(rangeInKM: rangeInKM)
         
-        let minLatitude = latitude - (rangeInKM / radiusEarth) * radiansToDegrees
-        let maxLatitude = latitude + (rangeInKM / radiusEarth) * radiansToDegrees
-        let minLongitude = longitude - (rangeInKM / radiusEarth) * radiansToDegrees / cos(latitude * degreesToRadians)
-        let maxLongitude = longitude + (rangeInKM / radiusEarth) * radiansToDegrees / cos(latitude * degreesToRadians)
+        let minLatitude = latitude - deltaLatLong
+        let maxLatitude = latitude + deltaLatLong
+        let minLongitude = longitude - deltaLatLong / cos(latitude * degreesToRadians)
+        let maxLongitude = longitude + deltaLatLong / cos(latitude * degreesToRadians)
         
         return (CLLocationCoordinate2D(latitude: minLatitude, longitude: minLongitude), CLLocationCoordinate2D(latitude: maxLatitude, longitude: maxLongitude))
+    }
+    
+    private func getDeltaLatLong(rangeInKM: Double) -> Double {
+        let radiusEarth: Double = 6378
+        let radiansToDegrees: Double = 180 / Double.pi
+        let deltaLatLong = (rangeInKM / radiusEarth) * radiansToDegrees
+        return deltaLatLong
     }
 
 }
