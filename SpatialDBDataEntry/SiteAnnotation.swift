@@ -45,6 +45,13 @@ MKAnnotation {
         self.subtitle = name
     }
     
+    override func isEqual(_ object: Any?) -> Bool {
+        if let other = object as? SiteAnnotation {
+            return self.id == other.id
+        }
+        return false
+    }
+    
     //MARK: Global Data Helpers
     
     static func loadSiteAnnotations(fromSites: [Site]) -> [SiteAnnotation] {
@@ -124,6 +131,17 @@ MKAnnotation {
         }
         
         return siteAnnotationList
+    }
+    
+    static func sortSiteAnnotationsFromLocation(siteAnnotations: [SiteAnnotation], location: CLLocationCoordinate2D) -> [SiteAnnotation] {
+        let sortedAnnotations = siteAnnotations.sorted {
+                let compareLocation = CLLocation(latitude: location.latitude, longitude: location.longitude)
+                let aDistance = CLLocation(latitude: $0.coordinate.latitude, longitude: $0.coordinate.longitude).distance(from: compareLocation)
+                let bDistance = CLLocation(latitude: $1.coordinate.latitude, longitude: $1.coordinate.longitude).distance(from: compareLocation)
+                return aDistance < bDistance
+        }
+        
+        return sortedAnnotations
     }
     
 }
