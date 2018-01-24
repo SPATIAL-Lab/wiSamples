@@ -50,7 +50,7 @@ DataManagerResponseDelegate {
     
     // MapView properties
     var lastUpdatedLocation: CLLocation = CLLocation()
-    let maxLatitudeDelta: Double = 0.05
+    let maxMapZoomLongitude: Double = 0.05
     var siteAnnotationList: [SiteAnnotation] = []
     var lastRegionCenter: CLLocationCoordinate2D = CLLocationCoordinate2D()
     
@@ -214,11 +214,11 @@ DataManagerResponseDelegate {
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         
         // Check if the map has been zoomed out beyond the maximum
-        if Double(mapView.region.span.latitudeDelta) > maxLatitudeDelta {
+        if Double(mapView.region.span.longitudeDelta) > maxMapZoomLongitude {
             let correctedCenter = existingSiteID.isEmpty ? lastUpdatedLocation.coordinate : existingSiteLocation
             
             // Zoom back in to the user's current location
-            let correctedRegion = MKCoordinateRegionMake(correctedCenter, MKCoordinateSpanMake(maxLatitudeDelta * 0.5, maxLatitudeDelta * 0.5))
+            let correctedRegion = MKCoordinateRegionMake(correctedCenter, MKCoordinateSpanMake(maxMapZoomLongitude * 0.9, maxMapZoomLongitude * 0.9))
             mapView.setRegion(correctedRegion, animated: true)
             
             return
@@ -362,7 +362,7 @@ DataManagerResponseDelegate {
     }
     
     private func centerMapOnLocation(location: CLLocationCoordinate2D) {
-        let coordinateRegion = MKCoordinateRegionMake(location, MKCoordinateSpanMake(maxLatitudeDelta * 0.25, maxLatitudeDelta * 0.25))
+        let coordinateRegion = MKCoordinateRegionMake(location, MKCoordinateSpanMake(maxMapZoomLongitude * 0.25, maxMapZoomLongitude * 0.25))
         mapView.setRegion(coordinateRegion, animated: true)
     }
     
