@@ -53,6 +53,7 @@ DataManagerResponseDelegate {
     let maxMapZoomLongitude: Double = 0.05
     var siteAnnotationList: [SiteAnnotation] = []
     var lastRegionCenter: CLLocationCoordinate2D = CLLocationCoordinate2D()
+    var selectedSiteInitialized: Bool = false
     
     // Site fetching
     var hasFetchedInitially: Bool = false
@@ -77,22 +78,19 @@ DataManagerResponseDelegate {
         siteAnnotationList.append(contentsOf: savedSites)
         mapView.addAnnotations(siteAnnotationList)
         
-//        // Check if an existing site has been selected
-//        if !existingSiteID.isEmpty {
-//            hasFetchedInitially = true
-//            
-//            // Get the selected site's location
-//            existingSiteLocation = getExistingSiteLocation()
-//            
-//            // Get a window around the selected site's location
-//            let (minLatLong, maxLatLong) = getMinMaxLatLong(location: existingSiteLocation, rangeInKM: siteFetchWindowSize)
-//            
-//            // Update the window dimensions
-//            updateWindow(mapRegionCenter: existingSiteLocation, minLatLong: minLatLong, maxLatLong: maxLatLong)
-//            
-//            // Fetch sites for the current window
-//            fetchSites(minLatLong: minLatLong, maxLatLong: maxLatLong)
-//        }
+        // Check if an existing site has been selected
+        if !existingSiteID.isEmpty {
+            hasFetchedInitially = true
+            
+            // Get a window around the selected site's location
+            let (minLatLong, maxLatLong) = getMinMaxLatLong(location: existingSiteLocation, rangeInKM: siteFetchWindowSize)
+            
+            // Update the window dimensions
+            updateWindow(mapRegionCenter: existingSiteLocation, minLatLong: minLatLong, maxLatLong: maxLatLong)
+            
+            // Fetch sites for the current window
+            fetchSites(minLatLong: minLatLong, maxLatLong: maxLatLong)
+        }
         
         // Initialize location
         // Request location usage
@@ -107,9 +105,6 @@ DataManagerResponseDelegate {
         else {
             os_log("Location services are disabled!", log: .default, type: .debug)
         }
-        
-        // Center map on selected location if valid else ask location manager
-        initSelectedSite()
         
         // Enable the save button if viewing an existing site
         saveButton.isEnabled = selectedExistingSite
@@ -141,9 +136,6 @@ DataManagerResponseDelegate {
             
             // Fetch sites for the current window
             fetchSites(minLatLong: minLatLong, maxLatLong: maxLatLong)
-            
-            // Center map on selected location if valid else ask location manager
-            initSelectedSite()
         }
     }
     
@@ -305,6 +297,9 @@ DataManagerResponseDelegate {
             // Plot the site annotations
             mapView.addAnnotations(newSites)
             
+            // Center map on selected location if valid else ask location manager
+            initSelectedSite()
+            
             print("SiteAnnotations:\(siteAnnotationList.count) MapAnnotations:\(mapView.annotations.count)")
         }
     }
@@ -329,11 +324,13 @@ DataManagerResponseDelegate {
         }
     }
     
-    //MARK: Private Methods
-    
     //MARK: Map Methods
     
     private func initSelectedSite() {
+        if selectedSiteInitialized {
+            return
+        }
+        
         // If not site was selected, center map on the user's current location
         if existingSiteID.isEmpty {
             centerMapOnLocation(location: locationManager.location!.coordinate)
@@ -345,20 +342,12 @@ DataManagerResponseDelegate {
                     centerMapOnLocation(location: siteAnnotation.coordinate)
                     mapView.selectAnnotation(siteAnnotation, animated: true)
                     navigationItem.title = siteAnnotation.id
-                    break
+                    
+                    selectedSiteInitialized = true
+                    return
                 }
             }
         }
-    }
-    
-    private func getExistingSiteLocation() -> CLLocationCoordinate2D {
-        // Select the annotation that matches the selected location's site ID
-        for siteAnnotation in siteAnnotationList {
-            if siteAnnotation.id == existingSiteID {
-                return siteAnnotation.coordinate
-            }
-        }
-        return CLLocationCoordinate2D()
     }
     
     private func centerMapOnLocation(location: CLLocationCoordinate2D) {

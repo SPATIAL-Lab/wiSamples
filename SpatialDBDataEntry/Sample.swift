@@ -89,6 +89,7 @@ class Sample: NSObject, NSCoding {
     var volume: Int = -1
     var phase: PhaseType = PhaseType.none
     var comments: String = ""
+    var siteLocation: CLLocationCoordinate2D
     
     //MARK: Types
     
@@ -102,11 +103,13 @@ class Sample: NSObject, NSCoding {
         static let volume = "volume"
         static let phase = "phase"
         static let comments = "sampleComments"
+        static let siteLatitude = "siteLatitude"
+        static let siteLongitude = "siteLongitude"
     }
     
     //MARK: Initialization
     
-    init?(id: String, siteID: String, type: SampleType, dateTime: Date, startDateTime: Date) {
+    init?(id: String, siteID: String, type: SampleType, dateTime: Date, startDateTime: Date, siteLocation: CLLocationCoordinate2D) {
         guard !id.isEmpty else {
             return nil
         }
@@ -116,6 +119,7 @@ class Sample: NSObject, NSCoding {
         self.type = type
         self.dateTime = dateTime
         self.startDateTime = startDateTime
+        self.siteLocation = siteLocation
     }
     
     //MARK: NSCoding
@@ -130,6 +134,8 @@ class Sample: NSObject, NSCoding {
         aCoder.encode(volume, forKey: PropertyKeys.volume)
         aCoder.encode(phase.rawValue, forKey: PropertyKeys.phase)
         aCoder.encode(comments, forKey: PropertyKeys.comments)
+        aCoder.encode(Double(siteLocation.latitude), forKey: PropertyKeys.siteLatitude)
+        aCoder.encode(Double(siteLocation.longitude), forKey: PropertyKeys.siteLongitude)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -146,8 +152,11 @@ class Sample: NSObject, NSCoding {
         let volume = aDecoder.decodeInteger(forKey: PropertyKeys.volume)
         let phase = PhaseType(rawValue: aDecoder.decodeInteger(forKey: PropertyKeys.phase))!
         let comments = aDecoder.decodeObject(forKey: PropertyKeys.comments) as? String
+        let latitude = aDecoder.decodeDouble(forKey: PropertyKeys.siteLatitude)
+        let longitude = aDecoder.decodeDouble(forKey: PropertyKeys.siteLongitude)
+        let siteLocation = CLLocationCoordinate2DMake(CLLocationDegrees(latitude), CLLocationDegrees(longitude))
         
-        self.init(id: id, siteID: siteID!, type: type, dateTime: dateTime!, startDateTime: startDateTime!)
+        self.init(id: id, siteID: siteID!, type: type, dateTime: dateTime!, startDateTime: startDateTime!, siteLocation: siteLocation)
         
         self.depth = depth
         self.volume = volume

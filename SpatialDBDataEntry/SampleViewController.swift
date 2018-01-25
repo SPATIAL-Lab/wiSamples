@@ -42,6 +42,7 @@ UIPickerViewDataSource {
     var phase: PhaseType = PhaseType.none
     var startCollectionDate: Date = Date.distantFuture
     var comments: String = ""
+    var siteLocation: CLLocationCoordinate2D = CLLocationCoordinate2D()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,6 +67,7 @@ UIPickerViewDataSource {
             phase = existingSample.phase
             startCollectionDate = existingSample.startDateTime
             comments = existingSample.comments
+            siteLocation = existingSample.siteLocation
             
             // Update view
             sampleIDTextField.text = existingSample.id
@@ -142,6 +144,7 @@ UIPickerViewDataSource {
             
             mapViewController.projectIndex = projectIndex
             mapViewController.existingSiteID = siteID
+            mapViewController.existingSiteLocation = siteLocation
             mapViewController.selectedExistingSite = !siteID.isEmpty
             
         case "ShowSampleMiscData":
@@ -169,7 +172,7 @@ UIPickerViewDataSource {
             let sampleID = sampleIDTextField.text ?? ""
             
             // Create a new sample
-            sample = Sample(id: sampleID, siteID: siteID, type: type, dateTime: collectionDate, startDateTime: startCollectionDate)
+            sample = Sample(id: sampleID, siteID: siteID, type: type, dateTime: collectionDate, startDateTime: startCollectionDate, siteLocation: siteLocation)
             
             sample!.depth = depth
             sample!.volume = volume
@@ -190,9 +193,11 @@ UIPickerViewDataSource {
         }
         else if let mapViewController = sender.source as? MapViewController {
             siteID = mapViewController.existingSiteID
+            siteLocation = mapViewController.existingSiteLocation
         }
         else if let siteViewController = sender.source as? SiteViewController {
             siteID = siteViewController.site!.id
+            siteLocation = siteViewController.site!.location
         }
         
         // Enable save button if site id is valid
