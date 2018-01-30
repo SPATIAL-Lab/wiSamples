@@ -189,6 +189,7 @@
                                         <state key="normal" title="Export Projects"/>
                                         <connections>
                                             <action selector="ExportProjects:" destination="8IJ-hK-0Nk" eventType="touchUpInside" id="ct7-c4-0aQ"/>
+                                            <segue destination="e61-b8-Qed" kind="show" identifier="ShowExportProjects" id="DGb-Qi-YPR"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m48-N9-Jyi">
@@ -220,6 +221,62 @@
                 <exit id="Avr-8P-jJw" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1638" y="-1595"/>
+        </scene>
+        <!--Export Projects Table View Controller-->
+        <scene sceneID="Gym-Hc-B6n">
+            <objects>
+                <tableViewController id="5Vr-s1-tts" customClass="ExportProjectsTableViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="75" sectionHeaderHeight="28" sectionFooterHeight="28" id="dsc-LQ-Tk9">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ExportProjectsTableViewCell" id="WdQ-Ut-0hX" customClass="ExportProjectsTableViewCell" customModule="SpatialDBDataEntry" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="375" height="75"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WdQ-Ut-0hX" id="bDE-Bw-SvR">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="74"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rxb-T0-MEz">
+                                            <rect key="frame" x="8" y="27" width="302" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="lh7-Bw-7Lx">
+                                            <rect key="frame" x="318" y="22" width="51" height="31"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </switch>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" notEnabled="YES"/>
+                                </accessibility>
+                                <connections>
+                                    <outlet property="projectNameLabel" destination="Rxb-T0-MEz" id="lZw-aF-QaX"/>
+                                    <outlet property="selectedSwitch" destination="lh7-Bw-7Lx" id="5PU-cu-Ghb"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="5Vr-s1-tts" id="1Kk-cI-YgR"/>
+                            <outlet property="delegate" destination="5Vr-s1-tts" id="wEa-2N-MPQ"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="zB3-d3-3tw">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="od3-qZ-uCk">
+                            <connections>
+                                <segue destination="gRO-pp-xuf" kind="unwind" unwindAction="unwindToSettingsWithSender:" id="jdw-Ih-a9v"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="H2h-PX-KS6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="gRO-pp-xuf" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="3437.5999999999999" y="-1595.352323838081"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="UEz-7I-WZ0">
@@ -766,6 +823,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n4y-qJ-FI7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="769" y="-1595"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="IE4-8n-LoH">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="e61-b8-Qed" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="H41-hw-F06">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="5Vr-s1-tts" kind="relationship" relationship="rootViewController" id="Ga4-RA-h37"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="M11-21-eyc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2534" y="-1595"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

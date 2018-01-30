@@ -34,11 +34,24 @@ class SettingsViewController: UIViewController {
 
     //MARK: Actions
     
+    // TODO: Remove if not required
     @IBAction func ExportProjects(_ sender: UIButton) {
         print("Export Projects")
     }
     
     @IBAction func ImportProjects(_ sender: UIButton) {
         print("Import Projects")
+    }
+    
+    @IBAction func unwindToSettings(sender: UIStoryboardSegue) {
+        if let exportProjectsTableViewController = sender.source as? ExportProjectsTableViewController {
+            let selectedProjectIndices: [Int] = exportProjectsTableViewController.getSelectedProjectIndices()
+            if selectedProjectIndices.isEmpty == false {
+                print("Selected \(selectedProjectIndices.count) for export:")
+                for index in selectedProjectIndices {
+                    print("Project Name: \(Project.projects[index].name)")
+                }
+            }
+        }
     }
 }
