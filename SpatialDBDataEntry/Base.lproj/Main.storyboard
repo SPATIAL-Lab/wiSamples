@@ -23,7 +23,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="75"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XwP-eD-dKu" id="BEv-jd-wNf">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="75"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="74"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZZR-zq-yIz">
@@ -47,6 +47,13 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Projects" id="OKg-kc-0BO">
+                        <barButtonItem key="leftBarButtonItem" systemItem="action" id="oMX-2P-QLo">
+                            <connections>
+                                <segue destination="OZt-CR-X0t" kind="popoverPresentation" identifier="ShowSettings" popoverAnchorBarButtonItem="oMX-2P-QLo" id="4wN-Yd-9Bb">
+                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                </segue>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="yRh-eJ-cDB">
                             <connections>
                                 <segue destination="flO-B4-xHI" kind="presentation" identifier="AddNewProject" id="3Wv-qY-Wjq"/>
@@ -162,6 +169,58 @@
             </objects>
             <point key="canvasLocation" x="1638" y="-620"/>
         </scene>
+        <!--Settings-->
+        <scene sceneID="aD7-8y-ydM">
+            <objects>
+                <viewController id="8IJ-hK-0Nk" customClass="SettingsViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="FvI-2d-R3i"/>
+                        <viewControllerLayoutGuide type="bottom" id="gep-Tt-yew"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="iFd-EM-VM9">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="0Xh-kZ-Aer">
+                                <rect key="frame" x="16" y="84" width="343" height="70"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AuU-3V-Ou0">
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="30"/>
+                                        <state key="normal" title="Export Projects"/>
+                                        <connections>
+                                            <action selector="ExportProjects:" destination="8IJ-hK-0Nk" eventType="touchUpInside" id="ct7-c4-0aQ"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m48-N9-Jyi">
+                                        <rect key="frame" x="0.0" y="40" width="343" height="30"/>
+                                        <state key="normal" title="Import Projects"/>
+                                        <connections>
+                                            <action selector="ImportProjects:" destination="8IJ-hK-0Nk" eventType="touchUpInside" id="tG4-fv-bHo"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="0Xh-kZ-Aer" firstAttribute="leading" secondItem="iFd-EM-VM9" secondAttribute="leadingMargin" id="1FO-1L-5cj"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="0Xh-kZ-Aer" secondAttribute="trailing" id="2R3-oS-aNA"/>
+                            <constraint firstItem="0Xh-kZ-Aer" firstAttribute="top" secondItem="FvI-2d-R3i" secondAttribute="bottom" constant="20" id="d1T-ns-WWD"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Settings" id="D6K-ja-ZO0">
+                        <barButtonItem key="leftBarButtonItem" systemItem="done" id="SQ0-qd-yXs">
+                            <connections>
+                                <segue destination="Avr-8P-jJw" kind="unwind" unwindAction="unwindToProjectListWithSender:" id="JW9-29-t30"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MLD-TT-wd7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Avr-8P-jJw" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="1638" y="-1595"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="UEz-7I-WZ0">
             <objects>
@@ -211,7 +270,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="75"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uWq-mG-12s" id="edw-YJ-zRZ">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="75"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="74"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Sample ID Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VSU-2G-lJx">
@@ -528,49 +587,6 @@
             </objects>
             <point key="canvasLocation" x="4377" y="1173"/>
         </scene>
-        <!--Sites-->
-        <scene sceneID="BTz-ry-3cD">
-            <objects>
-                <tableViewController id="DgL-fJ-2Mc" customClass="SiteTableViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="75" sectionHeaderHeight="28" sectionFooterHeight="28" id="Ljt-jr-k3R">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SiteTableViewCell" rowHeight="75" id="C6z-bq-WVE" customClass="SiteTableViewCell" customModule="SpatialDBDataEntry" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="75"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="C6z-bq-WVE" id="ZLt-jO-Yze">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="75"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Site ID Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wu2-pY-h5e">
-                                            <rect key="frame" x="8" y="17" width="360" height="40"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="siteIDLabel" destination="Wu2-pY-h5e" id="1PY-aF-M7y"/>
-                                </connections>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="DgL-fJ-2Mc" id="SY5-MR-Uc4"/>
-                            <outlet property="delegate" destination="DgL-fJ-2Mc" id="0jG-R4-iar"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Sites" id="SUH-c8-Hs6">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Z6e-rm-qFV"/>
-                    </navigationItem>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="J4G-5Q-WU7" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="769" y="-1740"/>
-        </scene>
         <!--New Site-->
         <scene sceneID="ApQ-PG-EHR">
             <objects>
@@ -732,6 +748,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jsc-SS-YMF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3437.5999999999999" y="402.54872563718146"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="eBI-tu-K4T">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="OZt-CR-X0t" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="HwZ-eG-yVn">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="8IJ-hK-0Nk" kind="relationship" relationship="rootViewController" id="i3I-k2-AYQ"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="n4y-qJ-FI7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="769" y="-1595"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

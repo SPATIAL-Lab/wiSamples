@@ -128,6 +128,9 @@ class ProjectTableViewController: UITableViewController {
             
             sampleTableViewController.projectIndex = indexPath.row
             
+        case "ShowSettings":
+            print("Showing settings.")
+            
         default:
             fatalError("Unexpected Segue Identifier: \(segue.identifier)")
         }
