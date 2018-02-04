@@ -47,10 +47,14 @@ class SettingsViewController: UIViewController {
         if let exportProjectsTableViewController = sender.source as? ExportProjectsTableViewController {
             let selectedProjectIndices: [Int] = exportProjectsTableViewController.getSelectedProjectIndices()
             if selectedProjectIndices.isEmpty == false {
-                print("Selected \(selectedProjectIndices.count) for export:")
+                // Add selected projects to a list
+                var selectedProjects: [Project] = []
                 for index in selectedProjectIndices {
-                    print("Project Name: \(Project.projects[index].name)")
+                    selectedProjects.append(Project.projects[index])
                 }
+                
+                // Ask the data manager to create CSVs and email them
+                DataManager.shared.exportSelectedProjects(selectedProjects: selectedProjects)
             }
         }
     }

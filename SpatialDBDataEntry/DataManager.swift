@@ -23,6 +23,8 @@ class DataManager: NSObject
     var responseDelegate: DataManagerResponseDelegate?
     var errorMessage: String = ""
     
+    //MARK: Remote site fetching
+    
     func fetchSites(delegate: DataManagerResponseDelegate, minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {
         dataTask?.cancel()
         responseDelegate = delegate
@@ -93,5 +95,62 @@ class DataManager: NSObject
         
         self.responseDelegate?.receiveSites(errorMessage: self.errorMessage, sites: sites)
         self.responseDelegate = nil
+    }
+    
+    //MARK: Data exporting
+    
+    func exportSelectedProjects(selectedProjects: [Project]) {
+        // Create containers
+        var projectsString = "Project_ID,Contact_Name,Contact_Email,Citation,URL,Project_Name,Proprietary\n"
+        var sitesString = "Site_ID,Site_Name,Latitude,Longitude,Elevation_mabsl,Address,City,State_or_Province,Country,Site_Comments\n"
+        var samplesString = "Sample_ID,Sample_ID_2,Site_ID,Type,Start_Date,Start_Time,Collection_Date,Collection_Time,Sample_Volume_ml,Collector_type,Phase,Depth_meters,Sample_Source,Sample_Ignore,Sample_Comments,Project_ID\n"
+        
+        // Export each project
+        for project in selectedProjects {
+            projectsString.append(exportSingle(project: project))
+            
+            // Export each site
+            for site in project.sites {
+                sitesString.append(exportSingle(site: site, project: project))
+            }
+            
+            // Export each sample
+            for sample in project.samples {
+                samplesString.append(exportSingle(sample: sample, project: project))
+            }
+        }
+        
+        print("Printing projects:")
+        print(projectsString)
+        
+        print("Printing sites:")
+        print(sitesString)
+        
+        print("Printing samples:")
+        print(samplesString)
+    }
+    
+    private func exportSingle(project: Project) -> String {
+        return "\(project.name),\(project.contactName),\(project.contactEmail),,,\(project.name)\n"
+    }
+    
+    private func exportSingle(site: Site, project: Project) -> String {
+        return "\(site.id),\(site.name),\(Double(site.location.latitude)),\(Double(site.location.longitude)),\(site.elevation),\(site.address),\(site.city),\(site.stateOrProvince),\(site.country),\(site.comments)\n"
+    }
+    
+    private func exportSingle(sample: Sample, project: Project) -> String {
+        var startDateString: String = ""
+        var startTimeString: String = ""
+        if sample.startDateTime.compare(Date.distantFuture) == ComparisonResult.orderedAscending {
+            startDateString = DateFormatter.localizedString(from: sample.startDateTime, dateStyle: .short, timeStyle: .none)
+            startTimeString = DateFormatter.localizedString(from: sample.startDateTime, dateStyle: .none, timeStyle: .short)
+        }
+        
+        let collectionDateString: String = DateFormatter.localizedString(from: sample.dateTime, dateStyle: .short, timeStyle: .none)
+        let collectionTimeString: String = DateFormatter.localizedString(from: sample.dateTime, dateStyle: .none, timeStyle: .short)
+        let depthString: String = sample.depth < 0 ? "" : String(sample.depth)
+        let volumeString: String = sample.volume < 0 ? "" : String(sample.volume)
+        
+        return "\(sample.id),,\(sample.siteID),\(sample.type.description),\(startDateString),\(startTimeString),\(collectionDateString),\(collectionTimeString),\(volumeString),,\(sample.phase.description),\(depthString),,,\(sample.comments),\(project.name)\n"
     }
 }

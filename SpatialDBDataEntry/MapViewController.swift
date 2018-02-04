@@ -74,9 +74,7 @@ DataManagerResponseDelegate {
         mapView.delegate = self
         
         // Plot saved sites
-        let savedSites = SiteAnnotation.loadSiteAnnotations(fromSites: Project.projects[projectIndex].sites)
-        siteAnnotationList.append(contentsOf: savedSites)
-        mapView.addAnnotations(siteAnnotationList)
+        plotSaveSites()
         
         // Check if an existing site has been selected
         if !existingSiteID.isEmpty {
@@ -324,7 +322,15 @@ DataManagerResponseDelegate {
         }
     }
     
-    //MARK: Map Methods
+    //MARK: Site Plotting Methods
+    
+    private func plotSaveSites() {
+        for savedProject in Project.projects {
+            let savedSiteAnnotations = SiteAnnotation.loadSiteAnnotations(fromSites: savedProject.sites)
+            siteAnnotationList.append(contentsOf: savedSiteAnnotations)
+            mapView.addAnnotations(siteAnnotationList)
+        }
+    }
     
     private func initSelectedSite() {
         if selectedSiteInitialized {
@@ -350,11 +356,6 @@ DataManagerResponseDelegate {
         }
     }
     
-    private func centerMapOnLocation(location: CLLocationCoordinate2D) {
-        let coordinateRegion = MKCoordinateRegionMake(location, MKCoordinateSpanMake(maxMapZoomLongitude * 0.25, maxMapZoomLongitude * 0.25))
-        mapView.setRegion(coordinateRegion, animated: true)
-    }
-    
     //MARK: Site Fetch Methods
     
     private func getNewSitesFromReceivedSites(receivedSiteAnnotations: [SiteAnnotation]) -> [SiteAnnotation] {
@@ -364,6 +365,30 @@ DataManagerResponseDelegate {
         }
 
         return newSiteAnnotations
+    }
+    
+    private func mustFetchSites(newMapRegionCenter: CLLocationCoordinate2D) -> MapPanFetchResultType {
+        if newMapRegionCenter.latitude < lastMinLatLong.latitude {
+            return MapPanFetchResultType.belowWindow
+        }
+        else if newMapRegionCenter.longitude < lastMinLatLong.longitude {
+            return MapPanFetchResultType.leftOfWindow
+        }
+        else if newMapRegionCenter.latitude > lastMaxLatLong.latitude {
+            return MapPanFetchResultType.aboveWindow
+        }
+        else if newMapRegionCenter.longitude > lastMaxLatLong.longitude {
+            return MapPanFetchResultType.rightOfWindow
+        }
+        
+        return MapPanFetchResultType.withinWindow
+    }
+    
+    //MARK: Map Manipulation Methods
+    
+    private func centerMapOnLocation(location: CLLocationCoordinate2D) {
+        let coordinateRegion = MKCoordinateRegionMake(location, MKCoordinateSpanMake(maxMapZoomLongitude * 0.25, maxMapZoomLongitude * 0.25))
+        mapView.setRegion(coordinateRegion, animated: true)
     }
     
     private func updateWindow(mapRegionCenter: CLLocationCoordinate2D, minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {
@@ -409,23 +434,6 @@ DataManagerResponseDelegate {
         }
         
         return (minLatLong, maxLatLong)
-    }
-    
-    private func mustFetchSites(newMapRegionCenter: CLLocationCoordinate2D) -> MapPanFetchResultType {
-        if newMapRegionCenter.latitude < lastMinLatLong.latitude {
-            return MapPanFetchResultType.belowWindow
-        }
-        else if newMapRegionCenter.longitude < lastMinLatLong.longitude {
-            return MapPanFetchResultType.leftOfWindow
-        }
-        else if newMapRegionCenter.latitude > lastMaxLatLong.latitude {
-            return MapPanFetchResultType.aboveWindow
-        }
-        else if newMapRegionCenter.longitude > lastMaxLatLong.longitude {
-            return MapPanFetchResultType.rightOfWindow
-        }
-        
-        return MapPanFetchResultType.withinWindow
     }
     
     private func getMinMaxLatLong(location: CLLocationCoordinate2D, rangeInKM: Double) -> (min: CLLocationCoordinate2D, max: CLLocationCoordinate2D) {
