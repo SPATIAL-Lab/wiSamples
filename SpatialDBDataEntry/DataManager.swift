@@ -6,9 +6,8 @@
 //  Copyright © 2017 University of Utah. All rights reserved.
 //
 
-import Foundation
 import CoreLocation
-import os.log
+import Foundation
 
 protocol DataManagerResponseDelegate: class {
     func receiveSites(errorMessage: String, sites: [Site])
@@ -61,24 +60,24 @@ class DataManager: NSObject
     
     func receiveSites(_ data: Data) {
         guard let json = try? JSONSerialization.jsonObject(with: data) else {
-            os_log("Couldn't get JSON from response!", log: .default, type: .debug)
+            print("Couldn't get JSON from response!")
             return
         }
         
         guard let dict = json as? [String: Any] else {
-            os_log("Couldn't parse response!", log: .default, type: .debug)
+            print("Couldn't parse response!")
             return
         }
         
         guard let sitesDict = dict["sites"] as? [Any] else {
-            os_log("Couldn't get sites from response!", log: .default, type: .debug)
+            print("Couldn't get sites from response!")
             return
         }
         
         var sites: [Site] = []
         for siteFromDict in sitesDict {
             guard let siteDict = siteFromDict as? [String: Any] else {
-                os_log("Couldn't get site from response")
+                print("Couldn't get site from response")
                 return
             }
             
@@ -99,7 +98,7 @@ class DataManager: NSObject
     
     //MARK: Data exporting
     
-    func exportSelectedProjects(selectedProjects: [Project]) {
+    func exportSelectedProjects(selectedProjects: [Project]) -> (projectsString: String, sitesString: String, samplesString: String) {
         // Create containers
         var projectsString = "Project_ID,Contact_Name,Contact_Email,Citation,URL,Project_Name,Proprietary\n"
         var sitesString = "Site_ID,Site_Name,Latitude,Longitude,Elevation_mabsl,Address,City,State_or_Province,Country,Site_Comments\n"
@@ -120,14 +119,7 @@ class DataManager: NSObject
             }
         }
         
-        print("Printing projects:")
-        print(projectsString)
-        
-        print("Printing sites:")
-        print(sitesString)
-        
-        print("Printing samples:")
-        print(samplesString)
+        return (projectsString, sitesString, samplesString)
     }
     
     private func exportSingle(project: Project) -> String {
@@ -135,7 +127,9 @@ class DataManager: NSObject
     }
     
     private func exportSingle(site: Site, project: Project) -> String {
-        return "\(site.id),\(site.name),\(Double(site.location.latitude)),\(Double(site.location.longitude)),\(site.elevation),\(site.address),\(site.city),\(site.stateOrProvince),\(site.country),\(site.comments)\n"
+        let elevationString: String = site.elevation < 0 ? "" : String(site.elevation)
+        
+        return "\(site.id),\(site.name),\(Double(site.location.latitude)),\(Double(site.location.longitude)),\(elevationString),\(site.address),\(site.city),\(site.stateOrProvince),\(site.country),\(site.comments)\n"
     }
     
     private func exportSingle(sample: Sample, project: Project) -> String {

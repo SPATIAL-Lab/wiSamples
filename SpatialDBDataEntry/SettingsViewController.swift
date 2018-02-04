@@ -36,26 +36,14 @@ class SettingsViewController: UIViewController {
     
     // TODO: Remove if not required
     @IBAction func ExportProjects(_ sender: UIButton) {
-        print("Export Projects")
+//        print("Export Projects")
     }
     
     @IBAction func ImportProjects(_ sender: UIButton) {
-        print("Import Projects")
+//        print("Import Projects")
     }
     
     @IBAction func unwindToSettings(sender: UIStoryboardSegue) {
-        if let exportProjectsTableViewController = sender.source as? ExportProjectsTableViewController {
-            let selectedProjectIndices: [Int] = exportProjectsTableViewController.getSelectedProjectIndices()
-            if selectedProjectIndices.isEmpty == false {
-                // Add selected projects to a list
-                var selectedProjects: [Project] = []
-                for index in selectedProjectIndices {
-                    selectedProjects.append(Project.projects[index])
-                }
-                
-                // Ask the data manager to create CSVs and email them
-                DataManager.shared.exportSelectedProjects(selectedProjects: selectedProjects)
-            }
-        }
+
     }
 }

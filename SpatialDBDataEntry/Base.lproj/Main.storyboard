@@ -266,15 +266,19 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Select Projects to Export" id="zB3-d3-3tw">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Unb-sV-Y9G">
+                            <connections>
+                                <action selector="cancelSelectingProjects:" destination="5Vr-s1-tts" id="Qa4-D1-nnX"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="od3-qZ-uCk">
                             <connections>
-                                <segue destination="gRO-pp-xuf" kind="unwind" unwindAction="unwindToSettingsWithSender:" id="jdw-Ih-a9v"/>
+                                <action selector="doneSelectingProjects:" destination="5Vr-s1-tts" id="zcw-uS-bgF"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H2h-PX-KS6" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="gRO-pp-xuf" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3437.5999999999999" y="-1595.352323838081"/>
         </scene>
