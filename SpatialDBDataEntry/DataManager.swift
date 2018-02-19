@@ -96,6 +96,10 @@ class DataManager: NSObject
         self.responseDelegate = nil
     }
     
+    func fetchAllSites() {
+        
+    }
+    
     //MARK: Data exporting
     
     func exportSelectedProjects(selectedProjects: [Project]) -> (projectsString: String, sitesString: String, samplesString: String) {
