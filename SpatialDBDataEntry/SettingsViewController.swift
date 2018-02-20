@@ -27,15 +27,19 @@ class SettingsViewController: UIViewController,
     
     //MARK: DataManagerResponseDelegate
     func receiveSites(errorMessage: String, sites: [Site]) {
-        importProjectsButton.isEnabled = true
-//        Project.cachedSites = sites
-//        Project.saveCachedSites()
+        importProjectsButton.setTitle("Cached \(sites.count) sites", for: UIControlState.normal)
+
+        DispatchQueue.main.async {
+            Project.cachedSites = sites
+            Project.saveCachedSites()
+        }
     }
 
     //MARK: Actions
     
     @IBAction func ImportProjects(_ sender: UIButton) {
         sender.isEnabled = false
+        print("Fetching all sites.")
         DataManager.shared.fetchAllSites(delegate: self)
     }
     

@@ -16,6 +16,8 @@ class Project: NSObject, NSCoding {
     static var enableSampleProjects: Bool = false
     static var projects: [Project] = [Project]()
     static var cachedSites: [Site] = [Site]()
+    private static var isSavingCachedSites: Bool = false
+    private static var isLoadingCachedSites: Bool = false
     
     //MARK: Properties
     
@@ -147,22 +149,38 @@ class Project: NSObject, NSCoding {
     }
     
     static func saveCachedSites() {
+        if isSavingCachedSites {
+            print("An ongoing save cached sites operation hasn't finished!")
+            return
+        }
+        
         if cachedSites.isEmpty {
             print("Attempt was made to save empty cached sites list!")
             return
         }
         
-        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(cachedSites, toFile: Project.cachedSitesArchiveURL.path)
-        
-        if isSuccessfulSave {
+        print("Saving cached sites.")
+        isSavingCachedSites = true
+
+        if NSKeyedArchiver.archiveRootObject(cachedSites, toFile: Project.cachedSitesArchiveURL.path) {
             print("Cached sites saved successfully.")
         }
         else {
             print("Cached sites failed to save!")
         }
+        
+        isSavingCachedSites = false
     }
     
     static func loadCachedSites() {
+        if isLoadingCachedSites {
+            print("An ongoing load cached sites operation hasn't finished!")
+            return
+        }
+        
+        print("Loading cached sites.")
+        isLoadingCachedSites = true
+        
         if let savedCachedSites = NSKeyedUnarchiver.unarchiveObject(withFile: Project.cachedSitesArchiveURL.path) as? [Site] {
             cachedSites = savedCachedSites
             print("Cached sites loaded successfully.")
@@ -170,6 +188,8 @@ class Project: NSObject, NSCoding {
         else {
             print("Cached sites failed to load!")
         }
+        
+        isLoadingCachedSites = false
     }
     
     //MARK: Private Methods
