@@ -272,13 +272,6 @@ DataManagerResponseDelegate {
     
     //MARK: DataManagerResponseDelegate
     
-    func fetchSites(minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {
-        print("Fetching sites in range \(minLatLong), \(maxLatLong)")
-        
-        // Request for sites in the range of latitude and longitude
-        DataManager.shared.fetchSites(delegate: self, minLatLong: minLatLong, maxLatLong: maxLatLong)
-    }
-    
     func receiveSites(errorMessage: String, sites: [Site]) {
         // Get site annotations for each received site
         let receivedSites = SiteAnnotation.loadSiteAnnotations(fromSites: sites)
@@ -357,6 +350,13 @@ DataManagerResponseDelegate {
     }
     
     //MARK: Site Fetch Methods
+    
+    private func fetchSites(minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {
+        print("Fetching sites in range \(minLatLong), \(maxLatLong)")
+        
+        // Request for sites in the range of latitude and longitude
+        DataManager.shared.fetchSites(delegate: self, minLatLong: minLatLong, maxLatLong: maxLatLong)
+    }
     
     private func getNewSitesFromReceivedSites(receivedSiteAnnotations: [SiteAnnotation]) -> [SiteAnnotation] {
         // Filter out existing sites

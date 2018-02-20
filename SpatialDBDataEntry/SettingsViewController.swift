@@ -8,7 +8,11 @@
 
 import UIKit
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: UIViewController,
+    DataManagerResponseDelegate {
+    
+    //MARK: Properties
+    @IBOutlet weak var importProjectsButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,26 +25,18 @@ class SettingsViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    //MARK: DataManagerResponseDelegate
+    func receiveSites(errorMessage: String, sites: [Site]) {
+        importProjectsButton.isEnabled = true
+//        Project.cachedSites = sites
+//        Project.saveCachedSites()
     }
-    */
 
     //MARK: Actions
     
-    // TODO: Remove if not required
-    @IBAction func ExportProjects(_ sender: UIButton) {
-//        print("Export Projects")
-    }
-    
     @IBAction func ImportProjects(_ sender: UIButton) {
-//        print("Import Projects")
+        sender.isEnabled = false
+        DataManager.shared.fetchAllSites(delegate: self)
     }
     
     @IBAction func unwindToSettings(sender: UIStoryboardSegue) {

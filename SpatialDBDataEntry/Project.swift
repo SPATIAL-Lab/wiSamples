@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import os.log
 import CoreLocation
 
 class Project: NSObject, NSCoding {
@@ -16,6 +15,7 @@ class Project: NSObject, NSCoding {
     
     static var enableSampleProjects: Bool = false
     static var projects: [Project] = [Project]()
+    static var cachedSites: [Site] = [Site]()
     
     //MARK: Properties
     
@@ -28,8 +28,9 @@ class Project: NSObject, NSCoding {
     
     //MARK: Archiving paths
     
-    static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
-    static let ArchiveURL = DocumentsDirectory.appendingPathComponent("projects")
+    static let documentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
+    static let projectsArchiveURL = documentsDirectory.appendingPathComponent("projects")
+    static let cachedSitesArchiveURL = documentsDirectory.appendingPathComponent("cachedSites")
     
     //MARK: Types
     
@@ -105,7 +106,7 @@ class Project: NSObject, NSCoding {
     
     required convenience init?(coder aDecoder: NSCoder) {
         guard let name = aDecoder.decodeObject(forKey: PropertyKeys.projectName) as? String else {
-            os_log("Unable to decode the name for a Project object!", log: OSLog.default, type: OSLogType.debug)
+            print("Unable to decode the name for a Project object!")
             return nil
         }
         
@@ -119,13 +120,13 @@ class Project: NSObject, NSCoding {
     }
     
     static func saveProjects() {
-        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(projects, toFile: Project.ArchiveURL.path)
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(projects, toFile: Project.projectsArchiveURL.path)
         
         if isSuccessfulSave {
-            os_log("Projects saved successfully.", log: .default, type: .debug)
+            print("Projects saved successfully.")
         }
         else {
-            os_log("Projects failed to save!", log: .default, type: .debug)
+            print("Projects failed to save!")
         }
     }
     
@@ -136,12 +137,38 @@ class Project: NSObject, NSCoding {
             return
         }
         
-        if let savedProjects = NSKeyedUnarchiver.unarchiveObject(withFile: Project.ArchiveURL.path) as? [Project] {
+        if let savedProjects = NSKeyedUnarchiver.unarchiveObject(withFile: Project.projectsArchiveURL.path) as? [Project] {
             projects = savedProjects
-            os_log("Projects loaded successfully.", log: .default, type: .debug)
+            print("Projects loaded successfully.")
         }
         else {
-            os_log("Projects failed to load!", log: .default, type: .debug)
+            print("Projects failed to load!")
+        }
+    }
+    
+    static func saveCachedSites() {
+        if cachedSites.isEmpty {
+            print("Attempt was made to save empty cached sites list!")
+            return
+        }
+        
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(cachedSites, toFile: Project.cachedSitesArchiveURL.path)
+        
+        if isSuccessfulSave {
+            print("Cached sites saved successfully.")
+        }
+        else {
+            print("Cached sites failed to save!")
+        }
+    }
+    
+    static func loadCachedSites() {
+        if let savedCachedSites = NSKeyedUnarchiver.unarchiveObject(withFile: Project.cachedSitesArchiveURL.path) as? [Site] {
+            cachedSites = savedCachedSites
+            print("Cached sites loaded successfully.")
+        }
+        else {
+            print("Cached sites failed to load!")
         }
     }
     
@@ -165,18 +192,18 @@ class Project: NSObject, NSCoding {
         
         projects += [project1]
         
-        os_log("Sample projects loaded successfully.", log: .default, type: .debug)
+        print("Sample projects loaded successfully.")
     }
     
     private static func deleteSavedProjects() {
         let fileManager = FileManager.default
         
         do {
-            try fileManager.removeItem(atPath: Project.ArchiveURL.path)
-            os_log("Saved projects deleted successfully.", log: .default, type: .debug)
+            try fileManager.removeItem(atPath: Project.projectsArchiveURL.path)
+            print("Saved projects deleted successfully.")
         }
         catch {
-            os_log("Failed to delete failed projects!", log: .default, type: .debug)
+            print("Failed to delete failed projects!")
         }
     }
 }

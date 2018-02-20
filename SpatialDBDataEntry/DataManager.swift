@@ -15,18 +15,24 @@ protocol DataManagerResponseDelegate: class {
 
 class DataManager: NSObject
 {
-    static var shared: DataManager = DataManager()
+    static let shared: DataManager = DataManager()
     
-    let session: URLSession = URLSession(configuration: .default)
-    var dataTask: URLSessionDataTask?
-    var responseDelegate: DataManagerResponseDelegate?
-    var errorMessage: String = ""
+    var session: URLSession?
+    var fetchSitesDataTask: URLSessionDataTask?
+    var fetchAllSitesDataTask: URLSessionDataTask?
+    
+    //MARK: Initialization
+    
+    private override init() {
+        super.init()
+        
+        session = URLSession(configuration: .default)
+    }
     
     //MARK: Remote site fetching
     
     func fetchSites(delegate: DataManagerResponseDelegate, minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {
-        dataTask?.cancel()
-        responseDelegate = delegate
+        fetchSitesDataTask?.cancel()
 
         let sitesURL: URL = URL(string: "http://wateriso.utah.edu/api/sites_for_mobile.php")!
         var sitesRequest: URLRequest = URLRequest(url: sitesURL)
@@ -42,23 +48,55 @@ class DataManager: NSObject
         let sitesRequestBodyData: Data = sitesRequestBodyString.data(using: .utf8)!
         sitesRequest.httpBody = sitesRequestBodyData
         
-        dataTask = session.dataTask(with: sitesRequest) { data, response, error in
-            defer { self.dataTask = nil }
+        fetchSitesDataTask = session!.dataTask(with: sitesRequest) { data, response, error in
+            defer { self.fetchSitesDataTask = nil }
             
+            var errorMessage: String = "";
             if let error = error {
-                self.errorMessage += error.localizedDescription
+                errorMessage += error.localizedDescription
             }
             else if let data = data {
                 DispatchQueue.main.async {
-                    self.receiveSites(data)
+                    self.receiveSites(data, delegate: delegate, errorMessage: errorMessage)
                 }
             }
         }
         
-        dataTask?.resume()
+        fetchSitesDataTask?.resume()
     }
     
-    func receiveSites(_ data: Data) {
+    func fetchAllSites(delegate: DataManagerResponseDelegate) {
+        fetchAllSitesDataTask?.cancel()
+        
+        let sitesURL: URL = URL(string: "http://wateriso.utah.edu/api/sites.php")!
+        var sitesRequest: URLRequest = URLRequest(url: sitesURL)
+        
+        sitesRequest.httpMethod = "POST"
+        sitesRequest.addValue("application/json", forHTTPHeaderField: "ContentType")
+        
+        let sitesRequestBodyString: String = "{\"latitude\":null,\"longitude\":null,\"elevation\":null,\"countries\":null,\"states\":null,\"collection_date\":null,\"types\":null,\"h2\":null,\"o18\":null,\"project_ids\":null}"
+        
+        let sitesRequestBodyData: Data = sitesRequestBodyString.data(using: .utf8)!
+        sitesRequest.httpBody = sitesRequestBodyData
+        
+        fetchAllSitesDataTask = session!.dataTask(with: sitesRequest) { data, response, error in
+            defer { self.fetchAllSitesDataTask = nil }
+            
+            var errorMessage: String = "";
+            if let error = error {
+                errorMessage += error.localizedDescription
+            }
+            else if let data = data {
+                DispatchQueue.main.async {
+                    self.receiveSites(data, delegate: delegate, errorMessage: errorMessage)
+                }
+            }
+        }
+        
+        fetchAllSitesDataTask?.resume()
+    }
+    
+    private func receiveSites(_ data: Data, delegate: DataManagerResponseDelegate, errorMessage: String) {
         guard let json = try? JSONSerialization.jsonObject(with: data) else {
             print("Couldn't get JSON from response!")
             return
@@ -91,13 +129,8 @@ class DataManager: NSObject
             
             sites.append(site)
         }
-        
-        self.responseDelegate?.receiveSites(errorMessage: self.errorMessage, sites: sites)
-        self.responseDelegate = nil
-    }
-    
-    func fetchAllSites() {
-        
+
+        delegate.receiveSites(errorMessage: errorMessage, sites: sites)
     }
     
     //MARK: Data exporting

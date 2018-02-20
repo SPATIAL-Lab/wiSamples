@@ -188,7 +188,6 @@
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="30"/>
                                         <state key="normal" title="Export Projects"/>
                                         <connections>
-                                            <action selector="ExportProjects:" destination="8IJ-hK-0Nk" eventType="touchUpInside" id="ct7-c4-0aQ"/>
                                             <segue destination="e61-b8-Qed" kind="show" identifier="ShowExportProjects" id="DGb-Qi-YPR"/>
                                         </connections>
                                     </button>
@@ -216,6 +215,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="importProjectsButton" destination="m48-N9-Jyi" id="N4t-MJ-Ini"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MLD-TT-wd7" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Avr-8P-jJw" userLabel="Exit" sceneMemberID="exit"/>
