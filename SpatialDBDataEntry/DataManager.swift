@@ -56,7 +56,7 @@ class DataManager: NSObject
                 errorMessage += error.localizedDescription
             }
             else if let data = data {
-                DispatchQueue.main.async {
+                DispatchQueue.global(qos: .userInteractive).async {
                     self.receiveSites(data, delegate: delegate, errorMessage: errorMessage)
                 }
             }
@@ -87,7 +87,7 @@ class DataManager: NSObject
                 errorMessage += error.localizedDescription
             }
             else if let data = data {
-                DispatchQueue.main.async {
+                DispatchQueue.global(qos: .utility).async {
                     self.receiveSites(data, delegate: delegate, errorMessage: errorMessage)
                 }
             }
@@ -130,7 +130,9 @@ class DataManager: NSObject
             sites.append(site)
         }
 
-        delegate.receiveSites(errorMessage: errorMessage, sites: sites)
+        DispatchQueue.main.async {
+            delegate.receiveSites(errorMessage: errorMessage, sites: sites)
+        }
     }
     
     //MARK: Data exporting

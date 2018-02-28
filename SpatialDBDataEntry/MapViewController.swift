@@ -54,6 +54,7 @@ DataManagerResponseDelegate {
     var siteAnnotationList: [SiteAnnotation] = []
     var lastRegionCenter: CLLocationCoordinate2D = CLLocationCoordinate2D()
     var selectedSiteInitialized: Bool = false
+    var hasUserPannedTheMap: Bool = false
     
     // Site fetching
     var hasFetchedInitially: Bool = false
@@ -203,6 +204,8 @@ DataManagerResponseDelegate {
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         
+        hasUserPannedTheMap = true
+        
         // Check if the map has been zoomed out beyond the maximum
         if Double(mapView.region.span.longitudeDelta) > maxMapZoomLongitude {
             let correctedCenter = existingSiteID.isEmpty ? lastUpdatedLocation.coordinate : existingSiteLocation
@@ -210,6 +213,8 @@ DataManagerResponseDelegate {
             // Zoom back in to the user's current location
             let correctedRegion = MKCoordinateRegionMake(correctedCenter, MKCoordinateSpanMake(maxMapZoomLongitude * 0.9, maxMapZoomLongitude * 0.9))
             mapView.setRegion(correctedRegion, animated: true)
+            
+            hasUserPannedTheMap = false
             
             return
         }
@@ -326,7 +331,8 @@ DataManagerResponseDelegate {
     }
     
     private func initSelectedSite() {
-        if selectedSiteInitialized {
+        if selectedSiteInitialized ||
+            hasUserPannedTheMap {
             return
         }
         
@@ -352,7 +358,7 @@ DataManagerResponseDelegate {
     //MARK: Site Fetch Methods
     
     private func fetchSites(minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {
-        print("Fetching sites in range \(minLatLong), \(maxLatLong)")
+        print("Fetching sites.")
         
         // Request for sites in the range of latitude and longitude
         DataManager.shared.fetchSites(delegate: self, minLatLong: minLatLong, maxLatLong: maxLatLong)

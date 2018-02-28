@@ -29,7 +29,7 @@ class SettingsViewController: UIViewController,
     func receiveSites(errorMessage: String, sites: [Site]) {
         importProjectsButton.setTitle("Cached \(sites.count) sites", for: UIControlState.normal)
 
-        DispatchQueue.main.async {
+        DispatchQueue.global(qos: .utility).async {
             Project.cachedSites = sites
             Project.saveCachedSites()
         }
