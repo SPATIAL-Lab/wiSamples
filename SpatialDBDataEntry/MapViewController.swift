@@ -8,7 +8,6 @@
 
 import UIKit
 import MapKit
-import os.log
 import CoreLocation
 
 enum MapPanFetchResultType: Int {
@@ -34,9 +33,9 @@ enum MapPanFetchResultType: Int {
 }
 
 class MapViewController: UIViewController,
-CLLocationManagerDelegate,
-MKMapViewDelegate,
-DataManagerResponseDelegate {
+    CLLocationManagerDelegate,
+    MKMapViewDelegate,
+    DataManagerResponseDelegate {
     
     //MARK: Properties
     
@@ -102,7 +101,7 @@ DataManagerResponseDelegate {
             locationManager.startUpdatingLocation()
         }
         else {
-            os_log("Location services are disabled!", log: .default, type: .debug)
+            print("Location services are disabled!")
         }
         
         // Enable the save button if viewing an existing site
@@ -254,26 +253,6 @@ DataManagerResponseDelegate {
             }
         }
     }
-
-    // MARK: Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        super.prepare(for: segue, sender: sender)
-        
-        if segue.identifier == "ShowSiteView" {
-            guard let navigationController = segue.destination as? UINavigationController else {
-                fatalError("Unexpected destination \(segue.destination)")
-            }
-            
-            guard let siteViewController = navigationController.viewControllers[0] as? SiteViewController else {
-                fatalError("Unexpected presented view controller \(navigationController.presentedViewController)")
-            }
-            
-            siteViewController.generatedSiteID = Project.projects[projectIndex].getIDForNewSite()
-            siteViewController.projectIndex = projectIndex
-            siteViewController.newLocation = lastUpdatedLocation
-        }
-    }
     
     //MARK: DataManagerResponseDelegate
     
@@ -297,6 +276,26 @@ DataManagerResponseDelegate {
             initSelectedSite()
             
             print("SiteAnnotations:\(siteAnnotationList.count) MapAnnotations:\(mapView.annotations.count)")
+        }
+    }
+    
+    // MARK: Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        
+        if segue.identifier == "ShowSiteView" {
+            guard let navigationController = segue.destination as? UINavigationController else {
+                fatalError("Unexpected destination \(segue.destination)")
+            }
+            
+            guard let siteViewController = navigationController.viewControllers[0] as? SiteViewController else {
+                fatalError("Unexpected presented view controller \(navigationController.presentedViewController)")
+            }
+            
+            siteViewController.generatedSiteID = Project.projects[projectIndex].getIDForNewSite()
+            siteViewController.projectIndex = projectIndex
+            siteViewController.newLocation = lastUpdatedLocation
         }
     }
     
@@ -358,8 +357,6 @@ DataManagerResponseDelegate {
     //MARK: Site Fetch Methods
     
     private func fetchSites(minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {
-        print("Fetching sites.")
-        
         // Request for sites in the range of latitude and longitude
         DataManager.shared.fetchSites(delegate: self, minLatLong: minLatLong, maxLatLong: maxLatLong)
     }

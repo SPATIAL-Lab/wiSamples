@@ -29,9 +29,22 @@ class DataManager: NSObject
         session = URLSession(configuration: .default)
     }
     
-    //MARK: Remote site fetching
+    //MARK: Site fetching based on network connection
     
     func fetchSites(delegate: DataManagerResponseDelegate, minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {
+        if Reachability.isConnectedToNetwork() {
+            fetchSitesRemote(delegate: delegate, minLatLong: minLatLong, maxLatLong: maxLatLong)
+        }
+        else {
+            fetchSitesFromCache(delegate: delegate, minLatLong: minLatLong, maxLatLong: maxLatLong)
+        }
+    }
+    
+    //MARK: Remote site fetching
+    
+    private func fetchSitesRemote(delegate: DataManagerResponseDelegate, minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {
+        print("Fetching sites from database")
+        
         fetchSitesDataTask?.cancel()
 
         let sitesURL: URL = URL(string: "http://wateriso.utah.edu/api/sites_for_mobile.php")!
@@ -57,7 +70,7 @@ class DataManager: NSObject
             }
             else if let data = data {
                 DispatchQueue.global(qos: .userInteractive).async {
-                    self.receiveSites(data, delegate: delegate, errorMessage: errorMessage)
+                    self.receiveRemoteSites(data, delegate: delegate, errorMessage: errorMessage)
                 }
             }
         }
@@ -66,6 +79,8 @@ class DataManager: NSObject
     }
     
     func fetchAllSites(delegate: DataManagerResponseDelegate) {
+        print("Fetching all sites from database.")
+        
         fetchAllSitesDataTask?.cancel()
         
         let sitesURL: URL = URL(string: "http://wateriso.utah.edu/api/sites.php")!
@@ -88,7 +103,7 @@ class DataManager: NSObject
             }
             else if let data = data {
                 DispatchQueue.global(qos: .utility).async {
-                    self.receiveSites(data, delegate: delegate, errorMessage: errorMessage)
+                    self.receiveRemoteSites(data, delegate: delegate, errorMessage: errorMessage)
                 }
             }
         }
@@ -96,7 +111,33 @@ class DataManager: NSObject
         fetchAllSitesDataTask?.resume()
     }
     
-    private func receiveSites(_ data: Data, delegate: DataManagerResponseDelegate, errorMessage: String) {
+    //MARK: Cached sites fetching
+    
+    private func fetchSitesFromCache(delegate: DataManagerResponseDelegate, minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            var sites: [Site] = []
+            for site in Project.cachedSites {
+                // North - Positive
+                // East - Positive
+                if site.location.latitude < minLatLong.latitude ||
+                    site.location.longitude < minLatLong.longitude ||
+                    site.location.latitude > maxLatLong.latitude ||
+                    site.location.longitude > maxLatLong.longitude {
+                    continue
+                }
+                
+                sites.append(site)
+            }
+
+            DispatchQueue.main.async {
+                delegate.receiveSites(errorMessage: "", sites: sites)
+            }
+        }
+    }
+    
+    //MARK: Site receiving and parsing
+    
+    private func receiveRemoteSites(_ data: Data, delegate: DataManagerResponseDelegate, errorMessage: String) {
         guard let json = try? JSONSerialization.jsonObject(with: data) else {
             print("Couldn't get JSON from response!")
             return

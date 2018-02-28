@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9E1262B9204659210022F1FA /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1262B8204659210022F1FA /* Reachability.swift */; };
 		9E17B9BA1F81A12600C99F12 /* SiteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E17B9B91F81A12600C99F12 /* SiteTableViewController.swift */; };
 		9E17B9BC1F81A6F500C99F12 /* SiteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E17B9BB1F81A6F500C99F12 /* SiteViewController.swift */; };
 		9E3B19811F7F3B930094D925 /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3B19801F7F3B930094D925 /* Site.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9E1262B8204659210022F1FA /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		9E17B9B91F81A12600C99F12 /* SiteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteTableViewController.swift; sourceTree = "<group>"; };
 		9E17B9BB1F81A6F500C99F12 /* SiteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteViewController.swift; sourceTree = "<group>"; };
 		9E3B19801F7F3B930094D925 /* Site.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Site.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 				9E3F560B1F819E1A004BEBEB /* SiteTableViewCell.swift */,
 				9E17B9B91F81A12600C99F12 /* SiteTableViewController.swift */,
 				9E17B9BB1F81A6F500C99F12 /* SiteViewController.swift */,
+				9E1262B8204659210022F1FA /* Reachability.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -297,6 +300,7 @@
 				9EE9C6341FCFA9C60079067D /* DataManager.swift in Sources */,
 				9E17B9BC1F81A6F500C99F12 /* SiteViewController.swift in Sources */,
 				9E3B19811F7F3B930094D925 /* Site.swift in Sources */,
+				9E1262B9204659210022F1FA /* Reachability.swift in Sources */,
 				9E647DBB1F73593000F2BC61 /* AppDelegate.swift in Sources */,
 				9E63B86E1F8EE6B000F16D02 /* Sample.swift in Sources */,
 				9E4A97301FA41CDB009EB5FD /* MapViewController.swift in Sources */,
