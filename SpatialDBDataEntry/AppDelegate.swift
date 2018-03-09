@@ -15,9 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Load saved projects at startup.
-        Project.loadProjects()
+        DataManager.shared.loadProjects()
         DispatchQueue.global(qos: .utility).async {
-            Project.loadCachedSites()
+            DataManager.shared.loadCachedSites()
         }
         
         return true

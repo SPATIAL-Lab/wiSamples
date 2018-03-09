@@ -29,7 +29,7 @@ class ProjectTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Project.projects.count
+        return DataManager.shared.projects.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -40,7 +40,7 @@ class ProjectTableViewController: UITableViewController {
             fatalError("The dequeued cell is not an instance of ProjectTableViewCell!")
         }
 
-        let project = Project.projects[indexPath.row]
+        let project = DataManager.shared.projects[indexPath.row]
         
         cell.projectNameLabel.text = project.name
         
@@ -60,13 +60,13 @@ class ProjectTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the project
-            Project.projects.remove(at: indexPath.row)
+            DataManager.shared.projects.remove(at: indexPath.row)
             
             // Delete the row from the data source
             tableView.deleteRows(at: [indexPath], with: .fade)
             
             // Save data
-            Project.saveProjects()
+            DataManager.shared.saveProjects()
         }
         else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -141,16 +141,16 @@ class ProjectTableViewController: UITableViewController {
     @IBAction func unwindToProjectList(sender: UIStoryboardSegue) {
         if let projectViewController = sender.source as? ProjectViewController, let project = projectViewController.project {
             // Get an index for the new cell
-            let newIndexPath = IndexPath(row: Project.projects.count, section: 0)
+            let newIndexPath = IndexPath(row: DataManager.shared.projects.count, section: 0)
             
             // Add the new project
-            Project.projects.append(project)
+            DataManager.shared.projects.append(project)
             
             // Add the new project to the table
             tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
             
             // Save data
-            Project.saveProjects()
+            DataManager.shared.saveProjects()
         }
     }
     

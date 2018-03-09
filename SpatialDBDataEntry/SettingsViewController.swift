@@ -56,11 +56,11 @@ class SettingsViewController: UIViewController,
 
         DispatchQueue.global(qos: .utility).async {
             print("Copying sites...")
-            Project.cachedSites = sites
+            DataManager.shared.cachedSites = sites
             print("Sorting sites...")
-            Project.cachedSites.sort(by: self.siteSortPredicate)
+            DataManager.shared.cachedSites.sort(by: self.siteSortPredicate)
             print("Saving sites...")
-            Project.saveCachedSites()
+            DataManager.shared.saveCachedSites()
             print("Done.")
             
             DispatchQueue.main.async {
@@ -89,7 +89,7 @@ class SettingsViewController: UIViewController,
     
     private func finishedProcessingCachedSites() {
 //        for i in 0...999 {
-//            let distance = lastUpdatedLocation.distance(from: CLLocation(latitude: Project.cachedSites[i].location.latitude, longitude: Project.cachedSites[i].location.longitude))
+//            let distance = lastUpdatedLocation.distance(from: CLLocation(latitude: DataManager.shared.cachedSites[i].location.latitude, longitude: DataManager.shared.cachedSites[i].location.longitude))
 //            print("Site:\(i) Distance:\(distance)")
 //        }
     }

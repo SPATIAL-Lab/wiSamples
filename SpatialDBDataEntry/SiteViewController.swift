@@ -98,7 +98,7 @@ class SiteViewController: UIViewController, UITextFieldDelegate {
         site!.comments = commentsTextField.text ?? ""
         
         // Add the new site to this project
-        Project.projects[projectIndex].sites.append(site!)
+        DataManager.shared.projects[projectIndex].sites.append(site!)
     }
 
     //MARK: Actions

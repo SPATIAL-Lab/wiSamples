@@ -17,9 +17,23 @@ class DataManager: NSObject
 {
     static let shared: DataManager = DataManager()
     
+    //MARK: Data
+    var enableSampleProjects: Bool = false
+    var projects: [Project] = [Project]()
+    var cachedSites: [Site] = [Site]()
+    private var isSavingCachedSites: Bool = false
+    private var isLoadingCachedSites: Bool = false
+    
+    //MARK: Tasks
     var session: URLSession?
     var fetchSitesDataTask: URLSessionDataTask?
     var fetchAllSitesDataTask: URLSessionDataTask?
+    
+    //MARK: Archiving paths
+    
+    private static let documentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
+    private static let projectsArchiveURL = documentsDirectory.appendingPathComponent("projects")
+    private static let cachedSitesArchiveURL = documentsDirectory.appendingPathComponent("cachedSites")
     
     //MARK: Initialization
     
@@ -116,7 +130,7 @@ class DataManager: NSObject
     private func fetchSitesFromCache(delegate: DataManagerResponseDelegate, minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {
         DispatchQueue.global(qos: .userInteractive).async {
             var sites: [Site] = []
-            for site in Project.cachedSites {
+            for site in self.cachedSites {
                 // North - Positive
                 // East - Positive
                 if site.location.latitude < minLatLong.latitude ||
@@ -227,4 +241,111 @@ class DataManager: NSObject
         
         return "\(sample.id),,\(sample.siteID),\(sample.type.description),\(startDateString),\(startTimeString),\(collectionDateString),\(collectionTimeString),\(volumeString),,\(sample.phase.description),\(depthString),,,\(sample.comments),\(project.name)\n"
     }
+    
+    //MARK: Data saving and loading
+    
+    func saveProjects() {
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(projects, toFile: DataManager.projectsArchiveURL.path)
+        
+        if isSuccessfulSave {
+            print("Projects saved successfully.")
+        }
+        else {
+            print("Projects failed to save!")
+        }
+    }
+    
+    func loadProjects() {
+        if enableSampleProjects {
+            deleteSavedProjects()
+            loadSampleProjects()
+            return
+        }
+        
+        if let savedProjects = NSKeyedUnarchiver.unarchiveObject(withFile: DataManager.projectsArchiveURL.path) as? [Project] {
+            projects = savedProjects
+            print("Projects loaded successfully.")
+        }
+        else {
+            print("Projects failed to load!")
+        }
+    }
+    
+    func saveCachedSites() {
+        if isSavingCachedSites {
+            print("An ongoing save cached sites operation hasn't finished!")
+            return
+        }
+        
+        if cachedSites.isEmpty {
+            print("Attempt was made to save empty cached sites list!")
+            return
+        }
+        
+        print("Saving cached sites.")
+        isSavingCachedSites = true
+        
+        if NSKeyedArchiver.archiveRootObject(cachedSites, toFile: DataManager.cachedSitesArchiveURL.path) {
+            print("Cached sites saved successfully.")
+        }
+        else {
+            print("Cached sites failed to save!")
+        }
+        
+        isSavingCachedSites = false
+    }
+    
+    func loadCachedSites() {
+        if isLoadingCachedSites {
+            print("An ongoing load cached sites operation hasn't finished!")
+            return
+        }
+        
+        print("Loading cached sites.")
+        isLoadingCachedSites = true
+        
+        if let savedCachedSites = NSKeyedUnarchiver.unarchiveObject(withFile: DataManager.cachedSitesArchiveURL.path) as? [Site] {
+            cachedSites = savedCachedSites
+            print("Cached sites loaded successfully.")
+        }
+        else {
+            print("Cached sites failed to load!")
+        }
+        
+        isLoadingCachedSites = false
+    }
+    
+    private func loadSampleProjects() {
+        let location = CLLocationCoordinate2DMake(CLLocationDegrees(40.759341), CLLocationDegrees(-111.861879))
+        
+        guard let site1 = Site(id: "TP1-JD-SITE-01", name: "Site_01", location: location) else {
+            fatalError("Unable to instantiate site1")
+        }
+        
+        let date = Date()
+        guard let sample1 = Sample(id: "TP1-JD-SAMPLE-01", siteID: "TP1-JD-SITE-01", type: SampleType.lake, dateTime: date, startDateTime: date, siteLocation: location) else {
+            fatalError("Unable to instantiate sample1")
+        }
+        
+        guard let project1 = Project(name: "TestProject_01", contactName: "John Doe", contactEmail: "", sampleIDPrefix: "TP1-JD-", sites: [site1], samples: [sample1]) else {
+            fatalError("Unable to instantiate project1")
+        }
+        
+        projects += [project1]
+        
+        print("Sample projects loaded successfully.")
+    }
+    
+    private func deleteSavedProjects() {
+        let fileManager = FileManager.default
+        
+        do {
+            try fileManager.removeItem(atPath: DataManager.projectsArchiveURL.path)
+            print("Saved projects deleted successfully.")
+        }
+        catch {
+            print("Failed to delete failed projects!")
+        }
+    }
+
 }

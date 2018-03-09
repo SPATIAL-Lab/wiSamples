@@ -36,7 +36,7 @@ class SampleTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Project.projects[projectIndex].samples.count
+        return DataManager.shared.projects[projectIndex].samples.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -46,7 +46,7 @@ class SampleTableViewController: UITableViewController {
             fatalError("The dequequed cell is not an instance of SampleTableViewCell!")
         }
         
-        let sample = Project.projects[projectIndex].samples[indexPath.row]
+        let sample = DataManager.shared.projects[projectIndex].samples[indexPath.row]
         
         cell.sampleIDLabel.text = sample.id
         
@@ -57,13 +57,13 @@ class SampleTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the sample
-            Project.projects[projectIndex].samples.remove(at: indexPath.row)
+            DataManager.shared.projects[projectIndex].samples.remove(at: indexPath.row)
             
             // Delete the row from the data source
             tableView.deleteRows(at: [indexPath], with: .fade)
             
             // Save data
-            Project.saveProjects()
+            DataManager.shared.saveProjects()
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
@@ -85,7 +85,7 @@ class SampleTableViewController: UITableViewController {
             }
             
             sampleViewController.projectIndex = projectIndex
-            sampleViewController.generatedSampleID = Project.projects[projectIndex].getIDForNewSample()
+            sampleViewController.generatedSampleID = DataManager.shared.projects[projectIndex].getIDForNewSample()
             
         case "ShowSample":            
             guard let navigationController = segue.destination as? UINavigationController else {
@@ -104,7 +104,7 @@ class SampleTableViewController: UITableViewController {
                 fatalError("The selected cell is not being displayed by the table")
             }
             
-            let selectedSample = Project.projects[projectIndex].samples[indexPath.row]
+            let selectedSample = DataManager.shared.projects[projectIndex].samples[indexPath.row]
             sampleViewController.projectIndex = projectIndex
             sampleViewController.sample = selectedSample
             
@@ -123,22 +123,22 @@ class SampleTableViewController: UITableViewController {
             
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 // Update an existing sample
-                Project.projects[projectIndex].samples[selectedIndexPath.row] = sample
+                DataManager.shared.projects[projectIndex].samples[selectedIndexPath.row] = sample
                 tableView.reloadRows(at: [selectedIndexPath], with: .none)
             }
             else {
                 // Get an index for the new cell
-                let newIndexPath = IndexPath(row: Project.projects[projectIndex].samples.count, section: 0)
+                let newIndexPath = IndexPath(row: DataManager.shared.projects[projectIndex].samples.count, section: 0)
                 
                 // Add the new sample
-                Project.projects[projectIndex].samples.append(sample)
+                DataManager.shared.projects[projectIndex].samples.append(sample)
                 
                 // Add the new sample to the table
                 tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
             }
             
             // Save data
-            Project.saveProjects()
+            DataManager.shared.saveProjects()
         }
     }
 

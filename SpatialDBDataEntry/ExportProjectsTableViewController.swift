@@ -29,7 +29,7 @@ class ExportProjectsTableViewController: UITableViewController, MFMailComposeVie
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Project.projects.count
+        return DataManager.shared.projects.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -40,7 +40,7 @@ class ExportProjectsTableViewController: UITableViewController, MFMailComposeVie
             fatalError("The dequeued cell is not an instance of ExportProjectsTableViewCell!")
         }
         
-        let project = Project.projects[indexPath.row]
+        let project = DataManager.shared.projects[indexPath.row]
         
         cell.projectNameLabel.text = project.name
         
@@ -97,11 +97,11 @@ class ExportProjectsTableViewController: UITableViewController, MFMailComposeVie
     private func getSelectedProjects() -> [Project] {
         var selectedProjects: [Project] = []
         
-        for index in 0...Project.projects.count {
+        for index in 0...DataManager.shared.projects.count {
             let indexPath = IndexPath(row: index, section: 0)
             if let exportProjectCell = tableView!.cellForRow(at: indexPath) as? ExportProjectsTableViewCell {
                 if exportProjectCell.selectedSwitch.isOn {
-                    selectedProjects.append(Project.projects[index])
+                    selectedProjects.append(DataManager.shared.projects[index])
                 }
             }
         }

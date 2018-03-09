@@ -293,7 +293,7 @@ class MapViewController: UIViewController,
                 fatalError("Unexpected presented view controller \(navigationController.presentedViewController)")
             }
             
-            siteViewController.generatedSiteID = Project.projects[projectIndex].getIDForNewSite()
+            siteViewController.generatedSiteID = DataManager.shared.projects[projectIndex].getIDForNewSite()
             siteViewController.projectIndex = projectIndex
             siteViewController.newLocation = lastUpdatedLocation
         }
@@ -322,7 +322,7 @@ class MapViewController: UIViewController,
     //MARK: Site Plotting Methods
     
     private func plotSaveSites() {
-        for savedProject in Project.projects {
+        for savedProject in DataManager.shared.projects {
             let savedSiteAnnotations = SiteAnnotation.loadSiteAnnotations(fromSites: savedProject.sites)
             siteAnnotationList.append(contentsOf: savedSiteAnnotations)
             mapView.addAnnotations(siteAnnotationList)

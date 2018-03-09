@@ -11,14 +11,6 @@ import CoreLocation
 
 class Project: NSObject, NSCoding {
     
-    //MARK: Globals
-    
-    static var enableSampleProjects: Bool = false
-    static var projects: [Project] = [Project]()
-    static var cachedSites: [Site] = [Site]()
-    private static var isSavingCachedSites: Bool = false
-    private static var isLoadingCachedSites: Bool = false
-    
     //MARK: Properties
     
     var name: String
@@ -27,12 +19,6 @@ class Project: NSObject, NSCoding {
     var sampleIDPrefix: String
     var sites: [Site]
     var samples: [Sample]
-    
-    //MARK: Archiving paths
-    
-    static let documentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
-    static let projectsArchiveURL = documentsDirectory.appendingPathComponent("projects")
-    static let cachedSitesArchiveURL = documentsDirectory.appendingPathComponent("cachedSites")
     
     //MARK: Types
     
@@ -92,7 +78,7 @@ class Project: NSObject, NSCoding {
     //MARK: Global Data Helpers
     
     static func isValid(projectIndex: Int) -> Bool {
-        return projectIndex >= 0 && projectIndex < projects.count
+        return projectIndex >= 0 && projectIndex < DataManager.shared.projects.count
     }
     
     //MARK: NSCoding
@@ -121,109 +107,4 @@ class Project: NSObject, NSCoding {
         self.init(name: name, contactName: contactName!, contactEmail: contactEmail!, sampleIDPrefix: sampleIDPrefix!, sites: sites!, samples: samples!)
     }
     
-    static func saveProjects() {
-        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(projects, toFile: Project.projectsArchiveURL.path)
-        
-        if isSuccessfulSave {
-            print("Projects saved successfully.")
-        }
-        else {
-            print("Projects failed to save!")
-        }
-    }
-    
-    static func loadProjects() {
-        if enableSampleProjects {
-            deleteSavedProjects()
-            loadSampleProjects()
-            return
-        }
-        
-        if let savedProjects = NSKeyedUnarchiver.unarchiveObject(withFile: Project.projectsArchiveURL.path) as? [Project] {
-            projects = savedProjects
-            print("Projects loaded successfully.")
-        }
-        else {
-            print("Projects failed to load!")
-        }
-    }
-    
-    static func saveCachedSites() {
-        if isSavingCachedSites {
-            print("An ongoing save cached sites operation hasn't finished!")
-            return
-        }
-        
-        if cachedSites.isEmpty {
-            print("Attempt was made to save empty cached sites list!")
-            return
-        }
-        
-        print("Saving cached sites.")
-        isSavingCachedSites = true
-
-        if NSKeyedArchiver.archiveRootObject(cachedSites, toFile: Project.cachedSitesArchiveURL.path) {
-            print("Cached sites saved successfully.")
-        }
-        else {
-            print("Cached sites failed to save!")
-        }
-        
-        isSavingCachedSites = false
-    }
-    
-    static func loadCachedSites() {
-        if isLoadingCachedSites {
-            print("An ongoing load cached sites operation hasn't finished!")
-            return
-        }
-        
-        print("Loading cached sites.")
-        isLoadingCachedSites = true
-        
-        if let savedCachedSites = NSKeyedUnarchiver.unarchiveObject(withFile: Project.cachedSitesArchiveURL.path) as? [Site] {
-            cachedSites = savedCachedSites
-            print("Cached sites loaded successfully.")
-        }
-        else {
-            print("Cached sites failed to load!")
-        }
-        
-        isLoadingCachedSites = false
-    }
-    
-    //MARK: Private Methods
-    
-    private static func loadSampleProjects() {
-        let location = CLLocationCoordinate2DMake(CLLocationDegrees(40.759341), CLLocationDegrees(-111.861879))
-        
-        guard let site1 = Site(id: "TP1-JD-SITE-01", name: "Site_01", location: location) else {
-            fatalError("Unable to instantiate site1")
-        }
-        
-        let date = Date()
-        guard let sample1 = Sample(id: "TP1-JD-SAMPLE-01", siteID: "TP1-JD-SITE-01", type: SampleType.lake, dateTime: date, startDateTime: date, siteLocation: location) else {
-            fatalError("Unable to instantiate sample1")
-        }
-        
-        guard let project1 = Project(name: "TestProject_01", contactName: "John Doe", contactEmail: "", sampleIDPrefix: "TP1-JD-", sites: [site1], samples: [sample1]) else {
-            fatalError("Unable to instantiate project1")
-        }
-        
-        projects += [project1]
-        
-        print("Sample projects loaded successfully.")
-    }
-    
-    private static func deleteSavedProjects() {
-        let fileManager = FileManager.default
-        
-        do {
-            try fileManager.removeItem(atPath: Project.projectsArchiveURL.path)
-            print("Saved projects deleted successfully.")
-        }
-        catch {
-            print("Failed to delete failed projects!")
-        }
-    }
 }

@@ -27,7 +27,7 @@ class SiteTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
-        navigationItem.title = Project.projects[projectIndex].name + " Sites"
+        navigationItem.title = DataManager.shared.projects[projectIndex].name + " Sites"
     }
 
     override func didReceiveMemoryWarning() {
@@ -42,7 +42,7 @@ class SiteTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Project.projects[projectIndex].sites.count
+        return DataManager.shared.projects[projectIndex].sites.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -52,7 +52,7 @@ class SiteTableViewController: UITableViewController {
             fatalError("The dequequed cell is not an instance of SiteTableViewCell!")
         }
 
-        let site = Project.projects[projectIndex].sites[indexPath.row]
+        let site = DataManager.shared.projects[projectIndex].sites[indexPath.row]
         
         cell.siteIDLabel.text = site.id
         
@@ -71,13 +71,13 @@ class SiteTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the site
-            Project.projects[projectIndex].sites.remove(at: indexPath.row)
+            DataManager.shared.projects[projectIndex].sites.remove(at: indexPath.row)
 
             // Delete the row from the data source
             tableView.deleteRows(at: [indexPath], with: .fade)
             
             // Save data
-            Project.saveProjects()
+            DataManager.shared.saveProjects()
         }
         else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -118,16 +118,16 @@ class SiteTableViewController: UITableViewController {
             }
             
             // Get an index for the new cell
-            let newIndexPath = IndexPath(row: Project.projects[projectIndex].sites.count, section: 0)
+            let newIndexPath = IndexPath(row: DataManager.shared.projects[projectIndex].sites.count, section: 0)
             
             // Add the new site
-            Project.projects[projectIndex].sites.append(site)
+            DataManager.shared.projects[projectIndex].sites.append(site)
             
             // Add the new site to the table
             tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
             
             // Save data
-            Project.saveProjects()
+            DataManager.shared.saveProjects()
         }
     }
     
