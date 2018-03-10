@@ -23,6 +23,7 @@ UIPickerViewDataSource
     @IBOutlet weak var startCollectionDatePicker: UIDatePicker!
     @IBOutlet weak var commentsTextField: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
+    var toolbar: UIToolbar? = nil
 
     var depth: Int = -1
     var volume: Int = -1
@@ -42,6 +43,15 @@ UIPickerViewDataSource
         phasePicker.delegate = self
         phasePicker.dataSource = self
         
+        // Register for keyboard events
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+
+        // Add a `Done` button to the numeric text fields
+        initToolbar()
+        depthTextField.inputAccessoryView = toolbar
+        volumeTextField.inputAccessoryView = toolbar
+        
         // Check if editing an existing sample
         if depth != -1 {
             depthTextField.text = String(depth)
@@ -59,6 +69,10 @@ UIPickerViewDataSource
         
         commentsTextField.text = comments
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -73,7 +87,7 @@ UIPickerViewDataSource
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // Hide the keyboard.
-        textField.resignFirstResponder()
+        self.view.endEditing(true)
         return true
     }
     
@@ -124,10 +138,34 @@ UIPickerViewDataSource
         dismiss(animated: true, completion: nil)
     }
     
-    //MARK: Private Methods
-    
     @IBAction func startCollectionDateSelected(_ sender: UIDatePicker) {
         startCollectionDate = sender.date
+    }
+    
+    //MARK: Private Methods
+    
+    private func initToolbar() {
+        toolbar = UIToolbar(frame: CGRect(x: 0, y: 0,  width: self.view.frame.size.width, height: 30))
+        
+        //create left side empty space so that done button set on right side
+        let flexSpace = UIBarButtonItem(barButtonSystemItem:    .flexibleSpace, target: nil, action: nil)
+        let doneBtn: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(SampleMiscDataViewController.doneButtonAction))
+        
+        toolbar!.setItems([flexSpace, doneBtn], animated: false)
+        toolbar!.sizeToFit()
+    }
+    
+    @objc private func doneButtonAction() {
+        // Hide the keyboard.
+        self.view.endEditing(true)
+    }
+    
+    @objc private func keyboardWillShow(notification: NSNotification) {
+        print("keyboardWillShow")
+    }
+    
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        print("keyboardWillHide")
     }
     
 }
