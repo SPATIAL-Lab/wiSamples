@@ -470,7 +470,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = wateriso.utah.edu.spatialdataentry;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c912ef34-dab1-40b1-8517-96afb0f85e29";
+				PROVISIONING_PROFILE = "6bdb00f7-ea03-4006-b2e0-ee1a73660248";
 				PROVISIONING_PROFILE_SPECIFIER = dev_profile_01;
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
