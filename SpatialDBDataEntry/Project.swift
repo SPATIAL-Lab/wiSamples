@@ -50,29 +50,43 @@ class Project: NSObject, NSCoding {
     //MARK: Behavior
     
     func getIDForNewSample() -> String {
-        if samples.count > 0 {
-            let lastSample = samples[samples.count - 1]
-            let splitSampleID = lastSample.id.components(separatedBy: sampleIDPrefix + String("SAMPLE-"))
-            if splitSampleID.count > 1 {
-                let newSampleID = Int(splitSampleID[1])! + 1
-                return sampleIDPrefix + String(format: "SAMPLE-%02d", newSampleID)
+        var newSampleID: Int = samples.count
+        if newSampleID > 0 {
+            for sample in samples {
+                let splitSampleID = sample.id.components(separatedBy: sampleIDPrefix)
+                if splitSampleID.count > 1 {
+                    let afterPrefix = splitSampleID[1]
+                    if let numberPartEndIndex = afterPrefix.index(afterPrefix.startIndex, offsetBy: 3, limitedBy: afterPrefix.endIndex) {
+                        let numberPart = afterPrefix.substring(to: numberPartEndIndex)
+                        if let number = Int(numberPart) {
+                            newSampleID = number > newSampleID ? number : newSampleID
+                        }
+                    }
+                }
             }
         }
         
-        return sampleIDPrefix + String(format: "SAMPLE-%02d", samples.count + 1)
+        return sampleIDPrefix + String(format: "%03d", newSampleID + 1)
     }
     
     func getIDForNewSite() -> String {
-        if sites.count > 0 {
-            let lastSite = sites[sites.count - 1]
-            let splitSiteID = lastSite.id.components(separatedBy: sampleIDPrefix + String("SITE-"))
-            if splitSiteID.count > 1 {
-                let newSiteID = Int(splitSiteID[1])! + 1
-                return sampleIDPrefix + String(format: "SITE-%02d", newSiteID)
+        var newSiteID: Int = sites.count
+        if newSiteID > 0 {
+            for site in sites {
+                let splitSiteID = site.id.components(separatedBy: sampleIDPrefix + String("SITE-"))
+                if splitSiteID.count > 1 {
+                    let afterPrefix = splitSiteID[1]
+                    if let numberPartEndIndex = afterPrefix.index(afterPrefix.startIndex, offsetBy: 3, limitedBy: afterPrefix.endIndex) {
+                        let numberPart = afterPrefix.substring(to: numberPartEndIndex)
+                        if let number = Int(numberPart) {
+                            newSiteID = number > newSiteID ? number : newSiteID
+                        }
+                    }
+                }
             }
         }
         
-        return sampleIDPrefix + String(format: "SITE-%02d", sites.count + 1)
+        return sampleIDPrefix + String(format: "SITE-%03d", newSiteID + 1)
     }
     
     //MARK: Global Data Helpers
