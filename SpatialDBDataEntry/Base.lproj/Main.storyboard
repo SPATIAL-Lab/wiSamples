@@ -193,7 +193,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m48-N9-Jyi">
                                         <rect key="frame" x="0.0" y="40" width="343" height="30"/>
-                                        <state key="normal" title="Import Projects"/>
+                                        <state key="normal" title="Import Sites"/>
                                         <connections>
                                             <action selector="ImportProjects:" destination="8IJ-hK-0Nk" eventType="touchUpInside" id="tG4-fv-bHo"/>
                                         </connections>
