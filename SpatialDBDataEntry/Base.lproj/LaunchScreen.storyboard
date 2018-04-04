@@ -22,7 +22,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="logo-wi" translatesAutoresizingMaskIntoConstraints="NO" id="HzJ-xV-pBW">
-                                <rect key="frame" x="59" y="205" width="256" height="256"/>
+                                <rect key="frame" x="58.092062863309593" y="206.49790420502757" width="256" height="256.00000000000011"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
@@ -35,6 +35,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="logo-wi" width="99" height="96"/>
+        <image name="logo-wi" width="381" height="371"/>
     </resources>
 </document>
