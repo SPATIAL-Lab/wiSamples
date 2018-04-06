@@ -30,6 +30,7 @@
 		9EC8E8D62020F1100040AEA2 /* ExportProjectsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC8E8D52020F1100040AEA2 /* ExportProjectsTableViewCell.swift */; };
 		9ECB43D21F9ECC230012B456 /* SampleMiscDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB43D11F9ECC230012B456 /* SampleMiscDataViewController.swift */; };
 		9EE9C6341FCFA9C60079067D /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE9C6331FCFA9C50079067D /* DataManager.swift */; };
+		9EF544C52077E57A001D6161 /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF544C42077E57A001D6161 /* SplashScreenViewController.swift */; };
 		9EF583B41F8C5C8E00079487 /* SampleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF583B31F8C5C8E00079487 /* SampleTableViewController.swift */; };
 		9EF583B61F8C5CA100079487 /* SampleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF583B51F8C5CA100079487 /* SampleTableViewCell.swift */; };
 		9EF583B81F8C5F6100079487 /* SampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF583B71F8C5F6100079487 /* SampleViewController.swift */; };
@@ -73,6 +74,7 @@
 		9EC8E8D52020F1100040AEA2 /* ExportProjectsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExportProjectsTableViewCell.swift; sourceTree = "<group>"; };
 		9ECB43D11F9ECC230012B456 /* SampleMiscDataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleMiscDataViewController.swift; sourceTree = "<group>"; };
 		9EE9C6331FCFA9C50079067D /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		9EF544C42077E57A001D6161 /* SplashScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
 		9EF583B31F8C5C8E00079487 /* SampleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleTableViewController.swift; sourceTree = "<group>"; };
 		9EF583B51F8C5CA100079487 /* SampleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleTableViewCell.swift; sourceTree = "<group>"; };
 		9EF583B71F8C5F6100079487 /* SampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleViewController.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				9E17B9B91F81A12600C99F12 /* SiteTableViewController.swift */,
 				9E17B9BB1F81A6F500C99F12 /* SiteViewController.swift */,
 				9E1262B8204659210022F1FA /* Reachability.swift */,
+				9EF544C42077E57A001D6161 /* SplashScreenViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -302,6 +305,7 @@
 				9E3B19811F7F3B930094D925 /* Site.swift in Sources */,
 				9E1262B9204659210022F1FA /* Reachability.swift in Sources */,
 				9E647DBB1F73593000F2BC61 /* AppDelegate.swift in Sources */,
+				9EF544C52077E57A001D6161 /* SplashScreenViewController.swift in Sources */,
 				9E63B86E1F8EE6B000F16D02 /* Sample.swift in Sources */,
 				9E4A97301FA41CDB009EB5FD /* MapViewController.swift in Sources */,
 				9E3B19831F7F3BA20094D925 /* Project.swift in Sources */,
