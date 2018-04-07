@@ -71,6 +71,7 @@ class MapViewController: UIViewController,
     var selectedExistingSite: Bool = false
     var existingSiteID: String = ""
     var existingSiteLocation: CLLocationCoordinate2D = CLLocationCoordinate2D()
+    var newSiteID: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,7 +81,9 @@ class MapViewController: UIViewController,
         let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
         self.view!.addGestureRecognizer(gestureRecognizer)
         
+        // Write some usable values beforehand
         deltaLatLong = getDeltaLatLong(rangeInKM: siteFetchWindowSize)
+        newSiteID = DataManager.shared.projects[projectIndex].getIDForNewSite()
         
         // Plot saved sites
         plotSavedSites()
@@ -183,10 +186,16 @@ class MapViewController: UIViewController,
             pinAnnotation.pinTintColor = UIColor.yellow
         }
         
-        centerMapOnLocation(location: (view.annotation?.coordinate)!)
+        // Center the map on the selected annotation
+        mapView.setCenter((view.annotation?.coordinate)!, animated: true)
         
-        // Update the title
+        // Check what kind of annotation was clicked
         if let siteAnnotation = view.annotation as? SiteAnnotation {
+            // Remove the newly added annotation if it wasn't selected
+            if siteAnnotation != newlyAddedAnnotation {
+                removeNewlyAddedSite()
+            }
+            
             existingSiteID = siteAnnotation.id
             existingSiteLocation = siteAnnotation.coordinate
             navigationItem.title = siteAnnotation.id
@@ -203,6 +212,13 @@ class MapViewController: UIViewController,
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
         if let pinAnnotation = view as? MKPinAnnotationView {
             pinAnnotation.pinTintColor = UIColor.orange
+        }
+        
+        // Remove the newly added annotation if it was deselected
+        if let siteAnnotation = view.annotation as? SiteAnnotation {
+            if siteAnnotation == newlyAddedAnnotation {
+                removeNewlyAddedSite()
+            }
         }
         
         existingSiteID = ""
@@ -275,9 +291,18 @@ class MapViewController: UIViewController,
                 fatalError("Unexpected presented view controller \(navigationController.presentedViewController)")
             }
             
-            siteViewController.generatedSiteID = DataManager.shared.projects[projectIndex].getIDForNewSite()
+            siteViewController.generatedSiteID = newSiteID
             siteViewController.projectIndex = projectIndex
-            siteViewController.newLocation = lastUpdatedLocation
+            
+            // Check if an annotation was added by the user
+            if newlyAddedAnnotation.title == nil {
+                // If no annotation was added, use the last updated location
+                siteViewController.newLocation = lastUpdatedLocation
+            }
+            else {
+                // Use the annotation that the user added
+                siteViewController.newLocation = CLLocation(latitude: newlyAddedAnnotation.coordinate.latitude, longitude: newlyAddedAnnotation.coordinate.longitude)
+            }
         }
     }
     
@@ -304,14 +329,18 @@ class MapViewController: UIViewController,
     //MARK: Site Plotting Methods
     
     @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
-        
-        let thumbOffsetX: CGFloat = -10
-        let thumbOffsetY: CGFloat = -125
+        // Add an offset acounting for the finger
+        let fingerOffsetX: CGFloat = -10
+        let fingerOffsetY: CGFloat = -125
         var pressLocation = sender.location(in: self.view!)
-        pressLocation.x += thumbOffsetX
-        pressLocation.y += thumbOffsetY
+        pressLocation.x += fingerOffsetX
+        pressLocation.y += fingerOffsetY
+        
+        // Get a map coordinate form the press location
         let coordinateInMap = mapView!.convert(pressLocation, toCoordinateFrom: mapView)
         
+        // Check whether a new annotation needs to be added
+        // or an existing one needs to be updated
         if (newlyAddedAnnotation.title == nil) {
             newlyAddedAnnotation.coordinate = coordinateInMap
             newlyAddedAnnotation.title = "New Site"
@@ -320,6 +349,8 @@ class MapViewController: UIViewController,
             mapView.addAnnotation(newlyAddedAnnotation)
         }
         else {
+            // Simply adjusting the coordinate doesn't update the map at all
+            // Thus, we remove the annotation and add it again
             mapView.removeAnnotation(newlyAddedAnnotation)
             newlyAddedAnnotation.coordinate = coordinateInMap
             mapView.addAnnotation(newlyAddedAnnotation)
@@ -362,7 +393,7 @@ class MapViewController: UIViewController,
             // Select the annotation that matches the selected location's site ID
             for siteAnnotation in siteAnnotationList {
                 if siteAnnotation.id == existingSiteID {
-                    centerMapOnLocation(location: siteAnnotation.coordinate)
+                    mapView.setCenter(siteAnnotation.coordinate, animated: true)
                     mapView.selectAnnotation(siteAnnotation, animated: true)
                     navigationItem.title = siteAnnotation.id
                     
@@ -373,8 +404,25 @@ class MapViewController: UIViewController,
         }
         // If we're online, center the map around the user's location
         else if Reachability.isConnectedToNetwork() {
-            centerMapOnLocation(location: locationManager.location!.coordinate)
+            mapView.setCenter(locationManager.location!.coordinate, animated: true)
         }
+    }
+    
+    private func removeNewlyAddedSite() {
+        // Check if the annotation was added to the map
+        if newlyAddedAnnotation.title == nil {
+            return;
+        }
+        
+        // Remove the annotation from the map view and
+        mapView.removeAnnotation(newlyAddedAnnotation)
+        if let index = siteAnnotationList.index(of: newlyAddedAnnotation) {
+            siteAnnotationList.remove(at: index)
+        }
+        
+        // Reset the annotation
+        newlyAddedAnnotation.coordinate = CLLocationCoordinate2D()
+        newlyAddedAnnotation.title = nil
     }
     
     //MARK: Site Fetch Methods
@@ -411,11 +459,6 @@ class MapViewController: UIViewController,
     }
     
     //MARK: Map Manipulation Methods
-    
-    private func centerMapOnLocation(location: CLLocationCoordinate2D) {
-        let coordinateRegion = MKCoordinateRegionMake(location, MKCoordinateSpanMake(maxMapZoomLongitude * 0.25, maxMapZoomLongitude * 0.25))
-        mapView.setRegion(coordinateRegion, animated: true)
-    }
     
     private func updateWindow(mapRegionCenter: CLLocationCoordinate2D, minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {
         lastRegionCenter = mapRegionCenter
