@@ -56,6 +56,7 @@ class MapViewController: UIViewController,
     var lastRegionCenter: CLLocationCoordinate2D = CLLocationCoordinate2D()
     var selectedSiteInitialized: Bool = false
     var hasUserPannedTheMap: Bool = false
+    var newlyAddedAnnotation: SiteAnnotation = SiteAnnotation()
     
     // Site fetching
     var hasFetchedInitially: Bool = false
@@ -75,6 +76,9 @@ class MapViewController: UIViewController,
         super.viewDidLoad()
 
         mapView.delegate = self
+        
+        let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
+        self.view!.addGestureRecognizer(gestureRecognizer)
         
         deltaLatLong = getDeltaLatLong(rangeInKM: siteFetchWindowSize)
         
@@ -163,7 +167,8 @@ class MapViewController: UIViewController,
         }
         
         // Check if the site annotation matches with the selected location
-        if annotation.id == existingSiteID {
+        if annotation.id.isEmpty == false &&
+            annotation.id == existingSiteID {
             view.pinTintColor = UIColor.yellow
         }
         else {
@@ -297,6 +302,29 @@ class MapViewController: UIViewController,
     }
     
     //MARK: Site Plotting Methods
+    
+    @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
+        
+        let thumbOffsetX: CGFloat = -10
+        let thumbOffsetY: CGFloat = -125
+        var pressLocation = sender.location(in: self.view!)
+        pressLocation.x += thumbOffsetX
+        pressLocation.y += thumbOffsetY
+        let coordinateInMap = mapView!.convert(pressLocation, toCoordinateFrom: mapView)
+        
+        if (newlyAddedAnnotation.title == nil) {
+            newlyAddedAnnotation.coordinate = coordinateInMap
+            newlyAddedAnnotation.title = "New Site"
+            
+            siteAnnotationList.append(newlyAddedAnnotation)
+            mapView.addAnnotation(newlyAddedAnnotation)
+        }
+        else {
+            mapView.removeAnnotation(newlyAddedAnnotation)
+            newlyAddedAnnotation.coordinate = coordinateInMap
+            mapView.addAnnotation(newlyAddedAnnotation)
+        }
+    }
     
     private func plotSavedSites() {
         for savedProject in DataManager.shared.projects {

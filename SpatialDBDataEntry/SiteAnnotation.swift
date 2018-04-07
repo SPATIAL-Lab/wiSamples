@@ -30,6 +30,10 @@ MKAnnotation {
     
     //MARK: Initialization
     
+    override init() {
+        
+    }
+    
     init(id: String, name: String, coordinate: CLLocationCoordinate2D, elevation: Double, address: String, city: String, stateOrProvince: String, country: String, comments: String) {
         self.id = id
         self.name = name
