@@ -412,7 +412,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="oev-4I-kT3">
-                                <rect key="frame" x="16" y="84" width="343" height="421.5"/>
+                                <rect key="frame" x="16" y="84" width="343" height="521.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sample ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ICK-Nz-ySh">
                                         <rect key="frame" x="0.0" y="0.0" width="78" height="20.5"/>
@@ -433,21 +433,21 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7iC-P2-5XN">
-                                        <rect key="frame" x="0.0" y="101" width="343" height="100"/>
+                                        <rect key="frame" x="0.0" y="101" width="343" height="150"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="bqg-Mj-csQ"/>
+                                            <constraint firstAttribute="height" constant="150" id="bqg-Mj-csQ"/>
                                         </constraints>
                                     </pickerView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Collection Date &amp; Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6a8-Ew-5re">
-                                        <rect key="frame" x="0.0" y="211" width="175.5" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="261" width="175.5" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="10" translatesAutoresizingMaskIntoConstraints="NO" id="6Le-5J-reb">
-                                        <rect key="frame" x="0.0" y="241.5" width="343" height="100"/>
+                                        <rect key="frame" x="0.0" y="291.5" width="343" height="150"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="qd4-Qf-sLl"/>
+                                            <constraint firstAttribute="height" constant="150" id="qd4-Qf-sLl"/>
                                         </constraints>
                                         <date key="date" timeIntervalSinceReferenceDate="529634141.47707403">
                                             <!--2017-10-14 00:35:41 +0000-->
@@ -457,14 +457,14 @@
                                         </connections>
                                     </datePicker>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="31z-Kg-TOd">
-                                        <rect key="frame" x="0.0" y="351.5" width="86" height="30"/>
+                                        <rect key="frame" x="0.0" y="451.5" width="86" height="30"/>
                                         <state key="normal" title="Set Location"/>
                                         <connections>
                                             <segue destination="IEp-1J-acU" kind="presentation" identifier="ShowMapView" id="2p4-BJ-1ec"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="79g-0p-sRm">
-                                        <rect key="frame" x="0.0" y="391.5" width="48" height="30"/>
+                                        <rect key="frame" x="0.0" y="491.5" width="48" height="30"/>
                                         <state key="normal" title="More..."/>
                                         <connections>
                                             <segue destination="AkH-HF-yfd" kind="presentation" identifier="ShowSampleMiscData" id="ShG-l4-kW6"/>
@@ -570,10 +570,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JpG-co-QPa">
-                                <rect key="frame" x="0.0" y="64" width="375" height="550"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="600"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vVU-9x-Vck">
-                                        <rect key="frame" x="20" y="473" width="320" height="30"/>
+                                        <rect key="frame" x="20" y="523" width="320" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
@@ -615,15 +615,15 @@
                                         <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Comments" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dea-f3-YPQ">
-                                        <rect key="frame" x="20" y="442" width="84" height="21"/>
+                                        <rect key="frame" x="20" y="492" width="84" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="10" translatesAutoresizingMaskIntoConstraints="NO" id="wmu-fo-Ylg">
-                                        <rect key="frame" x="20" y="332" width="320" height="100"/>
+                                        <rect key="frame" x="20" y="332" width="320" height="150"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="zqY-rA-ACJ"/>
+                                            <constraint firstAttribute="height" constant="150" id="zqY-rA-ACJ"/>
                                         </constraints>
                                         <date key="date" timeIntervalSinceReferenceDate="530843053.790474">
                                             <!--2017-10-28 00:24:13 +0000-->
@@ -663,7 +663,7 @@
                                     <constraint firstItem="hZI-M1-oNW" firstAttribute="top" secondItem="h3B-zX-dtE" secondAttribute="bottom" constant="10" id="ocC-4O-Iys"/>
                                     <constraint firstItem="dea-f3-YPQ" firstAttribute="top" secondItem="wmu-fo-Ylg" secondAttribute="bottom" constant="10" id="pqb-NI-jFc"/>
                                     <constraint firstItem="nCp-Gs-7az" firstAttribute="leading" secondItem="hUL-Ne-kZg" secondAttribute="leading" id="snU-ox-Cpk"/>
-                                    <constraint firstAttribute="height" constant="550" id="uty-6c-isV"/>
+                                    <constraint firstAttribute="height" constant="600" id="uty-6c-isV"/>
                                     <constraint firstItem="CFr-hJ-Wdu" firstAttribute="top" secondItem="38B-S4-hXx" secondAttribute="bottom" constant="10" id="wdh-XA-ce0"/>
                                     <constraint firstItem="38B-S4-hXx" firstAttribute="leading" secondItem="CFr-hJ-Wdu" secondAttribute="leading" id="x7x-7v-s4h"/>
                                     <constraint firstItem="Fmy-Y7-ZXf" firstAttribute="top" secondItem="JpG-co-QPa" secondAttribute="top" constant="20" id="yxG-Or-YQQ"/>

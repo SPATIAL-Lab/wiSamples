@@ -57,6 +57,7 @@ class MapViewController: UIViewController,
     var selectedSiteInitialized: Bool = false
     var hasUserPannedTheMap: Bool = false
     var newlyAddedAnnotation: SiteAnnotation = SiteAnnotation()
+    var isZoomCorrectionEnabled: Bool = false
     
     // Site fetching
     var hasFetchedInitially: Bool = false
@@ -100,6 +101,10 @@ class MapViewController: UIViewController,
             
             // Fetch sites for the current window
             fetchSites(minLatLong: minLatLong, maxLatLong: maxLatLong)
+            
+            // Set the map's initial zoom region
+            let initialRegion = MKCoordinateRegionMake(existingSiteLocation, MKCoordinateSpanMake(maxMapZoomLongitude * 0.9, maxMapZoomLongitude * 0.9))
+            mapView.setRegion(initialRegion, animated: true)
         }
         
         // Initialize location
@@ -146,6 +151,10 @@ class MapViewController: UIViewController,
             
             // Fetch sites for the current window
             fetchSites(minLatLong: minLatLong, maxLatLong: maxLatLong)
+            
+            // Set the map's initial zoom region
+            let initialRegion = MKCoordinateRegionMake(existingSiteLocation, MKCoordinateSpanMake(maxMapZoomLongitude * 0.9, maxMapZoomLongitude * 0.9))
+            mapView.setRegion(initialRegion, animated: true)
         }
     }
     
@@ -232,7 +241,7 @@ class MapViewController: UIViewController,
         hasUserPannedTheMap = true
         
         // Check if the map has been zoomed out beyond the maximum
-        if Double(mapView.region.span.longitudeDelta) > maxMapZoomLongitude {
+        if isZoomCorrectionEnabled && Double(mapView.region.span.longitudeDelta) > maxMapZoomLongitude {
             let correctedCenter = existingSiteID.isEmpty ? lastUpdatedLocation.coordinate : existingSiteLocation
             
             // Zoom back in to the user's current location
