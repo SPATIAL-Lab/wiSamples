@@ -310,7 +310,8 @@ class MapViewController: UIViewController,
             }
             else {
                 // Use the annotation that the user added
-                siteViewController.newLocation = CLLocation(latitude: newlyAddedAnnotation.coordinate.latitude, longitude: newlyAddedAnnotation.coordinate.longitude)
+                let newLocationCoordinate = CLLocationCoordinate2D(latitude: newlyAddedAnnotation.coordinate.latitude, longitude: newlyAddedAnnotation.coordinate.longitude)
+                siteViewController.newLocation = CLLocation(coordinate: newLocationCoordinate, altitude: -1, horizontalAccuracy: kCLLocationAccuracyKilometer, verticalAccuracy: kCLLocationAccuracyKilometer, timestamp: Date())
             }
         }
     }
