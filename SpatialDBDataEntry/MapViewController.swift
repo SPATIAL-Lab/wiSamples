@@ -153,7 +153,7 @@ class MapViewController: UIViewController,
             fetchSites(minLatLong: minLatLong, maxLatLong: maxLatLong)
             
             // Set the map's initial zoom region
-            let initialRegion = MKCoordinateRegionMake(existingSiteLocation, MKCoordinateSpanMake(maxMapZoomLongitude * 0.9, maxMapZoomLongitude * 0.9))
+            let initialRegion = MKCoordinateRegionMake(lastUpdatedLocation.coordinate, MKCoordinateSpanMake(maxMapZoomLongitude * 0.9, maxMapZoomLongitude * 0.9))
             mapView.setRegion(initialRegion, animated: true)
         }
     }
