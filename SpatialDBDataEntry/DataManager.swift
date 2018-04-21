@@ -18,7 +18,6 @@ class DataManager: NSObject
     static let shared: DataManager = DataManager()
     
     //MARK: Data
-    var enableSampleProjects: Bool = false
     var projects: [Project] = [Project]()
     var cachedSites: [Site] = [Site]()
     private var isSavingCachedSites: Bool = false
@@ -196,7 +195,7 @@ class DataManager: NSObject
         // Create containers
         var projectsString = "Project_ID,Contact_Name,Contact_Email,Citation,URL,Project_Name,Proprietary\n"
         var sitesString = "Site_ID,Site_Name,Latitude,Longitude,Elevation_mabsl,Address,City,State_or_Province,Country,Site_Comments\n"
-        var samplesString = "Sample_ID,Sample_ID_2,Site_ID,Type,Start_Date,Start_Time,Collection_Date,Collection_Time,Sample_Volume_ml,Collector_type,Phase,Depth_meters,Sample_Source,Sample_Ignore,Sample_Comments,Project_ID\n"
+        var samplesString = "Sample_ID,Sample_ID_2,Site_ID,Type,Start_Date_Time,Start_Time_Zone,Collection_Date_Time,Collection_Time_Zone,Sample_Volume_ml,Collector_type,Phase,Depth_meters,Sample_Source,Sample_Ignore,Sample_Comments,Project_ID\n"
         
         // Export each project
         for project in selectedProjects {
@@ -227,19 +226,25 @@ class DataManager: NSObject
     }
     
     private func exportSingle(sample: Sample, project: Project) -> String {
-        var startDateString: String = ""
-        var startTimeString: String = ""
+        var startDateTimeString: String = ""
+        var startTimeZoneString: String = ""
         if sample.startDateTime.compare(Date.distantFuture) == ComparisonResult.orderedAscending {
-            startDateString = DateFormatter.localizedString(from: sample.startDateTime, dateStyle: .short, timeStyle: .none)
-            startTimeString = DateFormatter.localizedString(from: sample.startDateTime, dateStyle: .none, timeStyle: .short)
+            startDateTimeString = getDateTimeString(dateTime: sample.startDateTime)
+            startTimeZoneString = sample.startDateTimeZone.abbreviation()!
         }
         
-        let collectionDateString: String = DateFormatter.localizedString(from: sample.dateTime, dateStyle: .short, timeStyle: .none)
-        let collectionTimeString: String = DateFormatter.localizedString(from: sample.dateTime, dateStyle: .none, timeStyle: .short)
+        let collectionDateTimeString: String = getDateTimeString(dateTime: sample.dateTime)
+        let collectionTimeZoneString: String = sample.dateTimeZone.abbreviation()!
         let depthString: String = sample.depth < 0 ? "" : String(sample.depth)
         let volumeString: String = sample.volume < 0 ? "" : String(sample.volume)
         
-        return "\(sample.id),,\(sample.siteID),\(sample.type.description),\(startDateString),\(startTimeString),\(collectionDateString),\(collectionTimeString),\(volumeString),,\(sample.phase.description),\(depthString),,,\(sample.comments),\(project.name)\n"
+        return "\(sample.id),,\(sample.siteID),\(sample.type.description),\(startDateTimeString),\(startTimeZoneString),\(collectionDateTimeString),\(collectionTimeZoneString),\(volumeString),,\(sample.phase.description),\(depthString),,,\(sample.comments),\(project.name)\n"
+    }
+    
+    private func getDateTimeString(dateTime: Date) -> String {
+        let dateString: String = DateFormatter.localizedString(from: dateTime, dateStyle: .short, timeStyle: .none)
+        let timeString: String = DateFormatter.localizedString(from: dateTime, dateStyle: .none, timeStyle: .short)
+        return String(dateString + " " + timeString)
     }
     
     //MARK: Data saving and loading
@@ -256,12 +261,6 @@ class DataManager: NSObject
     }
     
     func loadProjects() {
-        if enableSampleProjects {
-            deleteSavedProjects()
-            loadSampleProjects()
-            return
-        }
-        
         if let savedProjects = NSKeyedUnarchiver.unarchiveObject(withFile: DataManager.projectsArchiveURL.path) as? [Project] {
             projects = savedProjects
             print("Projects loaded successfully.")
@@ -313,39 +312,6 @@ class DataManager: NSObject
         }
         
         isLoadingCachedSites = false
-    }
-    
-    private func loadSampleProjects() {
-        let location = CLLocationCoordinate2DMake(CLLocationDegrees(40.759341), CLLocationDegrees(-111.861879))
-        
-        guard let site1 = Site(id: "TP1-JD-SITE-01", name: "Site_01", location: location) else {
-            fatalError("Unable to instantiate site1")
-        }
-        
-        let date = Date()
-        guard let sample1 = Sample(id: "TP1-JD-SAMPLE-01", siteID: "TP1-JD-SITE-01", type: SampleType.lake, dateTime: date, startDateTime: date, siteLocation: location) else {
-            fatalError("Unable to instantiate sample1")
-        }
-        
-        guard let project1 = Project(name: "TestProject_01", contactName: "John Doe", contactEmail: "", sampleIDPrefix: "TP1-JD-", sites: [site1], samples: [sample1]) else {
-            fatalError("Unable to instantiate project1")
-        }
-        
-        projects += [project1]
-        
-        print("Sample projects loaded successfully.")
-    }
-    
-    private func deleteSavedProjects() {
-        let fileManager = FileManager.default
-        
-        do {
-            try fileManager.removeItem(atPath: DataManager.projectsArchiveURL.path)
-            print("Saved projects deleted successfully.")
-        }
-        catch {
-            print("Failed to delete failed projects!")
-        }
     }
 
 }

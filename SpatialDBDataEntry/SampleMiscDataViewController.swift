@@ -30,6 +30,7 @@ UIPickerViewDataSource
     var volume: Int = -1
     var phase: PhaseType = PhaseType.none
     var startCollectionDate: Date = Date.distantFuture
+    var startCollectionTimeZone: TimeZone? = nil
     var comments: String = ""
     
     override func viewDidLoad() {
@@ -151,6 +152,7 @@ UIPickerViewDataSource
     
     @IBAction func startCollectionDateSelected(_ sender: UIDatePicker) {
         startCollectionDate = sender.date
+        startCollectionTimeZone = TimeZone.current
     }
     
     //MARK: Private Methods

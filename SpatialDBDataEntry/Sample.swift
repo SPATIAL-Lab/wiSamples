@@ -84,7 +84,9 @@ class Sample: NSObject, NSCoding {
     var siteID: String
     var type: SampleType
     var dateTime: Date
+    var dateTimeZone: TimeZone
     var startDateTime: Date
+    var startDateTimeZone: TimeZone
     var depth: Int = -1
     var volume: Int = -1
     var phase: PhaseType = PhaseType.none
@@ -98,7 +100,9 @@ class Sample: NSObject, NSCoding {
         static let siteID = "siteID"
         static let type = "sampleType"
         static let dateTime = "dateTime"
+        static let dateTimeZone = "dateTimeZone"
         static let startDateTime = "startDateTime"
+        static let startDateTimeZone = "startDateTimeZone"
         static let depth = "depth"
         static let volume = "volume"
         static let phase = "phase"
@@ -109,7 +113,14 @@ class Sample: NSObject, NSCoding {
     
     //MARK: Initialization
     
-    init?(id: String, siteID: String, type: SampleType, dateTime: Date, startDateTime: Date, siteLocation: CLLocationCoordinate2D) {
+    init?(id: String,
+          siteID: String,
+          type: SampleType,
+          dateTime: Date,
+          dateTimeZone: TimeZone,
+          startDateTime: Date,
+          startDateTimeZone: TimeZone,
+          siteLocation: CLLocationCoordinate2D) {
         guard !id.isEmpty else {
             return nil
         }
@@ -118,7 +129,9 @@ class Sample: NSObject, NSCoding {
         self.siteID = siteID
         self.type = type
         self.dateTime = dateTime
+        self.dateTimeZone = dateTimeZone
         self.startDateTime = startDateTime
+        self.startDateTimeZone = startDateTimeZone
         self.siteLocation = siteLocation
     }
     
@@ -129,7 +142,9 @@ class Sample: NSObject, NSCoding {
         aCoder.encode(siteID, forKey: PropertyKeys.siteID)
         aCoder.encode(type.rawValue, forKey: PropertyKeys.type)
         aCoder.encode(dateTime, forKey: PropertyKeys.dateTime)
+        aCoder.encode(dateTimeZone, forKey: PropertyKeys.dateTimeZone)
         aCoder.encode(startDateTime, forKey: PropertyKeys.startDateTime)
+        aCoder.encode(startDateTimeZone, forKey: PropertyKeys.startDateTimeZone)
         aCoder.encode(depth, forKey: PropertyKeys.depth)
         aCoder.encode(volume, forKey: PropertyKeys.volume)
         aCoder.encode(phase.rawValue, forKey: PropertyKeys.phase)
@@ -147,7 +162,9 @@ class Sample: NSObject, NSCoding {
         let siteID = aDecoder.decodeObject(forKey: PropertyKeys.siteID) as? String
         let type = SampleType(rawValue: aDecoder.decodeInteger(forKey: PropertyKeys.type))!
         let dateTime = aDecoder.decodeObject(forKey: PropertyKeys.dateTime) as? Date
+        let dateTimeZone = aDecoder.decodeObject(forKey: PropertyKeys.dateTimeZone) as? TimeZone
         let startDateTime = aDecoder.decodeObject(forKey: PropertyKeys.startDateTime) as? Date
+        let startDateTimeZone = aDecoder.decodeObject(forKey: PropertyKeys.startDateTimeZone) as? TimeZone
         let depth = aDecoder.decodeInteger(forKey: PropertyKeys.depth)
         let volume = aDecoder.decodeInteger(forKey: PropertyKeys.volume)
         let phase = PhaseType(rawValue: aDecoder.decodeInteger(forKey: PropertyKeys.phase))!
@@ -156,7 +173,14 @@ class Sample: NSObject, NSCoding {
         let longitude = aDecoder.decodeDouble(forKey: PropertyKeys.siteLongitude)
         let siteLocation = CLLocationCoordinate2DMake(CLLocationDegrees(latitude), CLLocationDegrees(longitude))
         
-        self.init(id: id, siteID: siteID!, type: type, dateTime: dateTime!, startDateTime: startDateTime!, siteLocation: siteLocation)
+        self.init(id: id,
+                  siteID: siteID!,
+                  type: type,
+                  dateTime: dateTime!,
+                  dateTimeZone: dateTimeZone!,
+                  startDateTime: startDateTime!,
+                  startDateTimeZone: startDateTimeZone!,
+                  siteLocation: siteLocation)
         
         self.depth = depth
         self.volume = volume

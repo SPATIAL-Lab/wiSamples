@@ -35,12 +35,14 @@ UIPickerViewDataSource {
     var type: SampleType = SampleType.ground
     var siteID: String = ""
     var collectionDate: Date = Date()
+    var collectionTimeZone: TimeZone? = nil
     
     // Sample misc properties
     var depth: Int = -1
     var volume: Int = -1
     var phase: PhaseType = PhaseType.none
     var startCollectionDate: Date = Date.distantFuture
+    var startCollectionTimeZone: TimeZone? = nil
     var comments: String = ""
     var siteLocation: CLLocationCoordinate2D = CLLocationCoordinate2D()
     
@@ -62,10 +64,12 @@ UIPickerViewDataSource {
             type = existingSample.type
             siteID = existingSample.siteID
             collectionDate = existingSample.dateTime
+            collectionTimeZone = existingSample.dateTimeZone
             depth = existingSample.depth
             volume = existingSample.volume
             phase = existingSample.phase
             startCollectionDate = existingSample.startDateTime
+            startCollectionTimeZone = existingSample.startDateTimeZone
             comments = existingSample.comments
             siteLocation = existingSample.siteLocation
             
@@ -160,6 +164,7 @@ UIPickerViewDataSource {
             sampleMiscDataViewController.volume = volume
             sampleMiscDataViewController.phase = phase
             sampleMiscDataViewController.startCollectionDate = startCollectionDate
+            sampleMiscDataViewController.startCollectionTimeZone = startCollectionTimeZone
             sampleMiscDataViewController.comments = comments
             
         default:
@@ -171,8 +176,16 @@ UIPickerViewDataSource {
             // Extract properties for a new sample.
             let sampleID = sampleIDTextField.text ?? ""
             
+            // Ensure valid time zones
+            if collectionTimeZone == nil {
+                collectionTimeZone = TimeZone.current
+            }
+            if startCollectionTimeZone == nil {
+                startCollectionTimeZone = TimeZone.current
+            }
+            
             // Create a new sample
-            sample = Sample(id: sampleID, siteID: siteID, type: type, dateTime: collectionDate, startDateTime: startCollectionDate, siteLocation: siteLocation)
+            sample = Sample(id: sampleID, siteID: siteID, type: type, dateTime: collectionDate, dateTimeZone: collectionTimeZone!, startDateTime: startCollectionDate, startDateTimeZone: startCollectionTimeZone!, siteLocation: siteLocation)
             
             sample!.depth = depth
             sample!.volume = volume
@@ -189,6 +202,7 @@ UIPickerViewDataSource {
             volume = sampleMiscDataViewController.volume
             phase = sampleMiscDataViewController.phase
             startCollectionDate = sampleMiscDataViewController.startCollectionDate
+            startCollectionTimeZone = sampleMiscDataViewController.startCollectionTimeZone
             comments = sampleMiscDataViewController.comments
         }
         else if let mapViewController = sender.source as? MapViewController {
@@ -210,6 +224,7 @@ UIPickerViewDataSource {
     
     @IBAction func collectionDateSelected(_ sender: UIDatePicker) {
         collectionDate = sender.date
+        collectionTimeZone = TimeZone.current
     }
     
 }
