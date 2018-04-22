@@ -47,6 +47,29 @@ class ExportProjectsTableViewController: UITableViewController, MFMailComposeVie
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var selectedProjects: [Project] = []
+        
+        selectedProjects.append(DataManager.shared.projects[indexPath.row])
+        
+        // Ask the data manager to create CSVs and email them
+        let (projectsString, sitesString, samplesString) = DataManager.shared.exportSelectedProjects(selectedProjects: selectedProjects)
+        
+        if MFMailComposeViewController.canSendMail() {
+            let emailController = MFMailComposeViewController()
+            emailController.mailComposeDelegate = self
+            emailController.setToRecipients([])
+            emailController.setSubject("Project Export")
+            emailController.setMessageBody("Please find attached.", isHTML: false)
+            
+            emailController.addAttachmentData(projectsString.data(using: .utf8)!, mimeType: "text/csv", fileName: "Projects.csv")
+            emailController.addAttachmentData(sitesString.data(using: .utf8)!, mimeType: "text/csv", fileName: "Sites.csv")
+            emailController.addAttachmentData(samplesString.data(using: .utf8)!, mimeType: "text/csv", fileName: "Samples.csv")
+            
+            present(emailController, animated: true, completion: nil)
+        }
+    }
+    
     //MARK: MailMFMailComposeViewControllerDelegate
     
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
@@ -61,52 +84,35 @@ class ExportProjectsTableViewController: UITableViewController, MFMailComposeVie
     
     //MARK: Actions
     
-    @IBAction func cancelSelectingProjects(_ sender: UIBarButtonItem) {
+    @IBAction func doneExportingProjects(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func doneSelectingProjects(_ sender: UIBarButtonItem) {
-        // Get selected projects to a list
-        let selectedProjects: [Project] = getSelectedProjects()
-        
-        if selectedProjects.isEmpty {
-            dismiss(animated: true, completion: nil)
-            return
-        }
-        
-        // Ask the data manager to create CSVs and email them
-        let (projectsString, sitesString, samplesString) = DataManager.shared.exportSelectedProjects(selectedProjects: selectedProjects)
-        
-        if MFMailComposeViewController.canSendMail() {
-            let emailController = MFMailComposeViewController()
-            emailController.mailComposeDelegate = self
-            emailController.setToRecipients([])
-            emailController.setSubject("Projects Export")
-            emailController.setMessageBody("Please find attached.", isHTML: false)
-            
-            emailController.addAttachmentData(projectsString.data(using: .utf8)!, mimeType: "text/csv", fileName: "Projects.csv")
-            emailController.addAttachmentData(sitesString.data(using: .utf8)!, mimeType: "text/csv", fileName: "Sites.csv")
-            emailController.addAttachmentData(samplesString.data(using: .utf8)!, mimeType: "text/csv", fileName: "Samples.csv")
-            
-            present(emailController, animated: true, completion: nil)
-        }
-    }
-
-    //MARK: Methods
-    
-    private func getSelectedProjects() -> [Project] {
-        var selectedProjects: [Project] = []
-        
-        for index in 0...DataManager.shared.projects.count {
-            let indexPath = IndexPath(row: index, section: 0)
-            if let exportProjectCell = tableView!.cellForRow(at: indexPath) as? ExportProjectsTableViewCell {
-                if exportProjectCell.selectedSwitch.isOn {
-                    selectedProjects.append(DataManager.shared.projects[index])
-                }
-            }
-        }
-        
-        return selectedProjects
-    }
+//    @IBAction func doneSelectingProjects(_ sender: UIBarButtonItem) {
+//        // Get selected projects to a list
+//        let selectedProjects: [Project] = getSelectedProjects()
+//        
+//        if selectedProjects.isEmpty {
+//            dismiss(animated: true, completion: nil)
+//            return
+//        }
+//        
+//        // Ask the data manager to create CSVs and email them
+//        let (projectsString, sitesString, samplesString) = DataManager.shared.exportSelectedProjects(selectedProjects: selectedProjects)
+//        
+//        if MFMailComposeViewController.canSendMail() {
+//            let emailController = MFMailComposeViewController()
+//            emailController.mailComposeDelegate = self
+//            emailController.setToRecipients([])
+//            emailController.setSubject("Projects Export")
+//            emailController.setMessageBody("Please find attached.", isHTML: false)
+//            
+//            emailController.addAttachmentData(projectsString.data(using: .utf8)!, mimeType: "text/csv", fileName: "Projects.csv")
+//            emailController.addAttachmentData(sitesString.data(using: .utf8)!, mimeType: "text/csv", fileName: "Sites.csv")
+//            emailController.addAttachmentData(samplesString.data(using: .utf8)!, mimeType: "text/csv", fileName: "Samples.csv")
+//            
+//            present(emailController, animated: true, completion: nil)
+//        }
+//    }
 
 }

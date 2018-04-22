@@ -228,7 +228,7 @@
         <scene sceneID="Gym-Hc-B6n">
             <objects>
                 <tableViewController id="5Vr-s1-tts" customClass="ExportProjectsTableViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="75" sectionHeaderHeight="28" sectionFooterHeight="28" id="dsc-LQ-Tk9">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="75" sectionHeaderHeight="28" sectionFooterHeight="28" id="dsc-LQ-Tk9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -237,20 +237,16 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="75"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WdQ-Ut-0hX" id="bDE-Bw-SvR">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="75"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="74"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rxb-T0-MEz">
-                                            <rect key="frame" x="8" y="27" width="302" height="21"/>
+                                            <rect key="frame" x="8" y="27" width="359" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="lh7-Bw-7Lx">
-                                            <rect key="frame" x="318" y="22" width="51" height="31"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        </switch>
                                     </subviews>
                                 </tableViewCellContentView>
                                 <accessibility key="accessibilityConfiguration">
@@ -258,7 +254,6 @@
                                 </accessibility>
                                 <connections>
                                     <outlet property="projectNameLabel" destination="Rxb-T0-MEz" id="lZw-aF-QaX"/>
-                                    <outlet property="selectedSwitch" destination="lh7-Bw-7Lx" id="5PU-cu-Ghb"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -268,14 +263,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Select Projects to Export" id="zB3-d3-3tw">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Unb-sV-Y9G">
+                        <barButtonItem key="leftBarButtonItem" systemItem="done" id="Unb-sV-Y9G">
                             <connections>
-                                <action selector="cancelSelectingProjects:" destination="5Vr-s1-tts" id="Qa4-D1-nnX"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="od3-qZ-uCk">
-                            <connections>
-                                <action selector="doneSelectingProjects:" destination="5Vr-s1-tts" id="zcw-uS-bgF"/>
+                                <action selector="doneExportingProjects:" destination="5Vr-s1-tts" id="jkN-OK-OCe"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
