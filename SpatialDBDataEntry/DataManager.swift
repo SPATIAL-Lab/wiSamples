@@ -235,8 +235,8 @@ class DataManager: NSObject
         
         let collectionDateTimeString: String = getDateTimeString(dateTime: sample.dateTime)
         let collectionTimeZoneString: String = sample.dateTimeZone.abbreviation()!
-        let depthString: String = sample.depth < 0 ? "" : String(sample.depth)
-        let volumeString: String = sample.volume < 0 ? "" : String(sample.volume)
+        let depthString: String = sample.depth == 0 ? "" : String(sample.depth)
+        let volumeString: String = sample.volume == 0 ? "" : String(sample.volume)
         
         return "\(sample.id),,\(sample.siteID),\(sample.type.description),\(startDateTimeString),\(startTimeZoneString),\(collectionDateTimeString),\(collectionTimeZoneString),\(volumeString),,\(sample.phase.description),\(depthString),,,\(sample.comments),\(project.name)\n"
     }
