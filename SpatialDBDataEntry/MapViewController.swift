@@ -50,8 +50,9 @@ class MapViewController: UIViewController,
     var projectIndex: Int = -1
     
     // MapView properties
+    let delayBeforeInitialZoom = 1
     var lastUpdatedLocation: CLLocation = CLLocation()
-    let maxMapZoomLongitude: Double = 0.05
+    let maxMapZoomLongitude: Double = 0.045
     var siteAnnotationList: [SiteAnnotation] = []
     var lastRegionCenter: CLLocationCoordinate2D = CLLocationCoordinate2D()
     var selectedSiteInitialized: Bool = false
@@ -92,19 +93,9 @@ class MapViewController: UIViewController,
         // Check if an existing site has been selected
         if !existingSiteID.isEmpty {
             hasFetchedInitially = true
-            
-            // Get a window around the selected site's location
-            let (minLatLong, maxLatLong) = getMinMaxLatLong(location: existingSiteLocation)
-            
-            // Update the window dimensions
-            updateWindow(mapRegionCenter: existingSiteLocation, minLatLong: minLatLong, maxLatLong: maxLatLong)
-            
-            // Fetch sites for the current window
-            fetchSites(minLatLong: minLatLong, maxLatLong: maxLatLong)
-            
-            // Set the map's initial zoom region
-            let initialRegion = MKCoordinateRegionMake(existingSiteLocation, MKCoordinateSpanMake(maxMapZoomLongitude * 0.9, maxMapZoomLongitude * 0.9))
-            mapView.setRegion(initialRegion, animated: true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delayBeforeInitialZoom)) {
+                self.zoomInMapAfterDelay(locationCoordinate: self.existingSiteLocation)
+            }
         }
         
         // Initialize location
@@ -141,20 +132,11 @@ class MapViewController: UIViewController,
         // Fetch initial sites only once
         // Fetch initial sites only if the updated location has stabilized
         if !hasFetchedInitially && distanceFromLastUpdatedLocation.isLess(than: minLocationErrorTolerance) {
+            
             hasFetchedInitially = true
-            
-            // Get a window around the user's current location
-            let (minLatLong, maxLatLong) = getMinMaxLatLong(location: lastUpdatedLocation.coordinate)
-            
-            // Update the window dimensions
-            updateWindow(mapRegionCenter: lastUpdatedLocation.coordinate, minLatLong: minLatLong, maxLatLong: maxLatLong)
-            
-            // Fetch sites for the current window
-            fetchSites(minLatLong: minLatLong, maxLatLong: maxLatLong)
-            
-            // Set the map's initial zoom region
-            let initialRegion = MKCoordinateRegionMake(lastUpdatedLocation.coordinate, MKCoordinateSpanMake(maxMapZoomLongitude * 0.9, maxMapZoomLongitude * 0.9))
-            mapView.setRegion(initialRegion, animated: true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delayBeforeInitialZoom)) {
+                self.zoomInMapAfterDelay(locationCoordinate: self.lastUpdatedLocation.coordinate)
+            }
         }
     }
     
@@ -469,6 +451,21 @@ class MapViewController: UIViewController,
     }
     
     //MARK: Map Manipulation Methods
+    
+    private func zoomInMapAfterDelay(locationCoordinate: CLLocationCoordinate2D) {
+        // Get a window around the user's current location
+        let (minLatLong, maxLatLong) = getMinMaxLatLong(location: locationCoordinate)
+        
+        // Update the window dimensions
+        updateWindow(mapRegionCenter: locationCoordinate, minLatLong: minLatLong, maxLatLong: maxLatLong)
+        
+        // Fetch sites for the current window
+        fetchSites(minLatLong: minLatLong, maxLatLong: maxLatLong)
+        
+        // Set the map's initial zoom region
+        let initialRegion = MKCoordinateRegionMake(locationCoordinate, MKCoordinateSpanMake(maxMapZoomLongitude * 0.9, maxMapZoomLongitude * 0.9))
+        mapView.setRegion(initialRegion, animated: true)
+    }
     
     private func updateWindow(mapRegionCenter: CLLocationCoordinate2D, minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {
         lastRegionCenter = mapRegionCenter
