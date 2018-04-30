@@ -385,12 +385,9 @@ class MapViewController: UIViewController,
             // Select the annotation that matches the selected location's site ID
             for siteAnnotation in siteAnnotationList {
                 if siteAnnotation.id == existingSiteID {
-                    mapView.setCenter(siteAnnotation.coordinate, animated: true)
                     mapView.selectAnnotation(siteAnnotation, animated: true)
                     navigationItem.title = siteAnnotation.id
-                    
                     selectedSiteInitialized = true
-                    return
                 }
             }
         }
