@@ -394,10 +394,6 @@ class MapViewController: UIViewController,
                 }
             }
         }
-        // If we're online, center the map around the user's location
-        else if Reachability.isConnectedToNetwork() {
-            mapView.setCenter(locationManager.location!.coordinate, animated: true)
-        }
     }
     
     private func removeNewlyAddedSite() {
