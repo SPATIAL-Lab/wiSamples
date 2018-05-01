@@ -65,11 +65,11 @@ UIPickerViewDataSource
         volumeTextField.inputAccessoryView = toolbar
         
         // Check if editing an existing sample
-        if depth != -1 {
+        if depth != -9999 {
             depthTextField.text = String(depth)
         }
         
-        if volume != -1 {
+        if volume != -9999 {
             volumeTextField.text = String(volume)
         }
         
