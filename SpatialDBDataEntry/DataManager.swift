@@ -220,7 +220,7 @@ class DataManager: NSObject
     }
     
     private func exportSingle(site: Site, project: Project) -> String {
-        let elevationString: String = site.elevation < 0 ? "" : String(site.elevation)
+        let elevationString: String = site.elevation == -9999 ? "" : String(site.elevation)
         
         return "\(site.id),\(site.name),\(Double(site.location.latitude)),\(Double(site.location.longitude)),\(elevationString),\(site.address),\(site.city),\(site.stateOrProvince),\(site.country),\(site.comments)\n"
     }
@@ -232,8 +232,8 @@ class DataManager: NSObject
         }
         
         let collectionDateTimeString: String = getDateTimeString(dateTime: sample.dateTime)
-        let depthString: String = sample.depth == 0 ? "" : String(sample.depth)
-        let volumeString: String = sample.volume == 0 ? "" : String(sample.volume)
+        let depthString: String = sample.depth == -9999 ? "" : String(sample.depth)
+        let volumeString: String = sample.volume == -9999 ? "" : String(sample.volume)
         
         return "\(sample.id),,\(sample.siteID),\(sample.type.description),\(startDateTimeString),\(sample.startDateTimeZone.secondsFromGMT() / 3600),\(collectionDateTimeString),\(sample.dateTimeZone.secondsFromGMT() / 3600),\(volumeString),,\(sample.phase.description),\(depthString),,,\(sample.comments),\(project.name)\n"
     }

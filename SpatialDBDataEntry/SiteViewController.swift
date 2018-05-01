@@ -26,7 +26,7 @@ class SiteViewController: UIViewController, UITextFieldDelegate {
     // Site properties
     var generatedSiteID: String = ""
     var location: CLLocationCoordinate2D = CLLocationCoordinate2D()
-    var elevation: Double = -1
+    var elevation: Double = -9999
     var address: String = ""
     var city: String = ""
     var stateOrProvince: String = ""
