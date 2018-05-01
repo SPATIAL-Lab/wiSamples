@@ -87,7 +87,7 @@ class Sample: NSObject, NSCoding {
     var dateTimeZone: TimeZone
     var startDateTime: Date
     var startDateTimeZone: TimeZone
-    var depth: Int = -9999
+    var depth: Int = -999
     var volume: Int = -9999
     var phase: PhaseType = PhaseType.none
     var comments: String = ""

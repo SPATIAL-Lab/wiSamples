@@ -17,7 +17,7 @@ class Site: NSObject, NSCoding {
     var id: String
     var name: String
     var location: CLLocationCoordinate2D
-    var elevation: Double = -9999
+    var elevation: Double = -999
     var address: String = ""
     var city: String = ""
     var stateOrProvince: String = ""
