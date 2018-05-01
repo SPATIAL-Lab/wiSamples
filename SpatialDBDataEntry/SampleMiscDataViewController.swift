@@ -26,7 +26,7 @@ UIPickerViewDataSource
     @IBOutlet weak var saveButton: UIBarButtonItem!
     var toolbar: UIToolbar? = nil
 
-    var depth: Int = -999
+    var depth: Int = -9999
     var volume: Int = -9999
     var phase: PhaseType = PhaseType.none
     var startCollectionDate: Date = Date.distantFuture

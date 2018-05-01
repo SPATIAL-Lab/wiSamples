@@ -220,7 +220,7 @@ class DataManager: NSObject
     }
     
     private func exportSingle(site: Site, project: Project) -> String {
-        let elevationString: String = site.elevation == -999 ? "" : String(site.elevation)
+        let elevationString: String = site.elevation == -9999 ? "" : String(site.elevation)
         
         return "\(site.id),\(site.name),\(Double(site.location.latitude)),\(Double(site.location.longitude)),\(elevationString),\(site.address),\(site.city),\(site.stateOrProvince),\(site.country),\(site.comments)\n"
     }
