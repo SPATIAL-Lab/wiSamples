@@ -18,7 +18,7 @@ MKAnnotation {
     var id: String = ""
     var name: String = ""
     var coordinate: CLLocationCoordinate2D = CLLocationCoordinate2D()
-    var elevation: Double = -1
+    var elevation: Double = -9999
     var address: String = ""
     var city: String = ""
     var stateOrProvince: String = ""

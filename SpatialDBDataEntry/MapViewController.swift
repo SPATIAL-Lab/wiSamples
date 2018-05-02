@@ -178,7 +178,9 @@ class MapViewController: UIViewController,
         }
         
         // Center the map on the selected annotation
-        mapView.setCenter((view.annotation?.coordinate)!, animated: true)
+        if existingSiteID.isEmpty {
+            mapView.setCenter((view.annotation?.coordinate)!, animated: true)
+        }
         
         // Check what kind of annotation was clicked
         if let siteAnnotation = view.annotation as? SiteAnnotation {
