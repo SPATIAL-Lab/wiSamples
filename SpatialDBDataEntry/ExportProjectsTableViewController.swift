@@ -58,7 +58,7 @@ class ExportProjectsTableViewController: UITableViewController, MFMailComposeVie
         if MFMailComposeViewController.canSendMail() {
             let emailController = MFMailComposeViewController()
             emailController.mailComposeDelegate = self
-            emailController.setToRecipients([])
+            emailController.setToRecipients([selectedProjects[1].contactEmail]) //attempt to set default email
             emailController.setSubject("Project Export")
             emailController.setMessageBody("Please find attached.", isHTML: false)
             
