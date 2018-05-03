@@ -54,11 +54,12 @@ class ExportProjectsTableViewController: UITableViewController, MFMailComposeVie
         
         // Ask the data manager to create CSVs and email them
         let (projectsString, sitesString, samplesString) = DataManager.shared.exportSelectedProjects(selectedProjects: selectedProjects)
+        let project = DataManager.shared.projects[indexPath.row]
         
         if MFMailComposeViewController.canSendMail() {
             let emailController = MFMailComposeViewController()
             emailController.mailComposeDelegate = self
-            emailController.setToRecipients([selectedProjects[1].contactEmail]) //attempt to set default email
+            emailController.setToRecipients([project.contactEmail])
             emailController.setSubject("Project Export")
             emailController.setMessageBody("Please find attached.", isHTML: false)
             
