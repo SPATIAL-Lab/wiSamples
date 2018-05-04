@@ -19,6 +19,7 @@ class Project: NSObject, NSCoding {
     var sampleIDPrefix: String
     var sites: [Site]
     var samples: [Sample]
+    var defaultType: SampleType
     
     //MARK: Types
     
@@ -30,11 +31,12 @@ class Project: NSObject, NSCoding {
         static let sampleIDPrefix = "sampleIDPrefix"
         static let sites = "sites"
         static let samples = "samples"
+        static let defaultType = "defaultType"
     }
     
     //MARK: Initialization
     
-    init?(name: String, contactName: String, contactEmail: String, sampleIDPrefix: String, sites: [Site]?, samples: [Sample]?) {
+    init?(name: String, contactName: String, contactEmail: String, sampleIDPrefix: String, sites: [Site]?, samples: [Sample]?, defaultType: SampleType) {
         guard !name.isEmpty else {
             return nil
         }
@@ -45,6 +47,7 @@ class Project: NSObject, NSCoding {
         self.sampleIDPrefix = sampleIDPrefix
         self.sites = sites ?? []
         self.samples = samples ?? []
+        self.defaultType = defaultType
     }
     
     //MARK: Behavior
