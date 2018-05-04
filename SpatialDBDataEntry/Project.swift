@@ -107,6 +107,7 @@ class Project: NSObject, NSCoding {
         aCoder.encode(sampleIDPrefix, forKey: PropertyKeys.sampleIDPrefix)
         aCoder.encode(sites, forKey: PropertyKeys.sites)
         aCoder.encode(samples, forKey: PropertyKeys.samples)
+        aCoder.encode(defaultType.rawValue, forKey: PropertyKeys.defaultType)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -120,8 +121,9 @@ class Project: NSObject, NSCoding {
         let sampleIDPrefix = aDecoder.decodeObject(forKey: PropertyKeys.sampleIDPrefix) as? String
         let sites = aDecoder.decodeObject(forKey: PropertyKeys.sites) as? [Site]
         let samples = aDecoder.decodeObject(forKey: PropertyKeys.samples) as? [Sample]
+        let defaultType = SampleType(rawValue: aDecoder.decodeInteger(forKey: PropertyKeys.defaultType))!
         
-        self.init(name: name, contactName: contactName!, contactEmail: contactEmail!, sampleIDPrefix: sampleIDPrefix!, sites: sites!, samples: samples!)
+        self.init(name: name, contactName: contactName!, contactEmail: contactEmail!, sampleIDPrefix: sampleIDPrefix!, sites: sites!, samples: samples!, defaultType: defaultType)
     }
     
 }

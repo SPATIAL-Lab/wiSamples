@@ -9,7 +9,7 @@
 import UIKit
 import os.log
 
-class ProjectViewController: UIViewController, UITextFieldDelegate {
+class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
     
     //MARK: Properties
     
@@ -17,12 +17,14 @@ class ProjectViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var contactNameTextField: UITextField!
     @IBOutlet weak var contactEmailTextField: UITextField!
     @IBOutlet weak var sampleIDPrefixTextField: UITextField!
+    @IBOutlet weak var typePicker: UIPickerView!
     @IBOutlet weak var saveButton: UIBarButtonItem!
 
     /* This value is either passed by `ProjectTableViewController` via `prepare(for:sender)`
         or construct as part of adding a new project.
      */
     var project: Project?
+    var defaultType: SampleType = SampleType.ground
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +34,10 @@ class ProjectViewController: UIViewController, UITextFieldDelegate {
         contactNameTextField.delegate = self
         contactEmailTextField.delegate = self
         sampleIDPrefixTextField.delegate = self
+        
+        // Set picker view delegates
+        typePicker.delegate = self
+        typePicker.dataSource = self
         
         // Disable the save button
         saveButton.isEnabled = false
@@ -60,7 +66,27 @@ class ProjectViewController: UIViewController, UITextFieldDelegate {
         checkAndEnableSaveButton()
         return true
     }
-
+    
+    //MARK: UIPickerViewDelegate
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return SampleType.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        defaultType = SampleType(rawValue: row)!
+    }
+    
+    //MARK: UIPickerViewDataSource
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return SampleType(rawValue: row)?.description
+    }
+    
     //MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -78,7 +104,7 @@ class ProjectViewController: UIViewController, UITextFieldDelegate {
         let sampleIDPrefix = sampleIDPrefixTextField.text ?? ""
         
         // Create a new project
-        project = Project(name: projectName, contactName: contactName, contactEmail: contactEmail, sampleIDPrefix: sampleIDPrefix, sites: nil, samples: nil)
+        project = Project(name: projectName, contactName: contactName, contactEmail: contactEmail, sampleIDPrefix: sampleIDPrefix, sites: nil, samples: nil, defaultType:defaultType)
     }
     
     //MARK: Actions

@@ -83,6 +83,10 @@ UIPickerViewDataSource {
             // Initialize sample ID
             sampleIDTextField.text = generatedSampleID
             navigationItem.title = generatedSampleID
+            
+            // Update view
+            let project =  DataManager.shared.projects[projectIndex]
+            typePicker.selectRow(project.defaultType.rawValue, inComponent: 0, animated: false)
         }
         
         // Enable save button if site id is valid
