@@ -524,15 +524,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="duI-4p-2WU" customClass="MGLMapView">
-                                <rect key="frame" x="10" y="98" width="355" height="559"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <view multipleTouchEnabled="YES" contentMode="scaleToFill" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="duI-4p-2WU" customClass="MGLMapView">
+                                <rect key="frame" x="10" y="74" width="355" height="583"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="styleURL__" value="mapbox://styles/mapbox/streets-v10"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="duI-4p-2WU" secondAttribute="trailing" constant="10" id="Di5-xP-wbQ"/>
                             <constraint firstItem="duI-4p-2WU" firstAttribute="top" secondItem="JeI-ES-ZcR" secondAttribute="bottom" constant="10" id="ngS-oe-N4O"/>
@@ -554,6 +553,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="duI-4p-2WU" id="fd3-UB-hdd"/>
+                        <outlet property="saveButton" destination="yfp-kS-Qqw" id="TT3-2j-4dW"/>
                         <segue destination="E3t-Zh-IbQ" kind="presentation" identifier="ShowSiteView" id="YJO-Vo-Hd2"/>
                         <segue destination="C6G-yh-9Lq" kind="unwind" identifier="UnwindOnSiteSelected" unwindAction="unwindToSampleViewWithSender:" id="tc8-j9-vNC"/>
                     </connections>
