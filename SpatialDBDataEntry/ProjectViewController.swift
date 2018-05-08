@@ -26,6 +26,7 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
      */
     var project: Project?
     var defaultType: SampleType = SampleType.ground
+    var activeField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +36,7 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         contactNameTextField.delegate = self
         contactEmailTextField.delegate = self
         sampleIDPrefixTextField.delegate = self
-        
+       
         // Set picker view delegates
         typePicker.delegate = self
         typePicker.dataSource = self
@@ -43,8 +44,8 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         // Register for keyboard events
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(keyboardWillShow(notification:)),
-            name: NSNotification.Name.UIKeyboardWillShow,
+            selector: #selector(keyboardDidShow(notification:)),
+            name: NSNotification.Name.UIKeyboardDidShow,
             object: nil
         )
         NotificationCenter.default.addObserver(
@@ -139,19 +140,33 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         }
     }
     
-    @objc private func keyboardWillShow(notification: Notification) {
-        adjustInsetForKeyboardShow(true, notification: notification)
+    @objc private func keyboardDidShow(notification: Notification) {
+        adjustInsetForKeyboardShow(notification: notification)
     }
     
     @objc private func keyboardWillHide(notification: Notification) {
-        adjustInsetForKeyboardShow(false, notification: notification)
+        //adjustInsetForKeyboardShow(notification: notification)
     }
     
-    private func adjustInsetForKeyboardShow(_ show: Bool, notification: Notification) {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        activeField = textField
+        return true
+    }
+    
+  
+    
+    
+    
+    private func adjustInsetForKeyboardShow(notification: Notification) {
         let userInfo = notification.userInfo ?? [:]
         let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        let adjustmentHeight = (keyboardFrame.height + 20) * (show ? 1 : -1)
-        scrollView.contentInset.bottom += adjustmentHeight
+
+        let activeFieldBase = activeField.frame.minY
+        let adjustmentHeight = (keyboardFrame.height + 10)
+        
+        if activeFieldBase > adjustmentHeight{
+            scrollView.contentInset.bottom += adjustmentHeight
+        }
     }
     
 }
