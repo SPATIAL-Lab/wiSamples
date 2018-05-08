@@ -19,7 +19,8 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     @IBOutlet weak var sampleIDPrefixTextField: UITextField!
     @IBOutlet weak var typePicker: UIPickerView!
     @IBOutlet weak var saveButton: UIBarButtonItem!
-
+    @IBOutlet weak var scrollView: UIScrollView!
+    
     /* This value is either passed by `ProjectTableViewController` via `prepare(for:sender)`
         or construct as part of adding a new project.
      */
@@ -38,7 +39,21 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         // Set picker view delegates
         typePicker.delegate = self
         typePicker.dataSource = self
-        
+
+        // Register for keyboard events
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow(notification:)),
+            name: NSNotification.Name.UIKeyboardWillShow,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide(notification:)),
+            name: NSNotification.Name.UIKeyboardWillHide,
+            object: nil
+        )
+
         // Disable the save button
         saveButton.isEnabled = false
     }
@@ -61,7 +76,7 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         }
         
         // Hide the keyboard.
-        textField.resignFirstResponder()
+        self.view.endEditing(true)
         
         checkAndEnableSaveButton()
         return true
@@ -123,5 +138,21 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
             saveButton.isEnabled = false;
         }
     }
+    
+    @objc private func keyboardWillShow(notification: Notification) {
+        adjustInsetForKeyboardShow(true, notification: notification)
+    }
+    
+    @objc private func keyboardWillHide(notification: Notification) {
+        adjustInsetForKeyboardShow(false, notification: notification)
+    }
+    
+    private func adjustInsetForKeyboardShow(_ show: Bool, notification: Notification) {
+        let userInfo = notification.userInfo ?? [:]
+        let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let adjustmentHeight = (keyboardFrame.height + 20) * (show ? 1 : -1)
+        scrollView.contentInset.bottom += adjustmentHeight
+    }
+    
 }
 

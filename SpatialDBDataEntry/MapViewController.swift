@@ -44,7 +44,6 @@ class MapViewController: UIViewController,
     let locationManager = CLLocationManager()
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
-
     @IBOutlet weak var mapView: MGLMapView!
     
     // Project properties
@@ -108,6 +107,7 @@ class MapViewController: UIViewController,
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             locationManager.startUpdatingLocation()
+            mapView.showsUserLocation = true
         }
         else {
             print("Location services are disabled!")
@@ -196,14 +196,17 @@ class MapViewController: UIViewController,
         
         // Check what kind of annotation was clicked
         if let siteAnnotation = view.annotation as? SiteAnnotation {
-            // Remove the newly added annotation if it wasn't selected
+            // Remove the newly added annotation if it wasn't selected, set title to either site ID or New Site
             if siteAnnotation != newlyAddedAnnotation {
                 removeNewlyAddedSite()
+                navigationItem.title = siteAnnotation.id
+            }
+            else {
+                navigationItem.title = "New Site"
             }
             
             existingSiteID = siteAnnotation.id
             existingSiteLocation = siteAnnotation.coordinate
-            navigationItem.title = siteAnnotation.id
         }
         else {
             existingSiteID = ""
@@ -324,7 +327,7 @@ class MapViewController: UIViewController,
     @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
         // Add an offset acounting for the finger
         let fingerOffsetX: CGFloat = -10
-        let fingerOffsetY: CGFloat = -100
+        let fingerOffsetY: CGFloat = -125
         var pressLocation = sender.location(in: self.view!)
         pressLocation.x += fingerOffsetX
         pressLocation.y += fingerOffsetY
@@ -458,7 +461,7 @@ class MapViewController: UIViewController,
         fetchSites(minLatLong: minLatLong, maxLatLong: maxLatLong)
         
         // Set the map's initial zoom region
-        mapView.setCenter(locationCoordinate, zoomLevel:10, animated: true)
+        mapView.setCenter(locationCoordinate, zoomLevel:11, animated: true)
     }
     
     private func updateWindow(mapRegionCenter: CLLocationCoordinate2D, minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {
