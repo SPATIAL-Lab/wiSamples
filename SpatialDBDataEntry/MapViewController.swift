@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import MapKit
+import Mapbox
 import CoreLocation
 
 enum MapPanFetchResultType: Int {
@@ -34,7 +34,7 @@ enum MapPanFetchResultType: Int {
 
 class MapViewController: UIViewController,
     CLLocationManagerDelegate,
-    MKMapViewDelegate,
+    MGLMapViewDelegate,
     DataManagerResponseDelegate {
     
     //MARK: Properties
@@ -44,7 +44,8 @@ class MapViewController: UIViewController,
     let locationManager = CLLocationManager()
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
-    @IBOutlet weak var mapView: MKMapView!
+
+    @IBOutlet weak var mapView: MGLMapView!
     
     // Project properties
     var projectIndex: Int = -1
@@ -142,39 +143,50 @@ class MapViewController: UIViewController,
     
     //MARK: MKMapViewDelegate
     
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+    func mapView(_ mapView: MGLMapView, viewFor annotation: MGLAnnotation) -> MGLAnnotationView? {
         guard let annotation = annotation as? SiteAnnotation else {
             return nil
         }
         
         let identifier = "SiteAnnotation"
-        var view: MKPinAnnotationView
+        var view: MGLAnnotationView
         
         // Reuse a dequeued view else create one
-        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKPinAnnotationView {
+        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) {
             dequeuedView.annotation = annotation
             view = dequeuedView
         }
         else {
-            view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-            view.canShowCallout = true
+            view = CustomAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            view.frame = CGRect(x: 0, y: 0, width: 10, height: 10)
         }
         
         // Check if the site annotation matches with the selected location
         if annotation.id.isEmpty == false &&
             annotation.id == existingSiteID {
-            view.pinTintColor = UIColor.yellow
+            view.backgroundColor = UIColor.yellow
         }
         else {
-            view.pinTintColor = UIColor.orange
+            view.backgroundColor = UIColor.orange
         }
         
         return view
     }
     
-    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        if let pinAnnotation = view as? MKPinAnnotationView {
-            pinAnnotation.pinTintColor = UIColor.yellow
+    class CustomAnnotationView: MGLAnnotationView {
+        override func layoutSubviews() {
+            super.layoutSubviews()
+            
+            scalesWithViewingDistance = false
+            
+            layer.cornerRadius = frame.width / 2
+            layer.borderWidth = 2
+        }
+    }
+    
+    func mapView(_ mapView: MGLMapView, didSelect view: MGLAnnotationView) {
+        if let pinAnnotation = view as? MGLAnnotationView {
+            pinAnnotation.backgroundColor = UIColor.yellow
         }
         
         // Center the map on the selected annotation
@@ -202,9 +214,9 @@ class MapViewController: UIViewController,
         saveButton.isEnabled = true
     }
     
-    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-        if let pinAnnotation = view as? MKPinAnnotationView {
-            pinAnnotation.pinTintColor = UIColor.orange
+    func mapView(_ mapView: MGLMapView, didDeselect view: MGLAnnotationView) {
+        if let pinAnnotation = view as? MGLAnnotationView {
+            pinAnnotation.backgroundColor = UIColor.orange
         }
         
         // Remove the newly added annotation if it was deselected
@@ -220,34 +232,21 @@ class MapViewController: UIViewController,
         saveButton.isEnabled = false
     }
     
-    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+    func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) {
         
         hasUserPannedTheMap = true
         
-        // Check if the map has been zoomed out beyond the maximum
-        if isZoomCorrectionEnabled && Double(mapView.region.span.longitudeDelta) > maxMapZoomLongitude {
-            let correctedCenter = existingSiteID.isEmpty ? lastUpdatedLocation.coordinate : existingSiteLocation
-            
-            // Zoom back in to the user's current location
-            let correctedRegion = MKCoordinateRegionMake(correctedCenter, MKCoordinateSpanMake(maxMapZoomLongitude * 0.9, maxMapZoomLongitude * 0.9))
-            mapView.setRegion(correctedRegion, animated: true)
-            
-            hasUserPannedTheMap = false
-            
-            return
-        }
-        
         // Check if the map has been panned far enough to fetch new sites
-        let mapPanFetchResult = mustFetchSites(newMapRegionCenter: mapView.region.center)
+        let mapPanFetchResult = mustFetchSites(newMapRegionCenter: mapView.centerCoordinate)
         
         if mapPanFetchResult != MapPanFetchResultType.withinWindow {
             print("MapPanFetchResult: \(mapPanFetchResult.description)")
             
             // Get a window around the map's current center
-            let (minLatLong, maxLatLong) = getMinMaxLatLong(location: mapView.region.center)
+            let (minLatLong, maxLatLong) = getMinMaxLatLong(location: mapView.centerCoordinate)
             
             // Update the window
-            updateWindow(mapRegionCenter: mapView.region.center, minLatLong: minLatLong, maxLatLong: maxLatLong)
+            updateWindow(mapRegionCenter: mapView.centerCoordinate, minLatLong: minLatLong, maxLatLong: maxLatLong)
 
             // Fetch sites around the map's current center
             fetchSites(minLatLong: minLatLong, maxLatLong: maxLatLong)
@@ -281,7 +280,7 @@ class MapViewController: UIViewController,
             }
             
             guard let siteViewController = navigationController.viewControllers[0] as? SiteViewController else {
-                fatalError("Unexpected presented view controller \(navigationController.presentedViewController)")
+                fatalError("Unexpected presented view controller \(String(describing: navigationController.presentedViewController))")
             }
             
             siteViewController.generatedSiteID = newSiteID
@@ -372,7 +371,8 @@ class MapViewController: UIViewController,
             // Center map on selected location if valid else ask location manager
             initSelectedSite()
             
-            print("SiteAnnotations:\(siteAnnotationList.count) MapAnnotations:\(mapView.annotations.count)")
+            //is this just bookkeeping?
+            //print("SiteAnnotations:\(siteAnnotationList.count) MapAnnotations:\(mapView.annotations.count)")
         }
     }
     
@@ -458,8 +458,7 @@ class MapViewController: UIViewController,
         fetchSites(minLatLong: minLatLong, maxLatLong: maxLatLong)
         
         // Set the map's initial zoom region
-        let initialRegion = MKCoordinateRegionMake(locationCoordinate, MKCoordinateSpanMake(maxMapZoomLongitude * 0.9, maxMapZoomLongitude * 0.9))
-        mapView.setRegion(initialRegion, animated: true)
+        mapView.setCenter(locationCoordinate, zoomLevel:10, animated: true)
     }
     
     private func updateWindow(mapRegionCenter: CLLocationCoordinate2D, minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {
