@@ -324,7 +324,7 @@ class MapViewController: UIViewController,
     @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
         // Add an offset acounting for the finger
         let fingerOffsetX: CGFloat = -10
-        let fingerOffsetY: CGFloat = -125
+        let fingerOffsetY: CGFloat = -100
         var pressLocation = sender.location(in: self.view!)
         pressLocation.x += fingerOffsetX
         pressLocation.y += fingerOffsetY
