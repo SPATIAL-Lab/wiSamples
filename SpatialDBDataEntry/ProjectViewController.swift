@@ -41,6 +41,7 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         typePicker.delegate = self
         typePicker.dataSource = self
 
+        /*
         // Register for keyboard events
         NotificationCenter.default.addObserver(
             self,
@@ -54,7 +55,8 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
             name: NSNotification.Name.UIKeyboardWillHide,
             object: nil
         )
-
+*/
+        
         // Disable the save button
         saveButton.isEnabled = false
     }
@@ -139,7 +141,7 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
             saveButton.isEnabled = false;
         }
     }
-    
+/*
     @objc private func keyboardDidShow(notification: Notification) {
         adjustInsetForKeyboardShow(notification: notification)
     }
@@ -153,21 +155,57 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         return true
     }
     
-  
-    
-    
-    
     private func adjustInsetForKeyboardShow(notification: Notification) {
         let userInfo = notification.userInfo ?? [:]
         let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
 
-        let activeFieldBase = activeField.frame.minY
-        let adjustmentHeight = (keyboardFrame.height + 10)
+        let activeFieldBase = activeField.frame.maxY
+        let keyboardHeight = (keyboardFrame.minY - 100)
         
-        if activeFieldBase > adjustmentHeight{
-            scrollView.contentInset.bottom += adjustmentHeight
+        if activeFieldBase > keyboardHeight{
+            scrollView.contentInset.bottom += (activeFieldBase - keyboardHeight)
+        }
+    }
+ */
+    func keyboardWasShown(notification: NSNotification){
+        //Need to calculate keyboard exact size due to Apple suggestions
+        self.scrollView.isScrollEnabled = true
+        var info = notification.userInfo!
+        let keyboardSize = (info[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue.size
+        let contentInsets : UIEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize!.height, 0.0)
+        
+        self.scrollView.contentInset = contentInsets
+        self.scrollView.scrollIndicatorInsets = contentInsets
+        
+        var aRect : CGRect = self.view.frame
+        aRect.size.height -= keyboardSize!.height + 100
+        if let activeField = self.activeField {
+            if (!aRect.contains(activeField.frame.origin)){
+                self.scrollView.scrollRectToVisible(activeField.frame, animated: true)
+            }
         }
     }
     
+    func keyboardWillBeHidden(notification: NSNotification){
+        //Once keyboard disappears, restore original positions
+        var info = notification.userInfo!
+        let keyboardSize = (info[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue.size
+        let contentInsets : UIEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, -keyboardSize!.height, 0.0)
+        self.scrollView.contentInset = contentInsets
+        self.scrollView.scrollIndicatorInsets = contentInsets
+        self.view.endEditing(true)
+        self.scrollView.isScrollEnabled = false
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        activeField = textField
+        return true
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField){
+        activeField = nil
+    }
+
+
 }
 
