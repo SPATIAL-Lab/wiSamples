@@ -208,13 +208,19 @@ class MapViewController: UIViewController,
             existingSiteID = siteAnnotation.id
             existingSiteLocation = siteAnnotation.coordinate
         }
-        else {
+
+        saveButton.isEnabled = true
+    }
+    
+    func mapView(_ mapView: MGLMapView, didSelect annotation: MGLAnnotation) {
+        if annotation is MGLUserLocation && mapView.userLocation != nil {
+            mapView.setCenter((annotation.coordinate), animated: true)
             existingSiteID = ""
             existingSiteLocation = CLLocationCoordinate2D()
             navigationItem.title = "My Location"
+            
+            saveButton.isEnabled = true
         }
-        
-        saveButton.isEnabled = true
     }
     
     func mapView(_ mapView: MGLMapView, didDeselect view: MGLAnnotationView) {
@@ -235,6 +241,13 @@ class MapViewController: UIViewController,
         saveButton.isEnabled = false
     }
     
+    func mapView(_ mapView: MGLMapView, didDeselect view: MGLAnnotation) {       
+        existingSiteID = ""
+        existingSiteLocation = CLLocationCoordinate2D()
+        navigationItem.title = ""
+        saveButton.isEnabled = false
+    }
+
     func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) {
         
         hasUserPannedTheMap = true
