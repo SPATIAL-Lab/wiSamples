@@ -41,21 +41,21 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         typePicker.delegate = self
         typePicker.dataSource = self
 
-        /*
+        
         // Register for keyboard events
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(keyboardDidShow(notification:)),
+            selector: #selector(keyboardWasShown(notification:)),
             name: NSNotification.Name.UIKeyboardDidShow,
             object: nil
         )
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(keyboardWillHide(notification:)),
+            selector: #selector(keyboardWillBeHidden(notification:)),
             name: NSNotification.Name.UIKeyboardWillHide,
             object: nil
         )
-*/
+
         
         // Disable the save button
         saveButton.isEnabled = false
@@ -178,7 +178,7 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         self.scrollView.scrollIndicatorInsets = contentInsets
         
         var aRect : CGRect = self.view.frame
-        aRect.size.height -= keyboardSize!.height + 100
+        aRect.size.height -= keyboardSize!.height
         if let activeField = self.activeField {
             if (!aRect.contains(activeField.frame.origin)){
                 self.scrollView.scrollRectToVisible(activeField.frame, animated: true)
