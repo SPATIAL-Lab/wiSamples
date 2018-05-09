@@ -158,7 +158,7 @@ class MapViewController: UIViewController,
         }
         else {
             view = CustomAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-            view.frame = CGRect(x: 0, y: 0, width: 10, height: 10)
+            view.frame = CGRect(x: 0, y: 0, width: 13, height: 13)
         }
         
         // Check if the site annotation matches with the selected location
@@ -432,17 +432,20 @@ class MapViewController: UIViewController,
     }
     
     private func mustFetchSites(newMapRegionCenter: CLLocationCoordinate2D) -> MapPanFetchResultType {
-        if newMapRegionCenter.latitude < lastMinLatLong.latitude {
-            return MapPanFetchResultType.belowWindow
-        }
-        else if newMapRegionCenter.longitude < lastMinLatLong.longitude {
-            return MapPanFetchResultType.leftOfWindow
-        }
-        else if newMapRegionCenter.latitude > lastMaxLatLong.latitude {
-            return MapPanFetchResultType.aboveWindow
-        }
-        else if newMapRegionCenter.longitude > lastMaxLatLong.longitude {
-            return MapPanFetchResultType.rightOfWindow
+        //cheat and use withinWindow if zoom level is too low
+        if mapView.zoomLevel >= 10 {
+            if newMapRegionCenter.latitude < lastMinLatLong.latitude {
+                return MapPanFetchResultType.belowWindow
+            }
+            else if newMapRegionCenter.longitude < lastMinLatLong.longitude {
+                return MapPanFetchResultType.leftOfWindow
+            }
+            else if newMapRegionCenter.latitude > lastMaxLatLong.latitude {
+                return MapPanFetchResultType.aboveWindow
+            }
+            else if newMapRegionCenter.longitude > lastMaxLatLong.longitude {
+                return MapPanFetchResultType.rightOfWindow
+            }
         }
         
         return MapPanFetchResultType.withinWindow
@@ -461,7 +464,7 @@ class MapViewController: UIViewController,
         fetchSites(minLatLong: minLatLong, maxLatLong: maxLatLong)
         
         // Set the map's initial zoom region
-        mapView.setCenter(locationCoordinate, zoomLevel:11, animated: true)
+        mapView.setCenter(locationCoordinate, zoomLevel:15, animated: true)
     }
     
     private func updateWindow(mapRegionCenter: CLLocationCoordinate2D, minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {

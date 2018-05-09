@@ -121,7 +121,9 @@ class SiteViewController: UIViewController, UITextFieldDelegate {
             
             if placemarks!.count > 0 {
                 let placemark = placemarks![0]
-                self.address = placemark.thoroughfare ?? ""
+                self.address = placemark.subThoroughfare ?? ""
+                if self.address != "" {self.address += " "}
+                self.address += placemark.thoroughfare ?? ""
                 self.city = placemark.locality ?? ""
                 self.stateOrProvince = placemark.administrativeArea ?? ""
                 self.country = placemark.isoCountryCode ?? ""
