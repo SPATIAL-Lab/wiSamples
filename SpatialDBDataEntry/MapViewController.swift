@@ -58,7 +58,7 @@ class MapViewController: UIViewController,
     var selectedSiteInitialized: Bool = false
     var hasUserPannedTheMap: Bool = false
     var newlyAddedAnnotation: SiteAnnotation = SiteAnnotation()
-    var isZoomCorrectionEnabled: Bool = false
+    var ULAnnotation: SiteAnnotation = SiteAnnotation()
     
     // Site fetching
     var hasFetchedInitially: Bool = false
@@ -78,8 +78,25 @@ class MapViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        mapView.styleURL = MGLStyle.streetsStyleURL
         mapView.delegate = self
         
+        if Reachability.isConnectedToNetwork() {
+            // Create a UISegmentedControl to toggle between map styles
+            let styleToggle = UISegmentedControl(items: ["Streets", "Satellite"])
+            styleToggle.translatesAutoresizingMaskIntoConstraints = false
+            styleToggle.backgroundColor = UIColor.white
+            styleToggle.selectedSegmentIndex = 0
+            view.insertSubview(styleToggle, aboveSubview: mapView)
+            styleToggle.addTarget(self, action: #selector(changeStyle(sender:)), for: .valueChanged)
+            
+            // Configure autolayout constraints for the UISegmentedControl to align
+            // at the bottom of the map view and above the Mapbox logo and attribution
+            NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:|-40-[styleToggle]-40-|", options: [], metrics: nil, views: ["styleToggle" : styleToggle]))
+            NSLayoutConstraint.activate([NSLayoutConstraint(item: styleToggle, attribute: .bottom, relatedBy: .equal, toItem: mapView.logoView, attribute: .top, multiplier: 1, constant: -20)])
+        }
+            
+        // Add contol for push-hold-drag
         let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
         self.view!.addGestureRecognizer(gestureRecognizer)
         
@@ -158,7 +175,7 @@ class MapViewController: UIViewController,
         }
         else {
             view = CustomAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-            view.frame = CGRect(x: 0, y: 0, width: 13, height: 13)
+            view.frame = CGRect(x: 3, y: -20, width: 13, height: 13)
         }
         
         // Check if the site annotation matches with the selected location
@@ -172,12 +189,13 @@ class MapViewController: UIViewController,
         
         return view
     }
-    
+
     class CustomAnnotationView: MGLAnnotationView {
         override func layoutSubviews() {
             super.layoutSubviews()
             
             scalesWithViewingDistance = false
+            
             
             layer.cornerRadius = frame.width / 2
             layer.borderWidth = 2
@@ -218,9 +236,10 @@ class MapViewController: UIViewController,
             existingSiteID = ""
             existingSiteLocation = CLLocationCoordinate2D()
             navigationItem.title = "My Location"
-            
+
             saveButton.isEnabled = true
-        }
+       }
+        
     }
     
     func mapView(_ mapView: MGLMapView, didDeselect view: MGLAnnotationView) {
@@ -315,6 +334,20 @@ class MapViewController: UIViewController,
         }
     }
     
+    //MARK: Map Style Controller
+    
+    // Change the map style based on the selected index of the UISegmentedControl
+    @objc func changeStyle(sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            mapView.styleURL = MGLStyle.streetsStyleURL
+        case 1:
+            mapView.styleURL = MGLStyle.satelliteStyleURL
+        default:
+            mapView.styleURL = MGLStyle.streetsStyleURL
+        }
+    }
+
     //MARK: Actions
     
     @IBAction func cancelSetLocation(_ sender: UIBarButtonItem) {
@@ -508,3 +541,4 @@ class MapViewController: UIViewController,
     }
 
 }
+
