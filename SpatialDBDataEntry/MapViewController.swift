@@ -58,7 +58,6 @@ class MapViewController: UIViewController,
     var selectedSiteInitialized: Bool = false
     var hasUserPannedTheMap: Bool = false
     var newlyAddedAnnotation: SiteAnnotation = SiteAnnotation()
-    var ULAnnotation: SiteAnnotation = SiteAnnotation()
     
     // Site fetching
     var hasFetchedInitially: Bool = false
@@ -175,9 +174,10 @@ class MapViewController: UIViewController,
         }
         else {
             view = CustomAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-            view.frame = CGRect(x: 3, y: -20, width: 13, height: 13)
+            view.frame = CGRect(x: 0, y: 0, width: 13, height: 23)
+            view.centerOffset = CGVector(dx: 0, dy: -5)
         }
-        
+
         // Check if the site annotation matches with the selected location
         if annotation.id.isEmpty == false &&
             annotation.id == existingSiteID {
@@ -187,6 +187,8 @@ class MapViewController: UIViewController,
             view.backgroundColor = UIColor.orange
         }
         
+        mapView.bringSubview(toFront: view)
+        
         return view
     }
 
@@ -195,7 +197,6 @@ class MapViewController: UIViewController,
             super.layoutSubviews()
             
             scalesWithViewingDistance = false
-            
             
             layer.cornerRadius = frame.width / 2
             layer.borderWidth = 2
