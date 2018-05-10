@@ -149,6 +149,23 @@
                                                     <constraint firstAttribute="height" constant="150" id="auP-Z4-dGR"/>
                                                 </constraints>
                                             </pickerView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Default Map Type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x4R-ng-xj2" userLabel="Default Map Type">
+                                                <rect key="frame" x="20" y="495" width="335" height="21"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="IBG-aQ-YsX" userLabel="Map Picker">
+                                                <rect key="frame" x="62.5" y="526" width="250" height="31"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="250" id="YkQ-zp-ije"/>
+                                                    <constraint firstAttribute="height" constant="30" id="ftG-3G-JaP"/>
+                                                </constraints>
+                                                <segments>
+                                                    <segment title="Street"/>
+                                                    <segment title="Satellite"/>
+                                                </segments>
+                                            </segmentedControl>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
@@ -156,7 +173,9 @@
                                             <constraint firstItem="b2j-sg-uKJ" firstAttribute="leading" secondItem="hiT-40-Ym4" secondAttribute="leading" id="5ff-78-kPg"/>
                                             <constraint firstItem="b2j-sg-uKJ" firstAttribute="trailing" secondItem="hiT-40-Ym4" secondAttribute="trailing" id="6to-TS-WhH"/>
                                             <constraint firstItem="KGL-Hy-fnh" firstAttribute="leading" secondItem="hiT-40-Ym4" secondAttribute="leading" id="7Yx-o5-NGc"/>
+                                            <constraint firstItem="IBG-aQ-YsX" firstAttribute="centerX" secondItem="E3s-ni-JAk" secondAttribute="centerX" id="B6t-4j-W7P"/>
                                             <constraint firstItem="bLY-VG-cMB" firstAttribute="trailing" secondItem="hiT-40-Ym4" secondAttribute="trailing" id="CBI-vI-iWL"/>
+                                            <constraint firstItem="x4R-ng-xj2" firstAttribute="leading" secondItem="hiT-40-Ym4" secondAttribute="leading" id="EiN-cO-Q4F"/>
                                             <constraint firstItem="Qlq-hb-PNt" firstAttribute="leading" secondItem="hiT-40-Ym4" secondAttribute="leading" id="GrT-Va-65D"/>
                                             <constraint firstItem="vu0-pw-jGW" firstAttribute="leading" secondItem="hiT-40-Ym4" secondAttribute="leading" id="KPt-0T-zjw"/>
                                             <constraint firstItem="iQb-iD-QtQ" firstAttribute="trailing" secondItem="hiT-40-Ym4" secondAttribute="trailing" id="LOE-Is-tGf"/>
@@ -165,6 +184,7 @@
                                             <constraint firstItem="hiT-40-Ym4" firstAttribute="trailing" secondItem="E3s-ni-JAk" secondAttribute="trailing" constant="-20" id="OS7-Nv-DwS"/>
                                             <constraint firstItem="Icp-w5-RK8" firstAttribute="trailing" secondItem="hiT-40-Ym4" secondAttribute="trailing" id="Ovh-fy-nXX"/>
                                             <constraint firstItem="hiT-40-Ym4" firstAttribute="leading" secondItem="E3s-ni-JAk" secondAttribute="leading" constant="20" id="P54-Dv-bbU"/>
+                                            <constraint firstItem="x4R-ng-xj2" firstAttribute="top" secondItem="hiT-40-Ym4" secondAttribute="bottom" constant="10" id="PL6-Kk-f9f"/>
                                             <constraint firstItem="1ka-zN-Kc6" firstAttribute="leading" secondItem="hiT-40-Ym4" secondAttribute="leading" id="PN4-XO-hhv"/>
                                             <constraint firstItem="b2j-sg-uKJ" firstAttribute="top" secondItem="vu0-pw-jGW" secondAttribute="bottom" constant="10" id="Pir-DE-Ojb"/>
                                             <constraint firstItem="bLY-VG-cMB" firstAttribute="leading" secondItem="hiT-40-Ym4" secondAttribute="leading" id="QyS-ec-2Zi"/>
@@ -174,6 +194,7 @@
                                             <constraint firstItem="iQb-iD-QtQ" firstAttribute="top" secondItem="Qlq-hb-PNt" secondAttribute="bottom" constant="10" id="Uo0-di-djh"/>
                                             <constraint firstItem="Qlq-hb-PNt" firstAttribute="top" secondItem="Yyx-K5-ACP" secondAttribute="bottom" constant="10" id="WKw-Oa-ukP"/>
                                             <constraint firstItem="Icp-w5-RK8" firstAttribute="top" secondItem="KGL-Hy-fnh" secondAttribute="bottom" constant="10" id="Wks-IX-JOu"/>
+                                            <constraint firstItem="x4R-ng-xj2" firstAttribute="trailing" secondItem="hiT-40-Ym4" secondAttribute="trailing" id="cla-1T-ZIJ"/>
                                             <constraint firstItem="Icp-w5-RK8" firstAttribute="leading" secondItem="hiT-40-Ym4" secondAttribute="leading" id="eIL-kG-Qe3"/>
                                             <constraint firstItem="Yyx-K5-ACP" firstAttribute="trailing" secondItem="hiT-40-Ym4" secondAttribute="trailing" id="eSm-jV-7hr"/>
                                             <constraint firstItem="Yyx-K5-ACP" firstAttribute="top" secondItem="E3s-ni-JAk" secondAttribute="top" constant="20" id="ejN-l0-VOt"/>
@@ -181,6 +202,7 @@
                                             <constraint firstItem="1ka-zN-Kc6" firstAttribute="trailing" secondItem="hiT-40-Ym4" secondAttribute="trailing" id="fYE-S3-Obw"/>
                                             <constraint firstItem="iQb-iD-QtQ" firstAttribute="leading" secondItem="hiT-40-Ym4" secondAttribute="leading" id="oy4-d8-ATw"/>
                                             <constraint firstItem="Yyx-K5-ACP" firstAttribute="leading" secondItem="hiT-40-Ym4" secondAttribute="leading" id="tUK-Rf-Tm0"/>
+                                            <constraint firstItem="IBG-aQ-YsX" firstAttribute="top" secondItem="x4R-ng-xj2" secondAttribute="bottom" constant="10" id="tzy-zs-ikr"/>
                                             <constraint firstItem="KGL-Hy-fnh" firstAttribute="top" secondItem="bLY-VG-cMB" secondAttribute="bottom" constant="10" id="y91-A6-0e5"/>
                                         </constraints>
                                     </view>
@@ -224,6 +246,7 @@
                         <outlet property="sampleIDPrefixTextField" destination="Icp-w5-RK8" id="qrZ-Zl-1wf"/>
                         <outlet property="saveButton" destination="qcp-Z3-lor" id="nfq-vI-dX7"/>
                         <outlet property="scrollView" destination="222-fL-s59" id="anO-FI-fYG"/>
+                        <outlet property="styleToggle" destination="IBG-aQ-YsX" id="xBe-wg-9aH"/>
                         <outlet property="typePicker" destination="hiT-40-Ym4" id="vUo-8q-VgO"/>
                     </connections>
                 </viewController>

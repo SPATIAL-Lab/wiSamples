@@ -126,9 +126,9 @@ class Project: NSObject, NSCoding {
         let sites = aDecoder.decodeObject(forKey: PropertyKeys.sites) as? [Site]
         let samples = aDecoder.decodeObject(forKey: PropertyKeys.samples) as? [Sample]
         let defaultType = SampleType(rawValue: aDecoder.decodeInteger(forKey: PropertyKeys.defaultType))!
-        let defaultMap = aDecoder.decodeObject(forKey: PropertyKeys.defaultMap) as? Int
+        let defaultMap = aDecoder.decodeObject(forKey: PropertyKeys.defaultMap) as? Int ?? 0  //safety for old projects
         
-        self.init(name: name, contactName: contactName!, contactEmail: contactEmail!, sampleIDPrefix: sampleIDPrefix!, sites: sites!, samples: samples!, defaultType: defaultType, defaultMap: defaultMap!)
+        self.init(name: name, contactName: contactName!, contactEmail: contactEmail!, sampleIDPrefix: sampleIDPrefix!, sites: sites!, samples: samples!, defaultType: defaultType, defaultMap: defaultMap)
     }
     
 }

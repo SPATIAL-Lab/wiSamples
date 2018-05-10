@@ -18,6 +18,7 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     @IBOutlet weak var contactEmailTextField: UITextField!
     @IBOutlet weak var sampleIDPrefixTextField: UITextField!
     @IBOutlet weak var typePicker: UIPickerView!
+    @IBOutlet weak var styleToggle: UISegmentedControl!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var scrollView: UIScrollView!
     
@@ -26,6 +27,7 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
      */
     var project: Project?
     var defaultType: SampleType = SampleType.ground
+    var defaultMap: Int = 0
     var activeField: UITextField!
     
     override func viewDidLoad() {
@@ -40,18 +42,6 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         // Set picker view delegates
         typePicker.delegate = self
         typePicker.dataSource = self
-
-        //TODO: Move to storyboard
-        // Create a UISegmentedControl to toggle between map styles
-        let styleToggle = UISegmentedControl(items: ["Streets", "Satellite"])
-        styleToggle.translatesAutoresizingMaskIntoConstraints = false
-        styleToggle.selectedSegmentIndex = 0
-        view.insertSubview(styleToggle)
-        styleToggle.addTarget(self, action: #selector(changeStyle(sender:)), for: .valueChanged)
-
-        // Configure autolayout constraints for the UISegmentedControl 
-        NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:|-40-[styleToggle]-40-|", options: [], metrics: nil, views: ["styleToggle" : styleToggle]))
-        NSLayoutConstraint.activate([NSLayoutConstraint(item: styleToggle, attribute: .top, relatedBy: .equal, toItem: typePicker, attribute: .bottom, multiplier: 1, constant: 10)])
         
         // Register for keyboard events
         NotificationCenter.default.addObserver(

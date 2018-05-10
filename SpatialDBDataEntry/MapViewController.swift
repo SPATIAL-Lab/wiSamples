@@ -76,8 +76,8 @@ class MapViewController: UIViewController,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        mapView.styleURL = MGLStyle.streetsStyleURL
+        let project = DataManager.shared.projects[projectIndex]
+        setStyle(index: project.defaultMap)
         mapView.delegate = self
         
         if Reachability.isConnectedToNetwork() {
@@ -339,7 +339,11 @@ class MapViewController: UIViewController,
     
     // Change the map style based on the selected index of the UISegmentedControl
     @objc func changeStyle(sender: UISegmentedControl) {
-        switch sender.selectedSegmentIndex {
+        setStyle(index: sender.selectedSegmentIndex)
+    }
+    
+    func setStyle(index: Int) {
+        switch index {
         case 0:
             mapView.styleURL = MGLStyle.streetsStyleURL
         case 1:
