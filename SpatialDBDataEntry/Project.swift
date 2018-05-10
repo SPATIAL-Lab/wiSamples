@@ -20,6 +20,7 @@ class Project: NSObject, NSCoding {
     var sites: [Site]
     var samples: [Sample]
     var defaultType: SampleType
+    var defaultMap: Int
     
     //MARK: Types
     
@@ -32,11 +33,12 @@ class Project: NSObject, NSCoding {
         static let sites = "sites"
         static let samples = "samples"
         static let defaultType = "defaultType"
+        static let defaultMap = "defaultMap"
     }
     
     //MARK: Initialization
     
-    init?(name: String, contactName: String, contactEmail: String, sampleIDPrefix: String, sites: [Site]?, samples: [Sample]?, defaultType: SampleType) {
+    init?(name: String, contactName: String, contactEmail: String, sampleIDPrefix: String, sites: [Site]?, samples: [Sample]?, defaultType: SampleType, defaultMap: Int) {
         guard !name.isEmpty else {
             return nil
         }
@@ -48,6 +50,7 @@ class Project: NSObject, NSCoding {
         self.sites = sites ?? []
         self.samples = samples ?? []
         self.defaultType = defaultType
+        self.defaultMap = defaultMap
     }
     
     //MARK: Behavior
@@ -108,6 +111,7 @@ class Project: NSObject, NSCoding {
         aCoder.encode(sites, forKey: PropertyKeys.sites)
         aCoder.encode(samples, forKey: PropertyKeys.samples)
         aCoder.encode(defaultType.rawValue, forKey: PropertyKeys.defaultType)
+        aCoder.encode(defaultMap, forKey: PropertyKeys.defaultMap)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -122,8 +126,9 @@ class Project: NSObject, NSCoding {
         let sites = aDecoder.decodeObject(forKey: PropertyKeys.sites) as? [Site]
         let samples = aDecoder.decodeObject(forKey: PropertyKeys.samples) as? [Sample]
         let defaultType = SampleType(rawValue: aDecoder.decodeInteger(forKey: PropertyKeys.defaultType))!
+        let defaultMap = aDecoder.decodeObject(forKey: PropertyKeys.defaultMap) as? Int
         
-        self.init(name: name, contactName: contactName!, contactEmail: contactEmail!, sampleIDPrefix: sampleIDPrefix!, sites: sites!, samples: samples!, defaultType: defaultType)
+        self.init(name: name, contactName: contactName!, contactEmail: contactEmail!, sampleIDPrefix: sampleIDPrefix!, sites: sites!, samples: samples!, defaultType: defaultType, defaultMap: defaultMap!)
     }
     
 }

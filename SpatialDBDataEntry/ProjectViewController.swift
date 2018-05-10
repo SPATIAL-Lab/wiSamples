@@ -41,6 +41,17 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         typePicker.delegate = self
         typePicker.dataSource = self
 
+        //TODO: Move to storyboard
+        // Create a UISegmentedControl to toggle between map styles
+        let styleToggle = UISegmentedControl(items: ["Streets", "Satellite"])
+        styleToggle.translatesAutoresizingMaskIntoConstraints = false
+        styleToggle.selectedSegmentIndex = 0
+        view.insertSubview(styleToggle)
+        styleToggle.addTarget(self, action: #selector(changeStyle(sender:)), for: .valueChanged)
+
+        // Configure autolayout constraints for the UISegmentedControl 
+        NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:|-40-[styleToggle]-40-|", options: [], metrics: nil, views: ["styleToggle" : styleToggle]))
+        NSLayoutConstraint.activate([NSLayoutConstraint(item: styleToggle, attribute: .top, relatedBy: .equal, toItem: typePicker, attribute: .bottom, multiplier: 1, constant: 10)])
         
         // Register for keyboard events
         NotificationCenter.default.addObserver(
@@ -120,9 +131,10 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         let contactName = contactNameTextField.text ?? ""
         let contactEmail = contactEmailTextField.text ?? ""
         let sampleIDPrefix = sampleIDPrefixTextField.text ?? ""
+        let defaultMap = styleToggle.selectedSegmentIndex
         
         // Create a new project
-        project = Project(name: projectName, contactName: contactName, contactEmail: contactEmail, sampleIDPrefix: sampleIDPrefix, sites: nil, samples: nil, defaultType:defaultType)
+        project = Project(name: projectName, contactName: contactName, contactEmail: contactEmail, sampleIDPrefix: sampleIDPrefix, sites: nil, samples: nil, defaultType: defaultType, defaultMap: defaultMap)
     }
     
     //MARK: Actions

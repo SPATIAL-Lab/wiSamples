@@ -85,7 +85,7 @@ class MapViewController: UIViewController,
             let styleToggle = UISegmentedControl(items: ["Streets", "Satellite"])
             styleToggle.translatesAutoresizingMaskIntoConstraints = false
             styleToggle.backgroundColor = UIColor.white
-            styleToggle.selectedSegmentIndex = 0
+            styleToggle.selectedSegmentIndex = project.defaultMap
             view.insertSubview(styleToggle, aboveSubview: mapView)
             styleToggle.addTarget(self, action: #selector(changeStyle(sender:)), for: .valueChanged)
             
