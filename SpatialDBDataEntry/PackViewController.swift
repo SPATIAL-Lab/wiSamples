@@ -7,18 +7,22 @@
 //  Copyright © 2018 University of Utah. All rights reserved.
 //
 
+import UIKit
 import Mapbox
+import CoreLocation
 
-class ViewController: UIViewController, CLLocationManagerDelegate, MGLMapViewDelegate {  
+class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapViewDelegate {
+
     let locationManager = CLLocationManager()
-    
+    @IBOutlet weak var mapView: MGLMapView!
     var progressView: UIProgressView!
+    
+    var lastUpdatedLocation: CLLocation = CLLocation()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let project = DataManager.shared.projects[projectIndex]
-        MapViewController.setStyle(index: project.defaultMap)
+        MapViewController.setStyle(index: 0)
         mapView.delegate = self
       
         if Reachability.isConnectedToNetwork() {
@@ -43,12 +47,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MGLMapViewDel
         // Setup location services
         if CLLocationManager.locationServicesEnabled() {
             locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
             locationManager.startUpdatingLocation()
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delayBeforeInitialZoom)) {
-             mapView.setCenter(locationManager.lastUpdatedLocation.coordinate, zoomLevel: 10, animated: true)
-        }
         
         // Setup offline pack notification handlers.
         NotificationCenter.default.addObserver(self, selector: #selector(offlinePackProgressDidChange), name: NSNotification.Name.MGLOfflinePackProgressChanged, object: nil)
@@ -56,6 +58,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MGLMapViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(offlinePackDidReceiveMaximumAllowedMapboxTiles), name: NSNotification.Name.MGLOfflinePackMaximumMapboxTilesReached, object: nil)
     }
     
+    //MARK: CLLocationManagerDelegate
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        // Save off the difference from the previous update
+        let lastUpdatedLocation = manager.location!
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+            self.mapView.setCenter(self.lastUpdatedLocation.coordinate, zoomLevel:10, animated: true)
+        }
+        }
+    }
+
     func mapViewDidFinishLoadingMap(_ mapView: MGLMapView) {
         // Start downloading tiles and resources for z13-16.
         startOfflinePackDownload()
