@@ -22,9 +22,9 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        MapViewController.setStyle(index: 0)
         mapView.delegate = self
-      
+        MapViewController.setStyle(index: 0)
+        
         if Reachability.isConnectedToNetwork() {
           // Create a UISegmentedControl to toggle between map styles
           let styleToggle = UISegmentedControl(items: ["Streets", "Satellite"])
@@ -66,7 +66,6 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
             self.mapView.setCenter(self.lastUpdatedLocation.coordinate, zoomLevel:10, animated: true)
-        }
         }
     }
 
