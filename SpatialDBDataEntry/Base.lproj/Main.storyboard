@@ -398,7 +398,7 @@
         <!--Pack View-->
         <scene sceneID="Ubh-QJ-mVe">
             <objects>
-                <viewController id="riH-wl-of9" userLabel="Pack View" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PackViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="riH-wl-of9" userLabel="Pack View" customClass="MapViewController" customModule="SpatialDBDataEntry" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="VWM-nV-EsX"/>
                         <viewControllerLayoutGuide type="bottom" id="upv-iL-z58"/>
@@ -417,7 +417,7 @@
                                     <navigationItem title="Pack for Offline" id="s1J-RY-DzO">
                                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="yp8-zX-OvU">
                                             <connections>
-                                                <segue destination="GJu-s4-sGO" kind="unwind" unwindAction="unwindToSettingsWithSender:" id="iv0-ds-9Yp"/>
+                                                <action selector="cancelPack:" destination="riH-wl-of9" id="iv0-ds-9Yp"/>
                                             </connections>
                                         </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" title="Pack" id="byG-RJ-haI">
@@ -665,6 +665,7 @@
                                     <constraint firstAttribute="bottom" secondItem="MHf-wS-ka2" secondAttribute="bottom" id="6vS-cr-DEj"/>
                                     <constraint firstItem="MHf-wS-ka2" firstAttribute="leading" secondItem="2Cf-6I-Y4a" secondAttribute="leading" id="I9d-vz-9iH"/>
                                     <constraint firstAttribute="trailing" secondItem="MHf-wS-ka2" secondAttribute="trailing" id="Wxc-Z1-xKZ"/>
+                                    <constraint firstItem="MHf-wS-ka2" firstAttribute="width" secondItem="2Cf-6I-Y4a" secondAttribute="width" id="ZbY-eg-hjX"/>
                                     <constraint firstItem="MHf-wS-ka2" firstAttribute="top" secondItem="2Cf-6I-Y4a" secondAttribute="top" id="yFT-I2-QmT"/>
                                     <constraint firstItem="MHf-wS-ka2" firstAttribute="centerX" secondItem="2Cf-6I-Y4a" secondAttribute="centerX" id="zYJ-t0-Fic"/>
                                 </constraints>

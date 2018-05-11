@@ -23,7 +23,7 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
         super.viewDidLoad()
         
         mapView.delegate = self
-        MapViewController.setStyle(index: 0)
+        setStyle(index: 0)
         
         if Reachability.isConnectedToNetwork() {
           // Create a UISegmentedControl to toggle between map styles
@@ -32,7 +32,7 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
           styleToggle.backgroundColor = UIColor.white
           styleToggle.selectedSegmentIndex = 0
           view.insertSubview(styleToggle, aboveSubview: mapView)
-          styleToggle.addTarget(self, action: #selector(MapViewController.changeStyle(sender:)), for: .valueChanged)
+          styleToggle.addTarget(self, action: #selector(changeStyle(sender:)), for: .valueChanged)
 
           // Configure autolayout constraints for the UISegmentedControl to align
           // at the bottom of the map view and above the Mapbox logo and attribution
@@ -103,6 +103,30 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
         
     }
     
+    //MARK: Map Style Controller
+    
+    // Change the map style based on the selected index of the UISegmentedControl
+    @objc func changeStyle(sender: UISegmentedControl) {
+        setStyle(index: sender.selectedSegmentIndex)
+    }
+    
+    func setStyle(index: Int) {
+        switch index {
+        case 0:
+            mapView.styleURL = MGLStyle.streetsStyleURL
+        case 1:
+            mapView.styleURL = MGLStyle.satelliteStyleURL
+        default:
+            mapView.styleURL = MGLStyle.streetsStyleURL
+        }
+    }
+    
+    //MARK: Actions
+    
+    @IBAction func cancelPack(_ sender: UIBarButtonItem) {
+        dismiss(animated: true, completion: nil)
+    }
+
     // MARK: - MGLOfflinePack notification handlers
     
     @objc func offlinePackProgressDidChange(notification: NSNotification) {

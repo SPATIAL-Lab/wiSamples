@@ -27,6 +27,7 @@ MGLAnnotation {
     
     var title: String?
     var subtitle: String?
+    var image: UIImage?
     
     //MARK: Initialization
     

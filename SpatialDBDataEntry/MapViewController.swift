@@ -58,6 +58,7 @@ class MapViewController: UIViewController,
     var selectedSiteInitialized: Bool = false
     var hasUserPannedTheMap: Bool = false
     var newlyAddedAnnotation: SiteAnnotation = SiteAnnotation()
+    var selectedAnnotation: SiteAnnotation = SiteAnnotation()
     
     // Site fetching
     var hasFetchedInitially: Bool = false
@@ -157,8 +158,52 @@ class MapViewController: UIViewController,
         }
     }
     
-    //MARK: MKMapViewDelegate
+    func icon(isSelected: Bool) -> UIImage {
+        if isSelected{
+            return #imageLiteral(resourceName: "PinSel")
+        }
+        else {
+            return #imageLiteral(resourceName: "PinUnSel")
+        }
+    }
     
+    //MARK: MKMapViewDelegate
+  
+     func mapView(_ mapView: MGLMapView, imageFor annotation: MGLAnnotation) -> MGLAnnotationImage? {
+        
+        if let point = annotation as? SiteAnnotation,
+            let image = point.image {
+            let identifier = "SiteAnnotation"
+            
+            // For better performance, always try to reuse existing annotations.
+            var annotationImage = mapView.dequeueReusableAnnotationImage(withIdentifier: identifier)
+            
+            // If there is no reusable annotation image available, initialize a new one.
+            if(annotationImage == nil) {
+                annotationImage = MGLAnnotationImage(image: image, reuseIdentifier: identifier)
+            }
+            return annotationImage
+        }
+        
+        return nil
+    }
+
+    private func MapView(_ mapView: MGLMapView, didSelect annotation: MGLAnnotationImage) {
+        
+        annotation.image = icon(isSelected: true)
+    /*    if let selected = annotation as? SiteAnnotation {
+            mapView.setCenter(selected.coordinate, animated: true)
+            if !selectedAnnotation.id.isEmpty {
+                mapView.removeAnnotation(selectedAnnotation)
+            }
+            selectedAnnotation = selected
+            selectedAnnotation.image = icon(isSelected: true)
+            mapView.addAnnotation(selectedAnnotation)
+        } */
+        
+    }
+    
+    /*
     func mapView(_ mapView: MGLMapView, viewFor annotation: MGLAnnotation) -> MGLAnnotationView? {
         guard let annotation = annotation as? SiteAnnotation else {
             return nil
@@ -231,6 +276,8 @@ class MapViewController: UIViewController,
         saveButton.isEnabled = true
     }
     
+
+    
     func mapView(_ mapView: MGLMapView, didSelect annotation: MGLAnnotation) {
         if annotation is MGLUserLocation && mapView.userLocation != nil {
             mapView.setCenter((annotation.coordinate), animated: true)
@@ -266,7 +313,7 @@ class MapViewController: UIViewController,
         existingSiteLocation = CLLocationCoordinate2D()
         navigationItem.title = ""
         saveButton.isEnabled = false
-    }
+    } */
 
     func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) {
         
@@ -416,6 +463,10 @@ class MapViewController: UIViewController,
         if !newSites.isEmpty {
             print("Plotting \(newSites.count) out of \(receivedSites.count) received sites")
             
+            for sites in newSites {
+                sites.image = icon(isSelected: false)
+            }
+            
             // Save the new sites
             siteAnnotationList.append(contentsOf: newSites)
             
@@ -541,6 +592,7 @@ class MapViewController: UIViewController,
     private func getDeltaLatLong(rangeInKM: Double) -> Double {
         let radiusEarth: Double = 6378
         let radiansToDegrees: Double = 180 / Double.pi
+
         let deltaLatLong = (rangeInKM / radiusEarth) * radiansToDegrees
         return deltaLatLong
     }
