@@ -18,13 +18,17 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     @IBOutlet weak var contactEmailTextField: UITextField!
     @IBOutlet weak var sampleIDPrefixTextField: UITextField!
     @IBOutlet weak var typePicker: UIPickerView!
+    @IBOutlet weak var styleToggle: UISegmentedControl!
     @IBOutlet weak var saveButton: UIBarButtonItem!
-
+    @IBOutlet weak var scrollView: UIScrollView!
+    
     /* This value is either passed by `ProjectTableViewController` via `prepare(for:sender)`
         or construct as part of adding a new project.
      */
     var project: Project?
     var defaultType: SampleType = SampleType.ground
+    var defaultMap: Int = 0
+    var activeField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,10 +38,25 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         contactNameTextField.delegate = self
         contactEmailTextField.delegate = self
         sampleIDPrefixTextField.delegate = self
-        
+       
         // Set picker view delegates
         typePicker.delegate = self
         typePicker.dataSource = self
+        
+        // Register for keyboard events
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWasShown(notification:)),
+            name: NSNotification.Name.UIKeyboardDidShow,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillBeHidden(notification:)),
+            name: NSNotification.Name.UIKeyboardWillHide,
+            object: nil
+        )
+
         
         // Disable the save button
         saveButton.isEnabled = false
@@ -61,7 +80,7 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         }
         
         // Hide the keyboard.
-        textField.resignFirstResponder()
+        self.view.endEditing(true)
         
         checkAndEnableSaveButton()
         return true
@@ -102,9 +121,10 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         let contactName = contactNameTextField.text ?? ""
         let contactEmail = contactEmailTextField.text ?? ""
         let sampleIDPrefix = sampleIDPrefixTextField.text ?? ""
+        let defaultMap = styleToggle.selectedSegmentIndex
         
         // Create a new project
-        project = Project(name: projectName, contactName: contactName, contactEmail: contactEmail, sampleIDPrefix: sampleIDPrefix, sites: nil, samples: nil, defaultType:defaultType)
+        project = Project(name: projectName, contactName: contactName, contactEmail: contactEmail, sampleIDPrefix: sampleIDPrefix, sites: nil, samples: nil, defaultType: defaultType, defaultMap: defaultMap)
     }
     
     //MARK: Actions
@@ -123,5 +143,71 @@ class ProjectViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
             saveButton.isEnabled = false;
         }
     }
+/*
+    @objc private func keyboardDidShow(notification: Notification) {
+        adjustInsetForKeyboardShow(notification: notification)
+    }
+    
+    @objc private func keyboardWillHide(notification: Notification) {
+        //adjustInsetForKeyboardShow(notification: notification)
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        activeField = textField
+        return true
+    }
+    
+    private func adjustInsetForKeyboardShow(notification: Notification) {
+        let userInfo = notification.userInfo ?? [:]
+        let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+
+        let activeFieldBase = activeField.frame.maxY
+        let keyboardHeight = (keyboardFrame.minY - 100)
+        
+        if activeFieldBase > keyboardHeight{
+            scrollView.contentInset.bottom += (activeFieldBase - keyboardHeight)
+        }
+    }
+ */
+    func keyboardWasShown(notification: NSNotification){
+        //Need to calculate keyboard exact size due to Apple suggestions
+        self.scrollView.isScrollEnabled = true
+        var info = notification.userInfo!
+        let keyboardSize = (info[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue.size
+        let contentInsets : UIEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize!.height, 0.0)
+        
+        self.scrollView.contentInset = contentInsets
+        self.scrollView.scrollIndicatorInsets = contentInsets
+        
+        var aRect : CGRect = self.view.frame
+        aRect.size.height -= keyboardSize!.height
+        if let activeField = self.activeField {
+            if (!aRect.contains(activeField.frame.origin)){
+                self.scrollView.scrollRectToVisible(activeField.frame, animated: true)
+            }
+        }
+    }
+    
+    func keyboardWillBeHidden(notification: NSNotification){
+        //Once keyboard disappears, restore original positions
+        var info = notification.userInfo!
+        let keyboardSize = (info[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue.size
+        let contentInsets : UIEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, -keyboardSize!.height, 0.0)
+        self.scrollView.contentInset = contentInsets
+        self.scrollView.scrollIndicatorInsets = contentInsets
+        self.view.endEditing(true)
+        self.scrollView.isScrollEnabled = false
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        activeField = textField
+        return true
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField){
+        activeField = nil
+    }
+
+
 }
 

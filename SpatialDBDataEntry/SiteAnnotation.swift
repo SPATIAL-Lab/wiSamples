@@ -7,11 +7,11 @@
 //
 
 import Foundation
-import MapKit
+import Mapbox
 import os.log
 
 class SiteAnnotation: NSObject,
-MKAnnotation {
+MGLAnnotation {
     
     //MARK: Properties
     
