@@ -173,14 +173,15 @@ class MapViewController: UIViewController,
         
         if let point = annotation as? SiteAnnotation,
             let image = point.image {
-            let identifier = "SiteAnnotation"
+            let identifier = point.id
             
             // For better performance, always try to reuse existing annotations.
             var annotationImage = mapView.dequeueReusableAnnotationImage(withIdentifier: identifier)
             
             // If there is no reusable annotation image available, initialize a new one.
             if(annotationImage == nil) {
-                annotationImage = MGLAnnotationImage(image: image, reuseIdentifier: identifier)
+                annotationImage = MGLAnnotationImage(image: image.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: image.size.height/2, right: 0))
+                    , reuseIdentifier: identifier)
             }
             return annotationImage
         }
@@ -189,6 +190,7 @@ class MapViewController: UIViewController,
     }
 
     private func MapView(_ mapView: MGLMapView, didSelect annotation: MGLAnnotationImage) {
+                
         
         annotation.image = icon(isSelected: true)
     /*    if let selected = annotation as? SiteAnnotation {
