@@ -32,6 +32,27 @@ enum MapPanFetchResultType: Int {
     }
 }
 
+class CustomImageAnnotationView: MGLAnnotationView {
+    var imageView: UIImageView!
+    
+    required init(reuseIdentifier: String?, image: UIImage) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        
+        self.imageView = UIImageView(image: image)
+        self.addSubview(self.imageView)
+        self.frame = self.imageView.frame
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+}
+
+
 class MapViewController: UIViewController,
     CLLocationManagerDelegate,
     MGLMapViewDelegate,
@@ -168,32 +189,40 @@ class MapViewController: UIViewController,
     }
     
     //MARK: MKMapViewDelegate
-  
-     func mapView(_ mapView: MGLMapView, imageFor annotation: MGLAnnotation) -> MGLAnnotationImage? {
+/*
+     func mapView(_ mapView: MGLMapView, viewFor annotation: MGLAnnotation) -> MGLAnnotationView? {
         
         if let point = annotation as? SiteAnnotation,
             let image = point.image {
             let identifier = point.id
             
             // For better performance, always try to reuse existing annotations.
-            var annotationImage = mapView.dequeueReusableAnnotationImage(withIdentifier: identifier)
+     //       var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
             
             // If there is no reusable annotation image available, initialize a new one.
-            if(annotationImage == nil) {
-                annotationImage = MGLAnnotationImage(image: image.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: image.size.height/2, right: 0))
-                    , reuseIdentifier: identifier)
-            }
-            return annotationImage
+     //       if(annotationView == nil) {
+                var annotationView = CustomImageAnnotationView(reuseIdentifier: "Site Annotation", image: image)
+    //        }
+            return annotationView
         }
         
         return nil
     }
 
-    private func MapView(_ mapView: MGLMapView, didSelect annotation: MGLAnnotationImage) {
-                
+    func MapView(_ mapView: MGLMapView, didSelect view: MGLAnnotationView) {
         
-        annotation.image = icon(isSelected: true)
-    /*    if let selected = annotation as? SiteAnnotation {
+        for sites in siteAnnotationList {
+            if sites.id == view.annotation?.title {
+                selectedAnnotation = sites
+            }
+        }
+        
+        let image = icon(isSelected: true)
+        var annotationView = CustomImageAnnotationView(reuseIdentifier: "Selected Annotation", image: image)
+
+        
+
+        /*    if let selected = annotation as? SiteAnnotation {
             mapView.setCenter(selected.coordinate, animated: true)
             if !selectedAnnotation.id.isEmpty {
                 mapView.removeAnnotation(selectedAnnotation)
@@ -205,7 +234,7 @@ class MapViewController: UIViewController,
         
     }
     
-    /*
+    */
     func mapView(_ mapView: MGLMapView, viewFor annotation: MGLAnnotation) -> MGLAnnotationView? {
         guard let annotation = annotation as? SiteAnnotation else {
             return nil
@@ -315,7 +344,7 @@ class MapViewController: UIViewController,
         existingSiteLocation = CLLocationCoordinate2D()
         navigationItem.title = ""
         saveButton.isEnabled = false
-    } */
+    } 
 
     func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) {
         
