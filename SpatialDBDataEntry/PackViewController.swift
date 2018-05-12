@@ -3,7 +3,7 @@
 //  PackViewController.swift
 //  SpatialDBDataEntry
 //
-//  Created by Gabe Bowen on 10/27/17.
+//  Created by Gabe Bowen on 5/8/18.
 //  Copyright © 2018 University of Utah. All rights reserved.
 //
 
@@ -15,6 +15,7 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
 
     let locationManager = CLLocationManager()
     @IBOutlet weak var mapView: MGLMapView!
+    @IBOutlet weak var cancelPack: UIBarButtonItem!
     var progressView: UIProgressView!
     
     var lastUpdatedLocation: CLLocation = CLLocation()
@@ -65,13 +66,8 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
         let lastUpdatedLocation = manager.location!
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-            self.mapView.setCenter(self.lastUpdatedLocation.coordinate, zoomLevel:10, animated: true)
+            self.mapView.setCenter(lastUpdatedLocation.coordinate, zoomLevel:10, animated: true)
         }
-    }
-
-    func mapViewDidFinishLoadingMap(_ mapView: MGLMapView) {
-        // Start downloading tiles and resources for z13-16.
-        startOfflinePackDownload()
     }
     
     deinit {
