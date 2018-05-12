@@ -15,8 +15,10 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
 
     let locationManager = CLLocationManager()
     @IBOutlet weak var mapView: MGLMapView!
-    @IBOutlet weak var cancelPack: UIBarButtonItem!
+    @IBOutlet weak var packButton: UIBarButtonItem!
+    @IBOutlet weak var donePack: UIBarButtonItem!
     var progressView: UIProgressView!
+    var textView: UITextField!
     
     var lastUpdatedLocation: CLLocation = CLLocation()
 
@@ -75,17 +77,24 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
         NotificationCenter.default.removeObserver(self)
     }
     
-    func startOfflinePackDownload() {
+    @IBAction func startOfflinePackDownload(_ sender: UIBarButtonItem) {
         // Create a region that includes the current viewport and any tiles needed to view it when zoomed further in.
         // Because tile count grows exponentially with the maximum zoom level, you should be conservative with your `toZoomLevel` setting.
-        let region = MGLTilePyramidOfflineRegion(styleURL: mapView.styleURL, bounds: mapView.visibleCoordinateBounds, fromZoomLevel: mapView.zoomLevel, toZoomLevel: mapView.zoomLevel + 6)
+        let region = MGLTilePyramidOfflineRegion(styleURL: mapView.styleURL, bounds: mapView.visibleCoordinateBounds, fromZoomLevel: mapView.zoomLevel, toZoomLevel: mapView.zoomLevel + 2)
         
         // Store some data for identification purposes alongside the downloaded resources.
         let userInfo = ["name": "My Offline Pack"]
         let context = NSKeyedArchiver.archivedData(withRootObject: userInfo)
        
-        // Create and register an offline pack with the shared offline storage object.
+        // Clean out old packs
+        let packs = MGLOfflineStorage.shared.packs!
+        if packs.count > 0 {
+            for pack in packs {
+                MGLOfflineStorage.shared.removePack(pack)
+            }
+        }
         
+        // Create and register an offline pack with the shared offline storage object.
         MGLOfflineStorage.shared.addPack(for: region, withContext: context) { (pack, error) in
             guard error == nil else {
                 // The pack couldn’t be created for some reason.
@@ -119,7 +128,7 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
     
     //MARK: Actions
     
-    @IBAction func cancelPack(_ sender: UIBarButtonItem) {
+    @IBAction func donePack(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
     }
 
@@ -138,6 +147,9 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
             // Calculate current progress percentage.
             let progressPercentage = Float(completedResources) / Float(expectedResources)
             
+            //Frame for background
+            
+            
             // Setup the progress bar.
             if progressView == nil {
                 progressView = UIProgressView(progressViewStyle: .default)
@@ -152,6 +164,19 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
             if completedResources == expectedResources {
                 let byteCount = ByteCountFormatter.string(fromByteCount: Int64(pack.progress.countOfBytesCompleted), countStyle: ByteCountFormatter.CountStyle.memory)
                 print("Offline pack “\(userInfo["name"] ?? "unknown")” completed: \(byteCount), \(completedResources) resources")
+                let frame = view.bounds.size
+                textView = UITextField(frame: CGRect(x: frame.width / 4, y: frame.height * 0.75 - 25, width: frame.width / 2, height: 20))
+                textView.text = "All Done!"
+                textView.textAlignment = NSTextAlignment.center
+                textView.textColor = UIColor.red
+                
+                view.addSubview(textView)
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+                    self.progressView.removeFromSuperview()
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)){
+                    self.textView.removeFromSuperview()
+                }
             } else {
                 // Otherwise, print download/verification progress.
                 print("Offline pack “\(userInfo["name"] ?? "unknown")” has \(completedResources) of \(expectedResources) resources — \(progressPercentage * 100)%.")

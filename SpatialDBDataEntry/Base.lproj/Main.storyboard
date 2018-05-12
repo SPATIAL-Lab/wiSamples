@@ -409,32 +409,34 @@
                         <subviews>
                             <view multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Abc-4a-123" customClass="MGLMapView">
                                 <rect key="frame" x="10" y="74" width="355" height="583"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Abc-4a-123" firstAttribute="top" secondItem="VWM-nV-EsX" secondAttribute="bottom" constant="10" id="C1u-Rz-7kL"/>
+                            <constraint firstAttribute="trailing" secondItem="Abc-4a-123" secondAttribute="trailing" constant="10" id="Ee0-od-avF"/>
+                            <constraint firstItem="Abc-4a-123" firstAttribute="leading" secondItem="Gff-Md-qFu" secondAttribute="leading" constant="10" id="aB7-l9-cev"/>
+                            <constraint firstItem="upv-iL-z58" firstAttribute="top" secondItem="Abc-4a-123" secondAttribute="bottom" constant="10" id="vPT-KW-O73"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Pack for Offline" id="s1J-RY-DzO">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="yp8-zX-OvU">
+                        <barButtonItem key="leftBarButtonItem" systemItem="done" id="yp8-zX-OvU" userLabel="Done Pack">
                             <connections>
-                                <action selector="cancelPack:" destination="riH-wl-of9" id="iv0-ds-9Yp"/>
+                                <action selector="donePack:" destination="riH-wl-of9" id="iv0-ds-9Yp"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Pack" id="byG-RJ-haI">
                             <connections>
-                                <action selector="startPack:" destination="GJu-s4-sGO" id="ucL-Ga-6gE"/>
+                                <action selector="startOfflinePackDownload:" destination="riH-wl-of9" id="HxG-TN-gE7"/>
                             </connections>
                         </barButtonItem>
-                        <connections>
-                            <outlet property="rightBarButtonItem" destination="byG-RJ-haI" id="HxG-TN-gE7"/>
-                        </connections>
                     </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="Abc-4a-123" id="fd3-UB-z8e"/>
+                        <outlet property="packButton" destination="byG-RJ-haI" id="feV-25-jYE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LGd-Kz-FJU" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="GJu-s4-sGO" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3421.5999999999999" y="-892.80359820089961"/>
         </scene>
@@ -1084,7 +1086,7 @@
             </objects>
             <point key="canvasLocation" x="3438" y="1173"/>
         </scene>
-        <!--New Sample Set SiteNav-->
+        <!--New Sample Set Site Nav-->
         <scene sceneID="Wce-Ej-yZh">
             <objects>
                 <navigationController storyboardIdentifier="MapViewNavigationController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="IEp-1J-acU" userLabel="New Sample Set Site Nav" sceneMemberID="viewController">
