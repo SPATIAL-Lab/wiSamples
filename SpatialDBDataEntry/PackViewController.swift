@@ -17,6 +17,7 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
     @IBOutlet weak var mapView: MGLMapView!
     @IBOutlet weak var packButton: UIBarButtonItem!
     @IBOutlet weak var donePack: UIBarButtonItem!
+    var popup: UIView!
     var progressView: UIProgressView!
     var textView: UITextField!
     
@@ -151,11 +152,17 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
             
             
             // Setup the progress bar.
+            if popup == nil {
+                popup = UIView()
+                let superFrame = view.bounds.size
+                popup.frame = CGRect(x: superFrame.width / 6, y: superFrame.height * 0.70, width: (superFrame.width * 2 / 3), height: 40)
+                popup.backgroundColor = UIColor.white
+                view.addSubview(popup)
+            }
             if progressView == nil {
                 progressView = UIProgressView(progressViewStyle: .default)
-                let frame = view.bounds.size
-                progressView.frame = CGRect(x: frame.width / 4, y: frame.height * 0.75, width: frame.width / 2, height: 10)
-                view.addSubview(progressView)
+                progressView.frame = CGRect(x: popup.frame.width / 6, y: 25, width: popup.frame.width * 2 / 3, height: 10)
+                popup.addSubview(progressView)
             }
             
             progressView.progress = progressPercentage
@@ -164,18 +171,13 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
             if completedResources == expectedResources {
                 let byteCount = ByteCountFormatter.string(fromByteCount: Int64(pack.progress.countOfBytesCompleted), countStyle: ByteCountFormatter.CountStyle.memory)
                 print("Offline pack “\(userInfo["name"] ?? "unknown")” completed: \(byteCount), \(completedResources) resources")
-                let frame = view.bounds.size
-                textView = UITextField(frame: CGRect(x: frame.width / 4, y: frame.height * 0.75 - 25, width: frame.width / 2, height: 20))
-                textView.text = "All Done!"
+                textView = UITextField(frame: CGRect(x: popup.frame.width / 4, y: 5, width: popup.frame.width / 2, height: 20))
+                textView.text = "Done"
                 textView.textAlignment = NSTextAlignment.center
-                textView.textColor = UIColor.red
                 
-                view.addSubview(textView)
+                popup.addSubview(textView)
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
-                    self.progressView.removeFromSuperview()
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)){
-                    self.textView.removeFromSuperview()
+                    self.popup.removeFromSuperview()
                 }
             } else {
                 // Otherwise, print download/verification progress.
