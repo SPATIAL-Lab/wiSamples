@@ -14,14 +14,16 @@ import CoreLocation
 class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapViewDelegate {
 
     let locationManager = CLLocationManager()
+    var lastUpdatedLocation: CLLocation = CLLocation()
+    let minLocationErrorTolerance: Double = 5
+    var hasFetchedInitially: Bool = false
+    
     @IBOutlet weak var mapView: MGLMapView!
     @IBOutlet weak var packButton: UIBarButtonItem!
     @IBOutlet weak var donePack: UIBarButtonItem!
     var popup: UIView!
     var progressView: UIProgressView!
     var textView: UITextField!
-    
-    var lastUpdatedLocation: CLLocation = CLLocation()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,20 +31,19 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
         mapView.delegate = self
         setStyle(index: 0)
         
-        if Reachability.isConnectedToNetwork() {
-          // Create a UISegmentedControl to toggle between map styles
-          let styleToggle = UISegmentedControl(items: ["Streets", "Satellite"])
-          styleToggle.translatesAutoresizingMaskIntoConstraints = false
-          styleToggle.backgroundColor = UIColor.white
-          styleToggle.selectedSegmentIndex = 0
-          view.insertSubview(styleToggle, aboveSubview: mapView)
-          styleToggle.addTarget(self, action: #selector(changeStyle(sender:)), for: .valueChanged)
 
-          // Configure autolayout constraints for the UISegmentedControl to align
-          // at the bottom of the map view and above the Mapbox logo and attribution
-          NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:|-40-[styleToggle]-40-|", options: [], metrics: nil, views: ["styleToggle" : styleToggle]))
-          NSLayoutConstraint.activate([NSLayoutConstraint(item: styleToggle, attribute: .bottom, relatedBy: .equal, toItem: mapView.logoView, attribute: .top, multiplier: 1, constant: -20)])
-        }
+        // Create a UISegmentedControl to toggle between map styles
+        let styleToggle = UISegmentedControl(items: ["Streets", "Satellite"])
+        styleToggle.translatesAutoresizingMaskIntoConstraints = false
+        styleToggle.backgroundColor = UIColor.white
+        styleToggle.selectedSegmentIndex = 0
+        view.insertSubview(styleToggle, aboveSubview: mapView)
+        styleToggle.addTarget(self, action: #selector(changeStyle(sender:)), for: .valueChanged)
+
+        // Configure autolayout constraints for the UISegmentedControl to align
+        // at the bottom of the map view and above the Mapbox logo and attribution
+        NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:|-40-[styleToggle]-40-|", options: [], metrics: nil, views: ["styleToggle" : styleToggle]))
+        NSLayoutConstraint.activate([NSLayoutConstraint(item: styleToggle, attribute: .bottom, relatedBy: .equal, toItem: mapView.logoView, attribute: .top, multiplier: 1, constant: -20)])
       
         // Initialize location
         // Request location usage
@@ -66,10 +67,15 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         // Save off the difference from the previous update
-        let lastUpdatedLocation = manager.location!
+        let distanceFromLastUpdatedLocation = manager.location!.distance(from: lastUpdatedLocation)
+        lastUpdatedLocation = manager.location!
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-            self.mapView.setCenter(lastUpdatedLocation.coordinate, zoomLevel:10, animated: true)
+        if !hasFetchedInitially && distanceFromLastUpdatedLocation.isLess(than: minLocationErrorTolerance) {
+            
+            hasFetchedInitially = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                self.mapView.setCenter(self.lastUpdatedLocation.coordinate, zoomLevel: 10, animated: true)
+            }
         }
     }
     
