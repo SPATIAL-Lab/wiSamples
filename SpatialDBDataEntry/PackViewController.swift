@@ -81,15 +81,41 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
     @IBAction func startOfflinePackDownload(_ sender: UIBarButtonItem) {
         // Create a region that includes the current viewport and any tiles needed to view it when zoomed further in.
         // Because tile count grows exponentially with the maximum zoom level, you should be conservative with your `toZoomLevel` setting.
-        let region = MGLTilePyramidOfflineRegion(styleURL: mapView.styleURL, bounds: mapView.visibleCoordinateBounds, fromZoomLevel: mapView.zoomLevel, toZoomLevel: mapView.zoomLevel + 2)
+        let maxzoom = min(mapView.zoomLevel + 5, 19)
+        let region = MGLTilePyramidOfflineRegion(styleURL: mapView.styleURL, bounds: mapView.visibleCoordinateBounds, fromZoomLevel: mapView.zoomLevel, toZoomLevel: maxzoom)
         
         // Store some data for identification purposes alongside the downloaded resources.
         let userInfo = ["name": "My Offline Pack"]
         let context = NSKeyedArchiver.archivedData(withRootObject: userInfo)
-       
+ 
+        // Set up notifications
+        if popup == nil {
+            popup = UIView()
+            let superFrame = view.bounds.size
+            popup.frame = CGRect(x: superFrame.width / 6, y: superFrame.height * 0.70, width: (superFrame.width * 2 / 3), height: 40)
+            popup.backgroundColor = UIColor.white
+            popup.layer.borderColor = UIColor.black.cgColor
+            popup.layer.cornerRadius = 4
+            popup.layer.borderWidth = 1
+        }
+        view.addSubview(popup)
+        
+        if textView == nil {
+            textView = UITextField(frame: CGRect(x: popup.frame.width / 4, y: 5, width: popup.frame.width / 2, height: 20))
+            textView.textAlignment = NSTextAlignment.center
+            popup.addSubview(textView)
+        } else {
+            textView.text = ""
+        }
+        if progressView != nil {
+            progressView.progress = 0
+        }
+
+        
         // Clean out old packs
         let packs = MGLOfflineStorage.shared.packs!
         if packs.count > 0 {
+            textView.text = "Preparing..."
             for pack in packs {
                 MGLOfflineStorage.shared.removePack(pack)
             }
@@ -152,16 +178,10 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
             
             
             // Setup the progress bar.
-            if popup == nil {
-                popup = UIView()
-                let superFrame = view.bounds.size
-                popup.frame = CGRect(x: superFrame.width / 6, y: superFrame.height * 0.70, width: (superFrame.width * 2 / 3), height: 40)
-                popup.backgroundColor = UIColor.white
-                view.addSubview(popup)
-            }
+            textView.text = "Packing..."
             if progressView == nil {
                 progressView = UIProgressView(progressViewStyle: .default)
-                progressView.frame = CGRect(x: popup.frame.width / 6, y: 25, width: popup.frame.width * 2 / 3, height: 10)
+                progressView.frame = CGRect(x: popup.frame.width / 6, y: 29, width: popup.frame.width * 2 / 3, height: 10)
                 popup.addSubview(progressView)
             }
             
@@ -171,17 +191,15 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
             if completedResources == expectedResources {
                 let byteCount = ByteCountFormatter.string(fromByteCount: Int64(pack.progress.countOfBytesCompleted), countStyle: ByteCountFormatter.CountStyle.memory)
                 print("Offline pack “\(userInfo["name"] ?? "unknown")” completed: \(byteCount), \(completedResources) resources")
-                textView = UITextField(frame: CGRect(x: popup.frame.width / 4, y: 5, width: popup.frame.width / 2, height: 20))
                 textView.text = "Done"
-                textView.textAlignment = NSTextAlignment.center
-                
-                popup.addSubview(textView)
+
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
                     self.popup.removeFromSuperview()
                 }
             } else {
                 // Otherwise, print download/verification progress.
                 print("Offline pack “\(userInfo["name"] ?? "unknown")” has \(completedResources) of \(expectedResources) resources — \(progressPercentage * 100)%.")
+
             }
         }
     }
@@ -191,6 +209,10 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
             let userInfo = NSKeyedUnarchiver.unarchiveObject(with: pack.context) as? [String: String],
             let error = notification.userInfo?[MGLOfflinePackUserInfoKey.error] as? NSError {
             print("Offline pack “\(userInfo["name"] ?? "unknown")” received error: \(error.localizedFailureReason ?? "unknown error")")
+            textView.text = "Unknown error"
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+                self.popup.removeFromSuperview()
+            }
         }
     }
     
@@ -199,6 +221,10 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
             let userInfo = NSKeyedUnarchiver.unarchiveObject(with: pack.context) as? [String: String],
             let maximumCount = (notification.userInfo?[MGLOfflinePackUserInfoKey.maximumCount] as AnyObject).uint64Value {
             print("Offline pack “\(userInfo["name"] ?? "unknown")” reached limit of \(maximumCount) tiles.")
+            textView.text = "Limit reached"
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+                self.popup.removeFromSuperview()
+            }
         }
     }
     
