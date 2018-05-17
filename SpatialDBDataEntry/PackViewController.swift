@@ -163,6 +163,8 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
     //MARK: Actions
     
     @IBAction func donePack(_ sender: UIBarButtonItem) {
+        // Remove offline pack observers.
+        NotificationCenter.default.removeObserver(self)
         dismiss(animated: true, completion: nil)
     }
 
@@ -181,11 +183,26 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
             // Calculate current progress percentage.
             let progressPercentage = Float(completedResources) / Float(expectedResources)
             
-            //Frame for background
+            // Set up notifications
+            if popup == nil {
+                popup = UIView()
+                let superFrame = view.bounds.size
+                popup.frame = CGRect(x: superFrame.width / 6, y: superFrame.height * 0.70, width: (superFrame.width * 2 / 3), height: 40)
+                popup.backgroundColor = UIColor.white
+                popup.layer.borderColor = UIColor.black.cgColor
+                popup.layer.cornerRadius = 4
+                popup.layer.borderWidth = 1
+            }
+            view.addSubview(popup)
             
-            
-            // Setup the progress bar.
+            if textView == nil {
+                textView = UITextField(frame: CGRect(x: popup.frame.width / 4, y: 5, width: popup.frame.width / 2, height: 20))
+                textView.textAlignment = NSTextAlignment.center
+                popup.addSubview(textView)
+            }
             textView.text = "Packing..."
+
+            // Setup the progress bar.
             if progressView == nil {
                 progressView = UIProgressView(progressViewStyle: .default)
                 progressView.frame = CGRect(x: popup.frame.width / 6, y: 29, width: popup.frame.width * 2 / 3, height: 10)
