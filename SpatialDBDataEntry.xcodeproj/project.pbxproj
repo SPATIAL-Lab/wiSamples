@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4515A47820A5510000DC422D /* PackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515A47720A5510000DC422D /* PackViewController.swift */; };
 		45FEEF3C20A0E504002F08BC /* Mapbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45FEEF3B20A0E504002F08BC /* Mapbox.framework */; };
 		45FEEF3D20A0E504002F08BC /* Mapbox.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 45FEEF3B20A0E504002F08BC /* Mapbox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9E1262B9204659210022F1FA /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1262B8204659210022F1FA /* Reachability.swift */; };
@@ -63,6 +64,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4515A47720A5510000DC422D /* PackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PackViewController.swift; sourceTree = "<group>"; };
 		45FEEF3B20A0E504002F08BC /* Mapbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mapbox.framework; sourceTree = "<group>"; };
 		9E1262B8204659210022F1FA /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		9E17B9B91F81A12600C99F12 /* SiteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteTableViewController.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 		9E3B197F1F7F3B410094D925 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				4515A47720A5510000DC422D /* PackViewController.swift */,
 				9EC8E8D52020F1100040AEA2 /* ExportProjectsTableViewCell.swift */,
 				9EC8E8D32020F0C70040AEA2 /* ExportProjectsTableViewController.swift */,
 				9E4A972F1FA41CDB009EB5FD /* MapViewController.swift */,
@@ -337,6 +340,7 @@
 				9E17B9BA1F81A12600C99F12 /* SiteTableViewController.swift in Sources */,
 				9EC8E8D62020F1100040AEA2 /* ExportProjectsTableViewCell.swift in Sources */,
 				9EF583B41F8C5C8E00079487 /* SampleTableViewController.swift in Sources */,
+				4515A47820A5510000DC422D /* PackViewController.swift in Sources */,
 				9EE9C6341FCFA9C60079067D /* DataManager.swift in Sources */,
 				9E17B9BC1F81A6F500C99F12 /* SiteViewController.swift in Sources */,
 				9E3B19811F7F3B930094D925 /* Site.swift in Sources */,

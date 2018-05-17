@@ -32,6 +32,27 @@ enum MapPanFetchResultType: Int {
     }
 }
 
+class CustomImageAnnotationView: MGLAnnotationView {
+    var imageView: UIImageView!
+    
+    required init(reuseIdentifier: String?, image: UIImage) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        
+        self.imageView = UIImageView(image: image)
+        self.addSubview(self.imageView)
+        self.frame = self.imageView.frame
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+}
+
+
 class MapViewController: UIViewController,
     CLLocationManagerDelegate,
     MGLMapViewDelegate,
@@ -58,6 +79,7 @@ class MapViewController: UIViewController,
     var selectedSiteInitialized: Bool = false
     var hasUserPannedTheMap: Bool = false
     var newlyAddedAnnotation: SiteAnnotation = SiteAnnotation()
+    var selectedAnnotation: SiteAnnotation = SiteAnnotation()
     
     // Site fetching
     var hasFetchedInitially: Bool = false
@@ -80,21 +102,19 @@ class MapViewController: UIViewController,
         setStyle(index: project.defaultMap)
         mapView.delegate = self
         
-        if Reachability.isConnectedToNetwork() {
-            // Create a UISegmentedControl to toggle between map styles
-            let styleToggle = UISegmentedControl(items: ["Streets", "Satellite"])
-            styleToggle.translatesAutoresizingMaskIntoConstraints = false
-            styleToggle.backgroundColor = UIColor.white
-            styleToggle.selectedSegmentIndex = project.defaultMap
-            view.insertSubview(styleToggle, aboveSubview: mapView)
-            styleToggle.addTarget(self, action: #selector(changeStyle(sender:)), for: .valueChanged)
+        // Create a UISegmentedControl to toggle between map styles
+        let styleToggle = UISegmentedControl(items: ["Streets", "Satellite"])
+        styleToggle.translatesAutoresizingMaskIntoConstraints = false
+        styleToggle.backgroundColor = UIColor.white
+        styleToggle.selectedSegmentIndex = project.defaultMap
+        view.insertSubview(styleToggle, aboveSubview: mapView)
+        styleToggle.addTarget(self, action: #selector(changeStyle(sender:)), for: .valueChanged)
             
-            // Configure autolayout constraints for the UISegmentedControl to align
-            // at the bottom of the map view and above the Mapbox logo and attribution
-            NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:|-40-[styleToggle]-40-|", options: [], metrics: nil, views: ["styleToggle" : styleToggle]))
-            NSLayoutConstraint.activate([NSLayoutConstraint(item: styleToggle, attribute: .bottom, relatedBy: .equal, toItem: mapView.logoView, attribute: .top, multiplier: 1, constant: -20)])
-        }
-            
+        // Configure autolayout constraints for the UISegmentedControl to align
+        // at the bottom of the map view and above the Mapbox logo and attribution
+        NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:|-40-[styleToggle]-40-|", options: [], metrics: nil, views: ["styleToggle" : styleToggle]))
+        NSLayoutConstraint.activate([NSLayoutConstraint(item: styleToggle, attribute: .bottom, relatedBy: .equal, toItem: mapView.logoView, attribute: .top, multiplier: 1, constant: -20)])
+        
         // Add contol for push-hold-drag
         let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
         self.view!.addGestureRecognizer(gestureRecognizer)
@@ -157,8 +177,62 @@ class MapViewController: UIViewController,
         }
     }
     
-    //MARK: MKMapViewDelegate
+    func icon(isSelected: Bool) -> UIImage {
+        if isSelected{
+            return #imageLiteral(resourceName: "PinSel")
+        }
+        else {
+            return #imageLiteral(resourceName: "PinUnSel")
+        }
+    }
     
+    //MARK: MKMapViewDelegate
+/*
+     func mapView(_ mapView: MGLMapView, viewFor annotation: MGLAnnotation) -> MGLAnnotationView? {
+        
+        if let point = annotation as? SiteAnnotation,
+            let image = point.image {
+            let identifier = point.id
+            
+            // For better performance, always try to reuse existing annotations.
+     //       var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+            
+            // If there is no reusable annotation image available, initialize a new one.
+     //       if(annotationView == nil) {
+                var annotationView = CustomImageAnnotationView(reuseIdentifier: "Site Annotation", image: image)
+    //        }
+            return annotationView
+        }
+        
+        return nil
+    }
+
+    func MapView(_ mapView: MGLMapView, didSelect view: MGLAnnotationView) {
+        
+        for sites in siteAnnotationList {
+            if sites.id == view.annotation?.title {
+                selectedAnnotation = sites
+            }
+        }
+        
+        let image = icon(isSelected: true)
+        var annotationView = CustomImageAnnotationView(reuseIdentifier: "Selected Annotation", image: image)
+
+        
+
+        /*    if let selected = annotation as? SiteAnnotation {
+            mapView.setCenter(selected.coordinate, animated: true)
+            if !selectedAnnotation.id.isEmpty {
+                mapView.removeAnnotation(selectedAnnotation)
+            }
+            selectedAnnotation = selected
+            selectedAnnotation.image = icon(isSelected: true)
+            mapView.addAnnotation(selectedAnnotation)
+        } */
+        
+    }
+    
+    */
     func mapView(_ mapView: MGLMapView, viewFor annotation: MGLAnnotation) -> MGLAnnotationView? {
         guard let annotation = annotation as? SiteAnnotation else {
             return nil
@@ -231,6 +305,8 @@ class MapViewController: UIViewController,
         saveButton.isEnabled = true
     }
     
+
+    
     func mapView(_ mapView: MGLMapView, didSelect annotation: MGLAnnotation) {
         if annotation is MGLUserLocation && mapView.userLocation != nil {
             mapView.setCenter((annotation.coordinate), animated: true)
@@ -266,7 +342,7 @@ class MapViewController: UIViewController,
         existingSiteLocation = CLLocationCoordinate2D()
         navigationItem.title = ""
         saveButton.isEnabled = false
-    }
+    } 
 
     func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) {
         
@@ -416,6 +492,10 @@ class MapViewController: UIViewController,
         if !newSites.isEmpty {
             print("Plotting \(newSites.count) out of \(receivedSites.count) received sites")
             
+            for sites in newSites {
+                sites.image = icon(isSelected: false)
+            }
+            
             // Save the new sites
             siteAnnotationList.append(contentsOf: newSites)
             
@@ -541,6 +621,7 @@ class MapViewController: UIViewController,
     private func getDeltaLatLong(rangeInKM: Double) -> Double {
         let radiusEarth: Double = 6378
         let radiansToDegrees: Double = 180 / Double.pi
+
         let deltaLatLong = (rangeInKM / radiusEarth) * radiansToDegrees
         return deltaLatLong
     }
