@@ -407,7 +407,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Abc-4a-123" customClass="MGLMapView">
+                            <view multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Abc-4a-123" customClass="MGLMapView">
                                 <rect key="frame" x="10" y="74" width="355" height="583"/>
                             </view>
                         </subviews>
@@ -592,16 +592,22 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7iC-P2-5XN">
-                                                <rect key="frame" x="20" y="122" width="335" height="216"/>
+                                                <rect key="frame" x="20" y="122" width="335" height="150"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="150" id="4fG-aD-F86"/>
+                                                </constraints>
                                             </pickerView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Collection Date &amp; Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6a8-Ew-5re">
-                                                <rect key="frame" x="20" y="348" width="335" height="21"/>
+                                                <rect key="frame" x="20" y="282" width="335" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="10" translatesAutoresizingMaskIntoConstraints="NO" id="6Le-5J-reb">
-                                                <rect key="frame" x="20" y="379" width="335" height="216"/>
+                                                <rect key="frame" x="20" y="313" width="335" height="150"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="150" id="8yr-Hd-cbJ"/>
+                                                </constraints>
                                                 <date key="date" timeIntervalSinceReferenceDate="529634141.47707403">
                                                     <!--2017-10-14 00:35:41 +0000-->
                                                 </date>
@@ -610,7 +616,7 @@
                                                 </connections>
                                             </datePicker>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="31z-Kg-TOd">
-                                                <rect key="frame" x="20" y="605" width="335" height="30"/>
+                                                <rect key="frame" x="20" y="473" width="335" height="30"/>
                                                 <color key="backgroundColor" red="0.83419689119999996" green="0.83419689119999996" blue="0.83419689119999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <size key="titleShadowOffset" width="1" height="1"/>
                                                 <state key="normal" title="Set Location">
@@ -621,7 +627,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="79g-0p-sRm">
-                                                <rect key="frame" x="20" y="645" width="335" height="30"/>
+                                                <rect key="frame" x="20" y="513" width="335" height="30"/>
                                                 <color key="backgroundColor" red="0.83419689119999996" green="0.83419689119999996" blue="0.83419689119999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <size key="titleShadowOffset" width="1" height="1"/>
                                                 <state key="normal" title="More...">
