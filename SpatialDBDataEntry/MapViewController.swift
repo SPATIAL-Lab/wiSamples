@@ -102,18 +102,20 @@ class MapViewController: UIViewController,
         setStyle(index: project.defaultMap)
         mapView.delegate = self
         
-        // Create a UISegmentedControl to toggle between map styles
-        let styleToggle = UISegmentedControl(items: ["Streets", "Satellite"])
-        styleToggle.translatesAutoresizingMaskIntoConstraints = false
-        styleToggle.backgroundColor = UIColor.white
-        styleToggle.selectedSegmentIndex = project.defaultMap
-        view.insertSubview(styleToggle, aboveSubview: mapView)
-        styleToggle.addTarget(self, action: #selector(changeStyle(sender:)), for: .valueChanged)
-            
-        // Configure autolayout constraints for the UISegmentedControl to align
-        // at the bottom of the map view and above the Mapbox logo and attribution
-        NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:|-40-[styleToggle]-40-|", options: [], metrics: nil, views: ["styleToggle" : styleToggle]))
-        NSLayoutConstraint.activate([NSLayoutConstraint(item: styleToggle, attribute: .bottom, relatedBy: .equal, toItem: mapView.logoView, attribute: .top, multiplier: 1, constant: -20)])
+        if Reachability.isConnectedToNetwork() {
+            // Create a UISegmentedControl to toggle between map styles
+            let styleToggle = UISegmentedControl(items: ["Streets", "Satellite"])
+            styleToggle.translatesAutoresizingMaskIntoConstraints = false
+            styleToggle.backgroundColor = UIColor.white
+            styleToggle.selectedSegmentIndex = project.defaultMap
+            view.insertSubview(styleToggle, aboveSubview: mapView)
+            styleToggle.addTarget(self, action: #selector(changeStyle(sender:)), for: .valueChanged)
+
+            // Configure autolayout constraints for the UISegmentedControl to align
+            // at the bottom of the map view and above the Mapbox logo and attribution
+            NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:|-40-[styleToggle]-40-|", options: [], metrics: nil, views: ["styleToggle" : styleToggle]))
+            NSLayoutConstraint.activate([NSLayoutConstraint(item: styleToggle, attribute: .bottom, relatedBy: .equal, toItem: mapView.logoView, attribute: .top, multiplier: 1, constant: -20)])
+        }
         
         // Add contol for push-hold-drag
         let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
