@@ -55,7 +55,7 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
             locationManager.startUpdatingLocation()
         }
         
-        packButton.isEnabeled = Reachability.isConnectedToNetwork()
+        packButton.isEnabled = Reachability.isConnectedToNetwork()
         
         // Setup offline pack notification handlers.
         NotificationCenter.default.addObserver(self, selector: #selector(offlinePackProgressDidChange), name: NSNotification.Name.MGLOfflinePackProgressChanged, object: nil)
