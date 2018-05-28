@@ -86,7 +86,7 @@ class MapViewController: UIViewController,
     let siteFetchWindowSize: Double = 10
     var deltaLatLong: Double = 0
     let siteFetchIncrementSize: Double = 0.045 // (5km / earthRadius) * radiansToDegrees
-    let minLocationErrorTolerance: Double = 5
+    let minLocationErrorTolerance: Double = 30
     var lastMinLatLong: CLLocationCoordinate2D = CLLocationCoordinate2D()
     var lastMaxLatLong: CLLocationCoordinate2D = CLLocationCoordinate2D()
 

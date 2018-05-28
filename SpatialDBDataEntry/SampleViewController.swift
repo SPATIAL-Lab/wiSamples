@@ -87,6 +87,7 @@ UIPickerViewDataSource {
             // Update view
             let project =  DataManager.shared.projects[projectIndex]
             typePicker.selectRow(project.defaultType.rawValue, inComponent: 0, animated: false)
+            type = project.defaultType
         }
         
         // Enable save button if site id is valid

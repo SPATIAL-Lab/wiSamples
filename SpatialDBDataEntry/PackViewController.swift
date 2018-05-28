@@ -15,7 +15,7 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
 
     let locationManager = CLLocationManager()
     var lastUpdatedLocation: CLLocation = CLLocation()
-    let minLocationErrorTolerance: Double = 5
+    let minLocationErrorTolerance: Double = 30
     var hasFetchedInitially: Bool = false
     
     @IBOutlet weak var mapView: MGLMapView!
