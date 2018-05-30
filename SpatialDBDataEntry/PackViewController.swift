@@ -85,6 +85,9 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
     }
     
     @IBAction func startOfflinePackDownload(_ sender: UIBarButtonItem) {
+        // Turn off pack button
+        packButton.isEnabled = false
+        
         // First get sites from database
         // Get a window around the map's current center
         let minLatLong = mapView.visibleCoordinateBounds.sw
@@ -257,6 +260,7 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
                 print("Offline pack “\(userInfo["name"] ?? "unknown")” has \(completedResources) of \(expectedResources) resources — \(progressPercentage * 100)%.")
 
             }
+            packButton.isEnabled = true
         }
     }
     
@@ -269,6 +273,7 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
                 self.popup.removeFromSuperview()
             }
+            packButton.isEnabled = true
         }
     }
     
@@ -281,6 +286,7 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
                 self.popup.removeFromSuperview()
             }
+            packButton.isEnabled = true
         }
     }
     

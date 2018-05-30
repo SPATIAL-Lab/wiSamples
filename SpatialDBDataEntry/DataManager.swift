@@ -220,9 +220,13 @@ class DataManager: NSObject
     }
     
     private func exportSingle(site: Site, project: Project) -> String {
-        let elevationString: String = site.elevation == -9999 ? "" : String(site.elevation)
+        var elevationString: String = site.elevation == -9999 ? "" : String(site.elevation)
+        if (elevationString == "-1") {
+            elevationString = "-9999"
+        }
+        let commentString: String = "\"" + site.comments + "\""
         
-        return "\(site.id),\(site.name),\(Double(site.location.latitude)),\(Double(site.location.longitude)),\(elevationString),\(site.address),\(site.city),\(site.stateOrProvince),\(site.country),\(site.comments)\n"
+        return "\(site.id),\(site.name),\(Double(site.location.latitude)),\(Double(site.location.longitude)),\(elevationString),\(site.address),\(site.city),\(site.stateOrProvince),\(site.country),\(commentString)\n"
     }
     
     private func exportSingle(sample: Sample, project: Project) -> String {
@@ -234,8 +238,9 @@ class DataManager: NSObject
         let collectionDateTimeString: String = getDateTimeString(dateTime: sample.dateTime)
         let depthString: String = sample.depth == -9999 ? "" : String(sample.depth)
         let volumeString: String = sample.volume == -9999 ? "" : String(sample.volume)
+        let commentString: String = "\"" + sample.comments + "\""
         
-        return "\(sample.id),,\(sample.siteID),\(sample.type.description),\(startDateTimeString),\(sample.startDateTimeZone.secondsFromGMT() / 3600),\(collectionDateTimeString),\(sample.dateTimeZone.secondsFromGMT() / 3600),\(volumeString),,\(sample.phase.description),\(depthString),,,\(sample.comments),\(project.name)\n"
+        return "\(sample.id),,\(sample.siteID),\(sample.type.description),\(startDateTimeString),\(sample.startDateTimeZone.secondsFromGMT() / 3600),\(collectionDateTimeString),\(sample.dateTimeZone.secondsFromGMT() / 3600),\(volumeString),,\(sample.phase.description),\(depthString),,,\(commentString),\(project.name)\n"
     }
     
     private func getDateTimeString(dateTime: Date) -> String {
