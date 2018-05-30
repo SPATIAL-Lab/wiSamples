@@ -11,7 +11,7 @@ import UIKit
 import Mapbox
 import CoreLocation
 
-class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapViewDelegate {
+class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapViewDelegate, DataManagerResponseDelegate {
 
     let locationManager = CLLocationManager()
     var lastUpdatedLocation: CLLocation = CLLocation()
@@ -85,6 +85,14 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
     }
     
     @IBAction func startOfflinePackDownload(_ sender: UIBarButtonItem) {
+        // First get sites from database
+        // Get a window around the map's current center
+        let minLatLong = mapView.visibleCoordinateBounds.sw
+        let maxLatLong = mapView.visibleCoordinateBounds.ne
+        
+        // Fetch sites around the map's current center
+        fetchSites(minLatLong: minLatLong, maxLatLong: maxLatLong)
+        
         // Create a region that includes the current viewport and any tiles needed to view it when zoomed further in.
         // Because tile count grows exponentially with the maximum zoom level, you should be conservative with your `toZoomLevel` setting.
         let maxzoom = min(mapView.zoomLevel + 5, 19)
@@ -167,6 +175,31 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
         dismiss(animated: true, completion: nil)
     }
 
+    // MARK: - Private methods
+    
+    private func fetchSites(minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {
+        // Request for sites in the range of latitude and longitude
+        DataManager.shared.fetchSites(delegate: self, minLatLong: minLatLong, maxLatLong: maxLatLong)
+    }
+    
+    private func siteSortPredicate(siteA: Site, siteB: Site) -> Bool {
+        return CLLocation(latitude: siteA.location.latitude, longitude: siteA.location.longitude).distance(from: lastUpdatedLocation) < CLLocation(latitude: siteB.location.latitude, longitude: siteB.location.longitude).distance(from: lastUpdatedLocation)
+    }
+    
+    //MARK: DataManagerResponseDelegate
+    
+    func receiveSites(errorMessage: String, sites: [Site]) {
+        
+        DispatchQueue.global(qos: .utility).async {
+            print("Copying sites...")
+            DataManager.shared.cachedSites = sites
+            print("Sorting sites...")
+            DataManager.shared.cachedSites.sort(by: self.siteSortPredicate)
+            print("Saving sites...")
+            DataManager.shared.saveCachedSites()
+            print("Done.")
+        }
+    }
     // MARK: - MGLOfflinePack notification handlers
     
     @objc func offlinePackProgressDidChange(notification: NSNotification) {
