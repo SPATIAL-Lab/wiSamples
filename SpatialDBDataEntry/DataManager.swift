@@ -221,7 +221,7 @@ class DataManager: NSObject
     
     private func exportSingle(site: Site, project: Project) -> String {
         var elevationString: String = site.elevation == -9999 ? "" : String(site.elevation)
-        if (elevationString == "-1") {
+        if (elevationString == "-1.0") {
             elevationString = "-9999"
         }
         let commentString: String = "\"" + site.comments + "\""
