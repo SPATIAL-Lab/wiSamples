@@ -344,7 +344,11 @@ class MapViewController: UIViewController,
         existingSiteLocation = CLLocationCoordinate2D()
         navigationItem.title = ""
         saveButton.isEnabled = false
-    } 
+    }
+    
+    func mapView(_ mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {
+        return true
+    }
 
     func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) {
         
