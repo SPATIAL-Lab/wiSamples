@@ -216,7 +216,8 @@ class DataManager: NSObject
     }
     
     private func exportSingle(project: Project) -> String {
-        return "\(project.name),\(project.contactName),\(project.contactEmail),,,\(project.name)\n"
+        let projectString: String = "\"" + project.name + "\""
+        return "\(project.name),\(project.contactName),\(project.contactEmail),,,\(projectString)\n"
     }
     
     private func exportSingle(site: Site, project: Project) -> String {
@@ -239,8 +240,9 @@ class DataManager: NSObject
         let depthString: String = sample.depth == -9999 ? "" : String(sample.depth)
         let volumeString: String = sample.volume == -9999 ? "" : String(sample.volume)
         let commentString: String = "\"" + sample.comments + "\""
+        let projectString: String = "\"" + project.name + "\""
         
-        return "\(sample.id),,\(sample.siteID),\(sample.type.description),\(startDateTimeString),\(sample.startDateTimeZone.secondsFromGMT() / 3600),\(collectionDateTimeString),\(sample.dateTimeZone.secondsFromGMT() / 3600),\(volumeString),,\(sample.phase.description),\(depthString),,,\(commentString),\(project.name)\n"
+        return "\(sample.id),,\(sample.siteID),\(sample.type.description),\(startDateTimeString),\(sample.startDateTimeZone.secondsFromGMT() / 3600),\(collectionDateTimeString),\(sample.dateTimeZone.secondsFromGMT() / 3600),\(volumeString),,\(sample.phase.description),\(depthString),,,\(commentString),\(projectString)\n"
     }
     
     private func getDateTimeString(dateTime: Date) -> String {

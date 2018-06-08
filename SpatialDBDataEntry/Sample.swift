@@ -18,11 +18,9 @@ enum SampleType: Int {
     case precipitation
     case spring
     case ocean
-    case irrigation
     case bottled
     case iceCore
     case snowPit
-    case firnCore
     case vapor
     case canal
     case sprinkler
@@ -33,21 +31,19 @@ enum SampleType: Int {
         switch self {
         case .ground:               return "Ground"
         case .lake:                 return "Lake"
-        case .riverOrStream:        return "River or Stream"
+        case .riverOrStream:        return "River_or_stream"
         case .tap:                  return "Tap"
         case .precipitation:        return "Precipitation"
         case .spring:               return "Spring"
         case .ocean:                return "Ocean"
-        case .irrigation:           return "Irrigation"
         case .bottled:              return "Bottled"
-        case .iceCore:              return "Ice Core"
-        case .snowPit:              return "Snow Pit"
-        case .firnCore:             return "Firn Core"
+        case .iceCore:              return "Ice_core"
+        case .snowPit:              return "Snow_pit"
         case .vapor:                return "Vapor"
         case .canal:                return "Canal"
         case .sprinkler:            return "Sprinkler"
         case .mine:                 return "Mine"
-        case .cloudWater:           return "Cloud Water"
+        case .cloudWater:           return "Cloud_or_fog"
         }
     }
     
