@@ -195,7 +195,7 @@ class DataManager: NSObject
         // Create containers
         var projectsString = "Project_ID,Contact_Name,Contact_Email,Citation,URL,Project_Name,Proprietary\n"
         var sitesString = "Site_ID,Site_Name,Latitude,Longitude,Elevation_mabsl,Address,City,State_or_Province,Country,Site_Comments\n"
-        var samplesString = "Sample_ID,Sample_ID_2,Site_ID,Type,Start_Date_Time,Start_Time_Zone,Collection_Date_Time,Collection_Time_Zone,Sample_Volume_ml,Collector_type,Phase,Depth_meters,Sample_Source,Sample_Ignore,Sample_Comments,Project_ID\n"
+        var samplesString = "Sample_ID,Sample_ID_2,Site_ID,Type,Start_Date,Start_Time_Zone,Collection_Date,Collection_Time_Zone,Sample_Volume_ml,Collector_type,Phase,Depth_meters,Sample_Source,Sample_Ignore,Sample_Comments,Project_ID\n"
         
         // Export each project
         for project in selectedProjects {
