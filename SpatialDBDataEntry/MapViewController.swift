@@ -130,6 +130,7 @@ class MapViewController: UIViewController,
         
         // Check if an existing site has been selected
         if !existingSiteID.isEmpty {
+            navigationItem.title = existingSiteID
             hasFetchedInitially = true
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delayBeforeInitialZoom)) {
                 self.zoomInMapAfterDelay(locationCoordinate: self.existingSiteLocation)
@@ -302,6 +303,7 @@ class MapViewController: UIViewController,
             
             existingSiteID = siteAnnotation.id
             existingSiteLocation = siteAnnotation.coordinate
+            selectedAnnotation = siteAnnotation
         }
 
         saveButton.isEnabled = true
@@ -314,6 +316,7 @@ class MapViewController: UIViewController,
             mapView.setCenter((annotation.coordinate), animated: true)
             existingSiteID = ""
             existingSiteLocation = CLLocationCoordinate2D()
+            selectedAnnotation = SiteAnnotation()
             navigationItem.title = "My Location"
 
             saveButton.isEnabled = true
@@ -335,6 +338,7 @@ class MapViewController: UIViewController,
         
         existingSiteID = ""
         existingSiteLocation = CLLocationCoordinate2D()
+        selectedAnnotation = SiteAnnotation()
         navigationItem.title = ""
         saveButton.isEnabled = false
     }
@@ -342,6 +346,7 @@ class MapViewController: UIViewController,
     func mapView(_ mapView: MGLMapView, didDeselect view: MGLAnnotation) {       
         existingSiteID = ""
         existingSiteLocation = CLLocationCoordinate2D()
+        selectedAnnotation = SiteAnnotation()
         navigationItem.title = ""
         saveButton.isEnabled = false
     }
@@ -415,6 +420,44 @@ class MapViewController: UIViewController,
                 siteViewController.newLocation = CLLocation(coordinate: newLocationCoordinate, altitude: -9999, horizontalAccuracy: kCLLocationAccuracyKilometer, verticalAccuracy: kCLLocationAccuracyKilometer, timestamp: Date())
             }
         }
+        else if !selectedAnnotation.id.isEmpty{
+            // Declare site to be added
+            let site = Site(id: selectedAnnotation.id, name: selectedAnnotation.name, location: selectedAnnotation.coordinate)
+            let ids = DataManager.shared.projects[projectIndex].sites.map{ $0.id }
+            
+            // Is it already in the project?
+            if !ids.contains(site!.id) {
+                // Fill in the remaining information
+                site!.elevation = selectedAnnotation.elevation
+                site!.address = selectedAnnotation.address
+                site!.city = selectedAnnotation.city
+                site!.stateOrProvince = selectedAnnotation.stateOrProvince
+                site!.country = selectedAnnotation.country
+                site!.comments = ""
+                
+                // Add the site to this project
+                DataManager.shared.projects[projectIndex].sites.append(site!)
+            }
+        }
+        //Add existing site to Project's site list IF it doesn't exist there already
+        //May require using existingSiteID to find site w/in data object holding sites (note existingSiteID is taken from Annotation)
+        /* Relevant code from SiteViewController
+         // Create a new site
+         site = Site(id: siteID, name: siteName, location: location)
+         
+         // Fill in the remaining information
+         site!.elevation = elevation
+         site!.address = address
+         site!.city = city
+         site!.stateOrProvince = stateOrProvince
+         site!.country = country
+         site!.comments = commentsTextField.text ?? ""
+         
+         // Add the new site to this project
+         DataManager.shared.projects[projectIndex].sites.append(site!)
+ */
+        
+        
     }
     
     //MARK: Map Style Controller
