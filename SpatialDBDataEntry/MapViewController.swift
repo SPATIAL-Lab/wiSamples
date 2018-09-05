@@ -433,7 +433,7 @@ class MapViewController: UIViewController,
                 site!.city = selectedAnnotation.city
                 site!.stateOrProvince = selectedAnnotation.stateOrProvince
                 site!.country = selectedAnnotation.country
-                site!.comments = ""
+                site!.comments = selectedAnnotation.comments
                 
                 // Add the site to this project
                 DataManager.shared.projects[projectIndex].sites.append(site!)

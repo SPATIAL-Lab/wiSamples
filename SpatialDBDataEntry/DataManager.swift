@@ -60,16 +60,22 @@ class DataManager: NSObject
         
         fetchSitesDataTask?.cancel()
 
-        let sitesURL: URL = URL(string: "http://wateriso.utah.edu/api/sites_for_mobile.php")!
+//        let sitesURL: URL = URL(string: "http://wateriso.utah.edu/api/sites_for_mobile.php")!
+        let sitesURL: URL = URL(string: "http://wateriso.utah.edu/api/sites.php")!
         var sitesRequest: URLRequest = URLRequest(url: sitesURL)
         
         sitesRequest.httpMethod = "POST"
         sitesRequest.addValue("application/json", forHTTPHeaderField: "ContentType")
-        
+
         let sitesRequestBodyString: String = "{" +
             "\"latitude\": { \"Min\": \(minLatLong.latitude), \"Max\": \(maxLatLong.latitude) }," +
             "\"longitude\": { \"Min\": \(minLatLong.longitude), \"Max\": \(maxLatLong.longitude) }" +
-        "}"
+            ",\"elevation\":null,\"countries\":null,\"states\":null,\"collection_date\":null,\"types\":null,\"h2\":null,\"o18\":null,\"project_ids\":null}"
+/*
+        let sitesRequestBodyString: String = "{" +
+            "\"latitude\": { \"Min\": \(minLatLong.latitude), \"Max\": \(maxLatLong.latitude) }," +
+            "\"longitude\": { \"Min\": \(minLatLong.longitude), \"Max\": \(maxLatLong.longitude) }" +
+        "}" */
         
         let sitesRequestBodyData: Data = sitesRequestBodyString.data(using: .utf8)!
         sitesRequest.httpBody = sitesRequestBodyData
@@ -181,6 +187,20 @@ class DataManager: NSObject
             
             let site: Site = Site(id: id ?? "nil", name: name ?? "", location: coordinate)!
             
+            let elevation = siteDict["Elevation_mabsl"] as? Double
+            let address = siteDict["Address"] as? String
+            let city = siteDict["City"] as? String
+            let stateOrProvince = siteDict["State_or_Province"] as? String
+            let country = siteDict["Country"] as? String
+            let comments = siteDict["Site_Comments"] as? String
+            
+            site.elevation = elevation ?? -9999
+            site.address = address ?? ""
+            site.city = city ?? ""
+            site.stateOrProvince = stateOrProvince ?? ""
+            site.country = country ?? ""
+            site.comments = comments ?? ""
+            
             sites.append(site)
         }
 
@@ -225,9 +245,12 @@ class DataManager: NSObject
         if (elevationString == "-1.0") {
             elevationString = "-9999"
         }
+        
+        let siteIDString: String = "\"" + site.id + "\""
+        let sitenameString: String = "\"" + site.name + "\""
         let commentString: String = "\"" + site.comments + "\""
         
-        return "\(site.id),\(site.name),\(Double(site.location.latitude)),\(Double(site.location.longitude)),\(elevationString),\(site.address),\(site.city),\(site.stateOrProvince),\(site.country),\(commentString)\n"
+        return "\(siteIDString),\(sitenameString),\(Double(site.location.latitude)),\(Double(site.location.longitude)),\(elevationString),\(site.address),\(site.city),\(site.stateOrProvince),\(site.country),\(commentString)\n"
     }
     
     private func exportSingle(sample: Sample, project: Project) -> String {
@@ -236,13 +259,15 @@ class DataManager: NSObject
             startDateTimeString = getDateTimeString(dateTime: sample.startDateTime)
         }
         
+        let sampleIDString: String = "\"" + sample.id + "\""
+        let siteIDString: String = "\"" + sample.siteID + "\""
         let collectionDateTimeString: String = getDateTimeString(dateTime: sample.dateTime)
         let depthString: String = sample.depth == -9999 ? "" : String(sample.depth)
         let volumeString: String = sample.volume == -9999 ? "" : String(sample.volume)
         let commentString: String = "\"" + sample.comments + "\""
         let projectString: String = "\"" + project.name + "\""
         
-        return "\(sample.id),,\(sample.siteID),\(sample.type.description),\(startDateTimeString),\(sample.startDateTimeZone.secondsFromGMT() / 3600),\(collectionDateTimeString),\(sample.dateTimeZone.secondsFromGMT() / 3600),\(volumeString),,\(sample.phase.description),\(depthString),,,\(commentString),\(projectString)\n"
+        return "\(sampleIDString),,\(siteIDString),\(sample.type.description),\(startDateTimeString),\(sample.startDateTimeZone.secondsFromGMT() / 3600),\(collectionDateTimeString),\(sample.dateTimeZone.secondsFromGMT() / 3600),\(volumeString),,\(sample.phase.description),\(depthString),,,\(commentString),\(projectString)\n"
     }
     
     private func getDateTimeString(dateTime: Date) -> String {
