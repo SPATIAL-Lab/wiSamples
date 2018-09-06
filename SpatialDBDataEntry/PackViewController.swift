@@ -203,6 +203,14 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
             print("Done.")
         }
     }
+    
+    func receiveSite(errorMessage: String, site: Site) {
+        DispatchQueue.global(qos: .utility).async {
+            print("Copying sites...")
+            DataManager.shared.cachedSites = [site]
+        }
+    }
+    
     // MARK: - MGLOfflinePack notification handlers
     
     @objc func offlinePackProgressDidChange(notification: NSNotification) {

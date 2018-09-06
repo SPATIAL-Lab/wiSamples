@@ -26,7 +26,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SpatialDBDataEntry/MapViewController.swift"
-            timestampString = "557845570.9346271"
+            timestampString = "557911324.0746861"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "221"
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SpatialDBDataEntry/MapViewController.swift"
-            timestampString = "557845570.935053"
+            timestampString = "557911324.074762"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "425"
-            endingLineNumber = "425"
+            startingLineNumber = "433"
+            endingLineNumber = "433"
             landmarkName = "prepare(for:sender:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -74,12 +74,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SpatialDBDataEntry/DataManager.swift"
-            timestampString = "557845570.93543"
+            timestampString = "557921818.718912"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "182"
-            endingLineNumber = "182"
-            landmarkName = "receiveRemoteSites(_:delegate:errorMessage:)"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
+            landmarkName = "fetchSitesRemote(delegate:minLatLong:maxLatLong:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -90,12 +90,44 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SpatialDBDataEntry/DataManager.swift"
-            timestampString = "557845570.9354939"
+            timestampString = "557921818.719349"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
-            landmarkName = "fetchSitesRemote(delegate:minLatLong:maxLatLong:)"
+            startingLineNumber = "137"
+            endingLineNumber = "137"
+            landmarkName = "fetchSite(delegate:site:projectIndex:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SpatialDBDataEntry/DataManager.swift"
+            timestampString = "557921818.7196341"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "225"
+            endingLineNumber = "225"
+            landmarkName = "receiveRemoteSite(_:delegate:errorMessage:projectIndex:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SpatialDBDataEntry/DataManager.swift"
+            timestampString = "557921818.719909"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "180"
+            endingLineNumber = "180"
+            landmarkName = "receiveRemoteSites(_:delegate:errorMessage:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

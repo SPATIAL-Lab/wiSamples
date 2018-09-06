@@ -11,6 +11,7 @@ import Foundation
 
 protocol DataManagerResponseDelegate: class {
     func receiveSites(errorMessage: String, sites: [Site])
+    func receiveSite(errorMessage: String, site: Site)
 }
 
 class DataManager: NSObject
@@ -26,7 +27,7 @@ class DataManager: NSObject
     //MARK: Tasks
     var session: URLSession?
     var fetchSitesDataTask: URLSessionDataTask?
-    var fetchAllSitesDataTask: URLSessionDataTask?
+    var fetchSiteDataTask: URLSessionDataTask?
     
     //MARK: Archiving paths
     
@@ -60,22 +61,22 @@ class DataManager: NSObject
         
         fetchSitesDataTask?.cancel()
 
-//        let sitesURL: URL = URL(string: "http://wateriso.utah.edu/api/sites_for_mobile.php")!
-        let sitesURL: URL = URL(string: "http://wateriso.utah.edu/api/sites.php")!
+        let sitesURL: URL = URL(string: "http://wateriso.utah.edu/api/sites_for_mobile.php")!
+//        let sitesURL: URL = URL(string: "http://wateriso.utah.edu/api/sites.php")!
         var sitesRequest: URLRequest = URLRequest(url: sitesURL)
         
         sitesRequest.httpMethod = "POST"
         sitesRequest.addValue("application/json", forHTTPHeaderField: "ContentType")
-
-        let sitesRequestBodyString: String = "{" +
-            "\"latitude\": { \"Min\": \(minLatLong.latitude), \"Max\": \(maxLatLong.latitude) }," +
-            "\"longitude\": { \"Min\": \(minLatLong.longitude), \"Max\": \(maxLatLong.longitude) }" +
-            ",\"elevation\":null,\"countries\":null,\"states\":null,\"collection_date\":null,\"types\":null,\"h2\":null,\"o18\":null,\"project_ids\":null}"
 /*
         let sitesRequestBodyString: String = "{" +
             "\"latitude\": { \"Min\": \(minLatLong.latitude), \"Max\": \(maxLatLong.latitude) }," +
             "\"longitude\": { \"Min\": \(minLatLong.longitude), \"Max\": \(maxLatLong.longitude) }" +
-        "}" */
+            ",\"elevation\":null,\"countries\":null,\"states\":null,\"collection_date\":null,\"types\":null,\"h2\":null,\"o18\":null,\"project_ids\":null}" */
+
+        let sitesRequestBodyString: String = "{" +
+            "\"latitude\": { \"Min\": \(minLatLong.latitude), \"Max\": \(maxLatLong.latitude) }," +
+            "\"longitude\": { \"Min\": \(minLatLong.longitude), \"Max\": \(maxLatLong.longitude) }" +
+        "}"
         
         let sitesRequestBodyData: Data = sitesRequestBodyString.data(using: .utf8)!
         sitesRequest.httpBody = sitesRequestBodyData
@@ -95,39 +96,6 @@ class DataManager: NSObject
         }
         
         fetchSitesDataTask?.resume()
-    }
-    
-    func fetchAllSites(delegate: DataManagerResponseDelegate) {
-        print("Fetching all sites from database.")
-        
-        fetchAllSitesDataTask?.cancel()
-        
-        let sitesURL: URL = URL(string: "http://wateriso.utah.edu/api/sites.php")!
-        var sitesRequest: URLRequest = URLRequest(url: sitesURL)
-        
-        sitesRequest.httpMethod = "POST"
-        sitesRequest.addValue("application/json", forHTTPHeaderField: "ContentType")
-        
-        let sitesRequestBodyString: String = "{\"latitude\":null,\"longitude\":null,\"elevation\":null,\"countries\":null,\"states\":null,\"collection_date\":null,\"types\":null,\"h2\":null,\"o18\":null,\"project_ids\":null}"
-        
-        let sitesRequestBodyData: Data = sitesRequestBodyString.data(using: .utf8)!
-        sitesRequest.httpBody = sitesRequestBodyData
-        
-        fetchAllSitesDataTask = session!.dataTask(with: sitesRequest) { data, response, error in
-            defer { self.fetchAllSitesDataTask = nil }
-            
-            var errorMessage: String = "";
-            if let error = error {
-                errorMessage += error.localizedDescription
-            }
-            else if let data = data {
-                DispatchQueue.global(qos: .utility).async {
-                    self.receiveRemoteSites(data, delegate: delegate, errorMessage: errorMessage)
-                }
-            }
-        }
-        
-        fetchAllSitesDataTask?.resume()
     }
     
     //MARK: Cached sites fetching
@@ -152,6 +120,53 @@ class DataManager: NSObject
                 delegate.receiveSites(errorMessage: "", sites: sites)
             }
         }
+    }
+    
+    //MARK: Fetch details for a single site using ID
+    
+    func fetchSite(delegate: DataManagerResponseDelegate, site: Site, projectIndex: Int) {
+        if Reachability.isConnectedToNetwork() {
+
+            print("Fetching site from database")
+            
+            fetchSiteDataTask?.cancel()
+            
+            let sitesURL: URL = URL(string: "http://wateriso.utah.edu/api/siteinfo.php")!
+            var sitesRequest: URLRequest = URLRequest(url: sitesURL)
+
+            sitesRequest.httpMethod = "POST"
+            sitesRequest.addValue("application/json", forHTTPHeaderField: "ContentType")
+            
+            let sitesRequestBodyString: String = "{\"site_id\":\"\(site.id)\"}"
+            
+            let sitesRequestBodyData: Data = sitesRequestBodyString.data(using: .utf8)!
+            sitesRequest.httpBody = sitesRequestBodyData
+            
+            fetchSiteDataTask = session!.dataTask(with: sitesRequest) { data, response, error in
+                defer { self.fetchSiteDataTask = nil }
+                
+                var errorMessage: String = "";
+                if let error = error {
+                    errorMessage += error.localizedDescription
+                }
+                else if let data = data {
+                    DispatchQueue.global(qos: .userInteractive).async {
+                        if !self.receiveRemoteSite(data, delegate: delegate, errorMessage: errorMessage, projectIndex: projectIndex) {
+                            print("Appending cached site")
+                            self.appendSite(site, projectIndex: projectIndex)
+                        }
+                    }
+                }
+            }
+            
+            fetchSiteDataTask?.resume()
+        }
+        
+        else{
+            print("Appending cached site")
+            appendSite(site, projectIndex: projectIndex)
+        }
+
     }
     
     //MARK: Site receiving and parsing
@@ -187,26 +202,68 @@ class DataManager: NSObject
             
             let site: Site = Site(id: id ?? "nil", name: name ?? "", location: coordinate)!
             
-            let elevation = siteDict["Elevation_mabsl"] as? Double
-            let address = siteDict["Address"] as? String
-            let city = siteDict["City"] as? String
-            let stateOrProvince = siteDict["State_or_Province"] as? String
-            let country = siteDict["Country"] as? String
-            let comments = siteDict["Site_Comments"] as? String
-            
-            site.elevation = elevation ?? -9999
-            site.address = address ?? ""
-            site.city = city ?? ""
-            site.stateOrProvince = stateOrProvince ?? ""
-            site.country = country ?? ""
-            site.comments = comments ?? ""
-            
             sites.append(site)
         }
+        
+        let nsites = sitesDict.count
+        print("Received " + String(nsites) + " sites")
 
         DispatchQueue.main.async {
             delegate.receiveSites(errorMessage: errorMessage, sites: sites)
         }
+    }
+    
+    //MARK: Site receiving and parsing
+    
+    private func receiveRemoteSite(_ data: Data, delegate: DataManagerResponseDelegate, errorMessage: String, projectIndex: Int) -> Bool {
+        
+        guard let json = try? JSONSerialization.jsonObject(with: data) else {
+            print("Couldn't get JSON from response!")
+            return false
+        }
+        
+        guard let dict = json as? [String: Any] else {
+            print("Couldn't parse response!")
+            return false
+        }
+        
+        let stat = dict["status"] as? [String: Any]
+        print(stat!["Code"])
+        
+        guard let siteDict = dict["site"] as? [String: Any] else {
+            print("Couldn't get sites from response!")
+            return false
+        }
+        
+        let id = siteDict["Site_ID"] as? String
+        let name = siteDict["Site_Name"] as? String
+        let latitude = siteDict["Latitude"] as? Double
+        let longitude = siteDict["Longitude"] as? Double
+        let coordinate = CLLocationCoordinate2D(latitude: latitude!, longitude: longitude!)
+            
+        let site = Site(id: id ?? "nil", name: name ?? "", location: coordinate)!
+            
+        let elevation = siteDict["Elevation_mabsl"] as? Double
+        let address = siteDict["Address"] as? String
+        let city = siteDict["City"] as? String
+        let stateOrProvince = siteDict["State_or_Province"] as? String
+        let country = siteDict["Country"] as? String
+        let comments = siteDict["Site_Comments"] as? String
+            
+        site.elevation = elevation ?? -9999
+        site.address = address ?? ""
+        site.city = city ?? ""
+        site.stateOrProvince = stateOrProvince ?? ""
+        site.country = country ?? ""
+        site.comments = comments ?? ""
+        
+        appendSite(site, projectIndex: projectIndex)
+        return true
+
+    }
+    
+    private func appendSite(_ site: Site, projectIndex: Int) {
+        DataManager.shared.projects[projectIndex].sites.append(site)
     }
     
     //MARK: Data exporting
@@ -248,9 +305,11 @@ class DataManager: NSObject
         
         let siteIDString: String = "\"" + site.id + "\""
         let sitenameString: String = "\"" + site.name + "\""
+        let addressString: String = "\"" + site.address + "\""
+        let cityString: String = "\"" + site.city + "\""
         let commentString: String = "\"" + site.comments + "\""
         
-        return "\(siteIDString),\(sitenameString),\(Double(site.location.latitude)),\(Double(site.location.longitude)),\(elevationString),\(site.address),\(site.city),\(site.stateOrProvince),\(site.country),\(commentString)\n"
+        return "\(siteIDString),\(sitenameString),\(Double(site.location.latitude)),\(Double(site.location.longitude)),\(elevationString),\(addressString),\(cityString),\(site.stateOrProvince),\(site.country),\(commentString)\n"
     }
     
     private func exportSingle(sample: Sample, project: Project) -> String {

@@ -392,6 +392,14 @@ class MapViewController: UIViewController,
         }
     }
     
+    func receiveSite(errorMessage: String, site: Site) {
+        DispatchQueue.global(qos: .utility).async {
+            if !errorMessage.isEmpty{
+                
+            }
+        }
+    }
+    
     // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -421,13 +429,15 @@ class MapViewController: UIViewController,
             }
         }
         else if !selectedAnnotation.id.isEmpty{
-            // Declare site to be added
+            // Declare site to be added, need to access fetch site here....
             let site = Site(id: selectedAnnotation.id, name: selectedAnnotation.name, location: selectedAnnotation.coordinate)
             let ids = DataManager.shared.projects[projectIndex].sites.map{ $0.id }
             
             // Is it already in the project?
             if !ids.contains(site!.id) {
-                // Fill in the remaining information
+                fetchSite(site: site!, projectIndex: projectIndex)
+                
+ /*               // Fill in the remaining information
                 site!.elevation = selectedAnnotation.elevation
                 site!.address = selectedAnnotation.address
                 site!.city = selectedAnnotation.city
@@ -436,7 +446,7 @@ class MapViewController: UIViewController,
                 site!.comments = selectedAnnotation.comments
                 
                 // Add the site to this project
-                DataManager.shared.projects[projectIndex].sites.append(site!)
+                DataManager.shared.projects[projectIndex].sites.append(site!) */
             }
         }
         //Add existing site to Project's site list IF it doesn't exist there already
@@ -600,6 +610,11 @@ class MapViewController: UIViewController,
     private func fetchSites(minLatLong: CLLocationCoordinate2D, maxLatLong: CLLocationCoordinate2D) {
         // Request for sites in the range of latitude and longitude
         DataManager.shared.fetchSites(delegate: self, minLatLong: minLatLong, maxLatLong: maxLatLong)
+    }
+    
+    private func fetchSite(site: Site, projectIndex: Int) {
+        // Request full info for single site
+        DataManager.shared.fetchSite(delegate: self, site: site, projectIndex: projectIndex)
     }
     
     private func getNewSitesFromReceivedSites(receivedSiteAnnotations: [SiteAnnotation]) -> [SiteAnnotation] {
