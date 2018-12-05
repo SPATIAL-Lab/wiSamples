@@ -68,7 +68,7 @@ class SiteTableViewController: UITableViewController {
     */
 
     // Support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the site
             DataManager.shared.projects[projectIndex].sites.remove(at: indexPath.row)
@@ -124,7 +124,7 @@ class SiteTableViewController: UITableViewController {
             DataManager.shared.projects[projectIndex].sites.append(site)
             
             // Add the new site to the table
-            tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
+            tableView.insertRows(at: [newIndexPath], with: UITableView.RowAnimation.automatic)
             
             // Save data
             DataManager.shared.saveProjects()

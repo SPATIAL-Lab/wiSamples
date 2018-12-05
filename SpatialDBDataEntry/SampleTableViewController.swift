@@ -54,7 +54,7 @@ class SampleTableViewController: UITableViewController {
     }
 
     // Support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the sample
             DataManager.shared.projects[projectIndex].samples.remove(at: indexPath.row)
@@ -134,7 +134,7 @@ class SampleTableViewController: UITableViewController {
                 DataManager.shared.projects[projectIndex].samples.append(sample)
                 
                 // Add the new sample to the table
-                tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
+                tableView.insertRows(at: [newIndexPath], with: UITableView.RowAnimation.automatic)
             }
             
             // Save data

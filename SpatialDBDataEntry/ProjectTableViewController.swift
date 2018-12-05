@@ -57,7 +57,7 @@ class ProjectTableViewController: UITableViewController {
 
 
     // Support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the project
             DataManager.shared.projects.remove(at: indexPath.row)
@@ -147,7 +147,7 @@ class ProjectTableViewController: UITableViewController {
             DataManager.shared.projects.append(project)
             
             // Add the new project to the table
-            tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.automatic)
+            tableView.insertRows(at: [newIndexPath], with: UITableView.RowAnimation.automatic)
             
             // Save data
             DataManager.shared.saveProjects()
