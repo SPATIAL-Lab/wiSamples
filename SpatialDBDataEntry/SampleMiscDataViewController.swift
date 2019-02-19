@@ -26,8 +26,8 @@ UIPickerViewDataSource
     @IBOutlet weak var saveButton: UIBarButtonItem!
     var toolbar: UIToolbar? = nil
 
-    var depth: Int = -9999
-    var volume: Int = -9999
+    var depth: Double = -9999.0
+    var volume: Double = -9999.0
     var phase: PhaseType = PhaseType.none
     var startCollectionDate: Date = Date.distantFuture
     var startCollectionTimeZone: TimeZone? = nil
@@ -135,11 +135,11 @@ UIPickerViewDataSource
         }
         
         if depthTextField.text!.isEmpty == false {
-            depth = Int(depthTextField.text!)!
+            depth = Double(depthTextField.text!)!
         }
         
         if volumeTextField.text!.isEmpty == false {
-            volume = Int(volumeTextField.text!)!
+            volume = Double(volumeTextField.text!)!
         }
         
         comments = commentsTextField.text!

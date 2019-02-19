@@ -38,8 +38,8 @@ UIPickerViewDataSource {
     var collectionTimeZone: TimeZone? = nil
     
     // Sample misc properties
-    var depth: Int = -9999
-    var volume: Int = -9999
+    var depth: Double = -9999.0
+    var volume: Double = -9999.0
     var phase: PhaseType = PhaseType.none
     var startCollectionDate: Date = Date.distantFuture
     var startCollectionTimeZone: TimeZone? = nil

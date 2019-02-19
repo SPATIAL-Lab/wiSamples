@@ -83,8 +83,8 @@ class Sample: NSObject, NSCoding {
     var dateTimeZone: TimeZone
     var startDateTime: Date
     var startDateTimeZone: TimeZone
-    var depth: Int = -9999
-    var volume: Int = -9999
+    var depth: Double = -9999.0
+    var volume: Double = -9999.0
     var phase: PhaseType = PhaseType.none
     var comments: String = ""
     var siteLocation: CLLocationCoordinate2D
@@ -161,8 +161,8 @@ class Sample: NSObject, NSCoding {
         let dateTimeZone = aDecoder.decodeObject(forKey: PropertyKeys.dateTimeZone) as? TimeZone
         let startDateTime = aDecoder.decodeObject(forKey: PropertyKeys.startDateTime) as? Date
         let startDateTimeZone = aDecoder.decodeObject(forKey: PropertyKeys.startDateTimeZone) as? TimeZone
-        let depth = aDecoder.decodeInteger(forKey: PropertyKeys.depth)
-        let volume = aDecoder.decodeInteger(forKey: PropertyKeys.volume)
+        let depth = aDecoder.decodeDouble(forKey: PropertyKeys.depth)
+        let volume = aDecoder.decodeDouble(forKey: PropertyKeys.volume)
         let phase = PhaseType(rawValue: aDecoder.decodeInteger(forKey: PropertyKeys.phase))!
         let comments = aDecoder.decodeObject(forKey: PropertyKeys.comments) as? String
         let latitude = aDecoder.decodeDouble(forKey: PropertyKeys.siteLatitude)

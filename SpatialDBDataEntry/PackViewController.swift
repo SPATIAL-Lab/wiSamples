@@ -24,6 +24,7 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
     var popup: UIView!
     var progressView: UIProgressView!
     var textView: UITextField!
+    var mz: Double!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,7 +99,7 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
         
         // Create a region that includes the current viewport and any tiles needed to view it when zoomed further in.
         // Because tile count grows exponentially with the maximum zoom level, you should be conservative with your `toZoomLevel` setting.
-        let maxzoom = min(mapView.zoomLevel + 5, 19)
+        let maxzoom = min(mapView.zoomLevel + 5 - mz, 19)
         let region = MGLTilePyramidOfflineRegion(styleURL: mapView.styleURL, bounds: mapView.visibleCoordinateBounds, fromZoomLevel: mapView.zoomLevel, toZoomLevel: maxzoom)
         
         // Store some data for identification purposes alongside the downloaded resources.
@@ -163,10 +164,13 @@ class PackViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
         switch index {
         case 0:
             mapView.styleURL = MGLStyle.streetsStyleURL
+            mz = 0
         case 1:
             mapView.styleURL = MGLStyle.satelliteStyleURL
+            mz = 1
         default:
             mapView.styleURL = MGLStyle.streetsStyleURL
+            mz = 0
         }
     }
     
