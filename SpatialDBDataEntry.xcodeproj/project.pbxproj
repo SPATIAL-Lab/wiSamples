@@ -272,7 +272,7 @@
 			};
 			buildConfigurationList = 9E647DB21F73592F00F2BC61 /* Build configuration list for PBXProject "SpatialDBDataEntry" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
