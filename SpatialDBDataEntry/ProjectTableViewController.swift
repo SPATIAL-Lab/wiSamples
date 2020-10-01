@@ -104,7 +104,7 @@ class ProjectTableViewController: UITableViewController {
             }
             
             guard let selectedProjectCell = sender as? ProjectTableViewCell else {
-                fatalError("Unexpected sender \(sender)")
+                fatalError("Unexpected sender \(String(describing: sender))")
             }
             
             guard let indexPath = tableView.indexPath(for: selectedProjectCell) else {
@@ -119,7 +119,7 @@ class ProjectTableViewController: UITableViewController {
             }
             
             guard let selectedProjectCell = sender as? ProjectTableViewCell else {
-                fatalError("Unexpected sender \(sender)")
+                fatalError("Unexpected sender \(String(describing: sender))")
             }
             
             guard let indexPath = tableView.indexPath(for: selectedProjectCell) else {
@@ -132,7 +132,7 @@ class ProjectTableViewController: UITableViewController {
             print("Showing settings.")
             
         default:
-            fatalError("Unexpected Segue Identifier: \(segue.identifier)")
+            fatalError("Unexpected Segue Identifier: \(String(describing: segue.identifier))")
         }
     }
 

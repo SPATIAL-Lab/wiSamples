@@ -258,13 +258,13 @@
 					9E647DB61F73592F00F2BC61 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 299TSMP9F8;
-						LastSwiftMigration = 1010;
+						LastSwiftMigration = 1130;
 						ProvisioningStyle = Manual;
 					};
 					9E647DCA1F73593000F2BC61 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 299TSMP9F8;
-						LastSwiftMigration = 1010;
+						LastSwiftMigration = 1130;
 						ProvisioningStyle = Manual;
 						TestTargetID = 9E647DB61F73592F00F2BC61;
 					};
@@ -522,7 +522,7 @@
 				PROVISIONING_PROFILE = "4e3aea1c-e001-4b5f-9eb2-4dfa7bd31809";
 				PROVISIONING_PROFILE_SPECIFIER = dev_profile_01;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -546,7 +546,7 @@
 				PROVISIONING_PROFILE = "4e3aea1c-e001-4b5f-9eb2-4dfa7bd31809";
 				PROVISIONING_PROFILE_SPECIFIER = dev_profile_01;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -562,7 +562,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = wateriso.utah.edu.SpatialDBDataEntryTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SpatialDBDataEntry.app/SpatialDBDataEntry";
 			};
 			name = Debug;
@@ -578,7 +578,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = wateriso.utah.edu.SpatialDBDataEntryTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SpatialDBDataEntry.app/SpatialDBDataEntry";
 			};
 			name = Release;

@@ -81,7 +81,7 @@ class SampleTableViewController: UITableViewController {
             }
             
             guard let sampleViewController = navigationController.viewControllers[0] as? SampleViewController else {
-                fatalError("Unexpected presented view controller \(navigationController.presentedViewController)")
+                fatalError("Unexpected presented view controller \(String(describing: navigationController.presentedViewController))")
             }
             
             sampleViewController.projectIndex = projectIndex
@@ -93,11 +93,11 @@ class SampleTableViewController: UITableViewController {
             }
             
             guard let sampleViewController = navigationController.viewControllers[0] as? SampleViewController else {
-                fatalError("Unexpected presented view controller \(navigationController.presentedViewController)")
+                fatalError("Unexpected presented view controller \(String(describing: navigationController.presentedViewController))")
             }
             
             guard let selectedSampleCell = sender as? SampleTableViewCell else {
-                fatalError("Unexpected sender: \(sender)")
+                fatalError("Unexpected sender: \(String(describing: sender))")
             }
             
             guard let indexPath = tableView.indexPath(for: selectedSampleCell) else {
@@ -109,7 +109,7 @@ class SampleTableViewController: UITableViewController {
             sampleViewController.sample = selectedSample
             
         default:
-            fatalError("Unexpected Segue Identifier: \(segue.identifier)")
+            fatalError("Unexpected Segue Identifier: \(String(describing: segue.identifier))")
         }
     }
     

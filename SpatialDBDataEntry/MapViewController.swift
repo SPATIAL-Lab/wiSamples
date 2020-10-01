@@ -596,7 +596,7 @@ class MapViewController: UIViewController,
         
         // Remove the annotation from the map view and
         mapView.removeAnnotation(newlyAddedAnnotation)
-        if let index = siteAnnotationList.index(of: newlyAddedAnnotation) {
+        if let index = siteAnnotationList.firstIndex(of: newlyAddedAnnotation) {
             siteAnnotationList.remove(at: index)
         }
         

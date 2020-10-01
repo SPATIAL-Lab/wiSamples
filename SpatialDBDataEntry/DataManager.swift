@@ -228,7 +228,7 @@ class DataManager: NSObject
         }
         
         let stat = dict["status"] as? [String: Any]
-        print(stat!["Code"])
+        print(stat!["Code"] ?? "No Code")
         
         guard let siteDict = dict["site"] as? [String: Any] else {
             print("Couldn't get sites from response!")

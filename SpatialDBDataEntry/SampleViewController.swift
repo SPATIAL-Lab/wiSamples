@@ -148,7 +148,7 @@ UIPickerViewDataSource {
             }
             
             guard let mapViewController = navigationController.viewControllers[0] as? MapViewController else {
-                fatalError("Unexpected presented view controller \(navigationController.presentedViewController)")
+                fatalError("Unexpected presented view controller \(String(describing: navigationController.presentedViewController))")
             }
             
             mapViewController.projectIndex = projectIndex
@@ -162,7 +162,7 @@ UIPickerViewDataSource {
             }
             
             guard let sampleMiscDataViewController = navigationController.viewControllers[0] as? SampleMiscDataViewController else {
-                fatalError("Unexpected presented view controller \(navigationController.presentedViewController)")
+                fatalError("Unexpected presented view controller \(String(describing: navigationController.presentedViewController))")
             }
             
             sampleMiscDataViewController.depth = depth

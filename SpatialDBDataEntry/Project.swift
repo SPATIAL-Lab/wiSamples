@@ -63,7 +63,7 @@ class Project: NSObject, NSCoding {
                 if splitSampleID.count > 1 {
                     let afterPrefix = splitSampleID[1]
                     if let numberPartEndIndex = afterPrefix.index(afterPrefix.startIndex, offsetBy: 3, limitedBy: afterPrefix.endIndex) {
-                        let numberPart = afterPrefix.substring(to: numberPartEndIndex)
+                        let numberPart = afterPrefix[..<numberPartEndIndex]
                         if let number = Int(numberPart) {
                             newSampleID = number > newSampleID ? number : newSampleID
                         }
@@ -83,7 +83,7 @@ class Project: NSObject, NSCoding {
                 if splitSiteID.count > 1 {
                     let afterPrefix = splitSiteID[1]
                     if let numberPartEndIndex = afterPrefix.index(afterPrefix.startIndex, offsetBy: 3, limitedBy: afterPrefix.endIndex) {
-                        let numberPart = afterPrefix.substring(to: numberPartEndIndex)
+                        let numberPart = afterPrefix[..<numberPartEndIndex]
                         if let number = Int(numberPart) {
                             newSiteID = number > newSiteID ? number : newSiteID
                         }
