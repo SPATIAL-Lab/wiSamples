@@ -75,6 +75,7 @@ class Project: NSObject, NSCoding {
         return sampleIDPrefix + String(format: "%03d", newSampleID + 1)
     }
     
+    /*
     func getIDForNewSite() -> String {
         var newSiteID: Int = samples.count
         if newSiteID > 0 {
@@ -94,7 +95,8 @@ class Project: NSObject, NSCoding {
         
         return sampleIDPrefix + String(format: "SITE-%03d", newSiteID + 1)
     }
-    
+    */
+ 
     //MARK: Global Data Helpers
     
     static func isValid(projectIndex: Int) -> Bool {

@@ -42,7 +42,7 @@ class Site: NSObject, NSCoding {
     
     //MARK: Initialization
     
-    init?(id: String, name: String, location: CLLocationCoordinate2D) {
+    @objc init?(id: String, name: String, location: CLLocationCoordinate2D) {
         guard !id.isEmpty else {
             return nil
         }

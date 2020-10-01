@@ -155,6 +155,7 @@ UIPickerViewDataSource {
             mapViewController.existingSiteID = siteID
             mapViewController.existingSiteLocation = siteLocation
             mapViewController.selectedExistingSite = !siteID.isEmpty
+            mapViewController.newSiteID = sampleIDTextField.text ?? generatedSampleID
             
         case "ShowSampleMiscData":
             guard let navigationController = segue.destination as? UINavigationController else {

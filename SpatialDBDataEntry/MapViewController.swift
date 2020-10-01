@@ -123,7 +123,8 @@ class MapViewController: UIViewController,
         
         // Write some usable values beforehand
         deltaLatLong = getDeltaLatLong(rangeInKM: siteFetchWindowSize)
-        newSiteID = DataManager.shared.projects[projectIndex].getIDForNewSite()
+        
+        // newSiteID = DataManager.shared.projects[projectIndex].getIDForNewSite()
         
         // Plot saved sites
         plotSavedSites()
