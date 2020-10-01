@@ -76,12 +76,12 @@ class Project: NSObject, NSCoding {
     }
     
     func getIDForNewSite() -> String {
-        var newSiteID: Int = sites.count
+        var newSiteID: Int = samples.count
         if newSiteID > 0 {
-            for site in sites {
-                let splitSiteID = site.id.components(separatedBy: sampleIDPrefix + String("SITE-"))
-                if splitSiteID.count > 1 {
-                    let afterPrefix = splitSiteID[1]
+            for sample in samples {
+                let splitSampleID = sample.id.components(separatedBy: sampleIDPrefix)
+                if splitSampleID.count > 1 {
+                    let afterPrefix = splitSampleID[1]
                     if let numberPartEndIndex = afterPrefix.index(afterPrefix.startIndex, offsetBy: 3, limitedBy: afterPrefix.endIndex) {
                         let numberPart = afterPrefix[..<numberPartEndIndex]
                         if let number = Int(numberPart) {
