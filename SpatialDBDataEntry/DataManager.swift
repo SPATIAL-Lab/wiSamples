@@ -61,7 +61,7 @@ class DataManager: NSObject
         
         fetchSitesDataTask?.cancel()
 
-        let sitesURL: URL = URL(string: "http://wateriso.utah.edu/api/sites_for_mobile.php")!
+        let sitesURL: URL = URL(string: "https://wateriso.utah.edu/api/sites_for_mobile.php")!
 //        let sitesURL: URL = URL(string: "http://wateriso.utah.edu/api/sites.php")!
         var sitesRequest: URLRequest = URLRequest(url: sitesURL)
         
@@ -131,7 +131,7 @@ class DataManager: NSObject
             
             fetchSiteDataTask?.cancel()
             
-            let sitesURL: URL = URL(string: "http://wateriso.utah.edu/api/siteinfo.php")!
+            let sitesURL: URL = URL(string: "https://wateriso.utah.edu/api/siteinfo.php")!
             var sitesRequest: URLRequest = URLRequest(url: sitesURL)
 
             sitesRequest.httpMethod = "POST"
