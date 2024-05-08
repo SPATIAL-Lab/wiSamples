@@ -1,3 +1,2 @@
-# spatial-db-data-entry
-A data entry app built for the Department of Geology and Geophysics at the University of Utah.
-Branch to add default types to projects.
+# wiSamples
+Quickly and accurately collect water isotope sample metadata in the field. Allows seamless integration with the [wiDB](http://WaterisotopeDB.org). 
